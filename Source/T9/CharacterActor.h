@@ -49,7 +49,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
 		TMap<int32, FCharacterLevels> Levels;
 
-	UPROPERTY(VisibleAnywhere, Category = "SpawnBuilding")
+	UPROPERTY(VisibleAnywhere, Category = "Spawn")
 		class AActor* SpawnBuilding = nullptr;
 
 	UPROPERTY()
@@ -61,13 +61,13 @@ protected:
 	UPROPERTY()
 		class UHealthBarWidget* HealthBar;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
 		class AMainPlayerController* PC;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
 		class AMainPlayerState* PS;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* MainHandItemMesh;
 
 	UPROPERTY(VisibleAnywhere, Category = "Leveling")
@@ -86,6 +86,15 @@ protected:
 		float DeathTime = 1.0f;
 
 	FTimerHandle DeathTimerHandle;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
+	    UCharacterMovementComponent* MovementComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
+	    bool Invulnerable = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
+		bool NeedsController = true;
 
 
 public:	
@@ -112,12 +121,12 @@ public:
 		AActor* CurrentTarget;
 
 	UFUNCTION()
-		void SpawnInit(AActor* BuildingSpawn, int SpawnLevel = 1);
+		void SpawnInit(AActor* BuildingSpawn, int SpawnLevel = 1, bool Invuln = false, bool SpawnController = true);
 
 	UFUNCTION()
 		class AActor* GetSpawnBuilding();
 
-	UPROPERTY(VisibleAnywhere, Category = "SpawnBuilding")
+	UPROPERTY(VisibleAnywhere, Category = "Spawn")
 		FVector InitalLocation;
 
 	//0 is global
@@ -177,6 +186,12 @@ public:
 
 	UFUNCTION()
 		virtual void EquipMainHand();
+
+	UFUNCTION()
+		bool CheckInvulnerable();
+
+	UFUNCTION()
+		void ToggleInvulnerable(bool Input);
 
 	//UFUNCTION()
 	//	float GetDamage();

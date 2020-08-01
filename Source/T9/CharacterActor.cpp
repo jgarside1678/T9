@@ -32,6 +32,7 @@ ACharacterActor::ACharacterActor() :
 	MainHandItemMesh->SetSimulatePhysics(false);
 	MainHandItemMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 	//MainHandItemMesh->SetupAttachment(GetMesh());
+	MovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
 }
 
 
@@ -56,10 +57,9 @@ void ACharacterActor::BeginPlay()
 		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Level].MaxHealth);
 	}
 
-	//Spawn Controller if not already spawned
-	if (!GetController()) {
-		FTimerHandle ControllerTimerHandle;
-		GetWorldTimerManager().SetTimer(ControllerTimerHandle, this, &ACharacterActor::SpawnDefaultController, 2, false, 2);
+	if (MovementComponent) {
+		MovementComponent->SetAvoidanceEnabled(true);
+		MovementComponent->AvoidanceConsiderationRadius = CapsuleRadius * 3;
 	}
 
 	//Used to for Spacing between characters and other objects
@@ -86,11 +86,20 @@ void ACharacterActor::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 }
 
-void ACharacterActor::SpawnInit(AActor* BuildingSpawn, int SpawnLevel)
+void ACharacterActor::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invuln, bool SpawnController)
 {
 	SpawnBuilding = BuildingSpawn;
 	Level = SpawnLevel;
 	ResetHealth();
+	NeedsController = SpawnController;
+	Invulnerable = Invuln;
+	if (!GetController() && NeedsController) {
+		FTimerHandle ControllerTimerHandle;
+		GetWorldTimerManager().SetTimer(ControllerTimerHandle, this, &ACharacterActor::SpawnDefaultController, 2, false, 2);
+	}
+	else {
+		WidgetComponent->SetVisibility(false);
+	}
 }
 
 AActor* ACharacterActor::GetSpawnBuilding() {
@@ -161,8 +170,12 @@ void ACharacterActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage)
 {
 	if (!IsDead) {
 		CurrentHealth -= AmountOfDamage;
-		if(Levels.Contains(Level))	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Level].MaxHealth);
-		else if (Levels.Contains(Levels.Num()))	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Levels.Num()].MaxHealth);
+		if (Levels.Contains(Level)) {
+			if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Level].MaxHealth);
+		}
+		else if (Levels.Contains(Levels.Num())) {
+			if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Levels.Num()].MaxHealth);
+		}
 		if (CurrentHealth <= 0) {
 			IsDead = true;
 			if (Levels.Contains(Level)) {
@@ -179,8 +192,10 @@ void ACharacterActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage)
 			GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, Delegate, DeathTime, false);
 			if (SpawnBuilding) {
 				UBuildingSpawnComponent* SpawnComponent = Cast<UBuildingSpawnComponent>(SpawnBuilding->GetComponentByClass(UBuildingSpawnComponent::StaticClass()));
-				SpawnComponent->CurrentSpawnCount--;
-				SpawnComponent->Respawn();
+				if (SpawnComponent) {
+					SpawnComponent->CurrentSpawnCount--;
+					SpawnComponent->Respawn();
+				}
 			}
 		}
 	}
@@ -227,4 +242,14 @@ void ACharacterActor::EquipMainHand()
 	if (MainHandItemMesh) {
 		MainHandItemMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("weaponShield_R"));
 	}
+}
+
+bool ACharacterActor::CheckInvulnerable()
+{
+	return Invulnerable;
+}
+
+void ACharacterActor::ToggleInvulnerable(bool Input)
+{
+	Invulnerable = Input;
 }

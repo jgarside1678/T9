@@ -4,6 +4,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "DamageInterface.h"
+#include "DefensiveBuildingActor.h"
 
 // Sets default values
 AProjectile::AProjectile() :
@@ -30,17 +31,19 @@ AProjectile::AProjectile() :
 }
 
 
-void AProjectile::ProjectileInnit(AActor* TargetActor, float AttackDamage, float ProjectileDelay) {
+void AProjectile::ProjectileInnit(AActor* TargetActor, float AttackDamage, AActor* SpawnActor, float ProjectileDelay) {
 	Target = TargetActor;
 	Damage = AttackDamage;
+	Spawner = SpawnActor;
 	ProjectileMovementDelay = ProjectileDelay;
+	BuildingSpawn = Cast<ADefensiveBuildingActor>(Spawner);
+	if (BuildingSpawn) SpawnLocation = BuildingSpawn->ProjectileSpawn;
 	if (ProjectileMovementDelay > 0) {
-		SetActorTickEnabled(false);
+		Active = false;
 		FTimerDelegate TickDelay;
-		TickDelay.BindUFunction(this, FName("SetActorTickEnabled"), true);
+		TickDelay.BindUFunction(this, FName("ToggleActive"), true);
 		GetWorldTimerManager().SetTimer(ProjectileMovementDelayHandle, TickDelay, ProjectileMovementDelay, false, ProjectileMovementDelay);
 	}
-
 }
 
 void AProjectile::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -57,12 +60,22 @@ void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	if ((Target != nullptr) && (Target->IsValidLowLevel())&& (!Target->IsPendingKill())) {
-		FVector Direction = (Target->GetActorLocation() - GetActorLocation() + FVector(0,0, Target->GetSimpleCollisionHalfHeight())).GetSafeNormal();
-		ProjectileMovement->Velocity += Direction * 50000.f * DeltaTime;
-		ProjectileMovement->Velocity = ProjectileMovement->Velocity.GetSafeNormal() * 1500.0f;
+		if (Active) {
+			FVector Direction = (Target->GetActorLocation() - GetActorLocation() + FVector(0, 0, Target->GetSimpleCollisionHalfHeight())).GetSafeNormal();
+			ProjectileMovement->Velocity += Direction * 50000.f * DeltaTime;
+			ProjectileMovement->Velocity = ProjectileMovement->Velocity.GetSafeNormal() * 1500.0f;
+		}
+		else {
+			SetActorLocation(SpawnLocation->GetComponentLocation());
+			if(BuildingSpawn) SetActorRelativeRotation(BuildingSpawn->TurretRotation);
+		}
 	}
 	else this->Destroy();
 
+}
+
+void AProjectile::ToggleActive(bool Input) {
+	Active = Input;
 }
 
 // Called to bind functionality to input

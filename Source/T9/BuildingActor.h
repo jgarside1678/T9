@@ -169,6 +169,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		class UAudioComponent* UpgradeAudio;
 
+	//Alliance Solider for use in archer/wizard towers
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
+		class AAllianceCharacter* BuildingDefender;
+
 public:
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;

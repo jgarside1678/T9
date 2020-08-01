@@ -11,9 +11,9 @@ ABuilding_Arrow_Tower::ABuilding_Arrow_Tower(const FObjectInitializer& ObjectIni
 	TurretStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TurretMesh"));
 	TurretStaticMeshComponent->SetupAttachment(StaticMeshComponent);
 	TurretStaticMeshComponent->SetRelativeLocation(FVector(0, 0, 330.0));
-
 	Projectile = AProjectile_Arrow::StaticClass();
-	ProjectileSpawnLocation += FVector(0.0f, 0.0f, 260.0f);
+	ProjectileSpawn->SetupAttachment(TurretStaticMeshComponent);
+	ProjectileSpawn->SetRelativeLocation(FVector(0.0f, 0.0f, 30.0f));
 	ProjectileDelay = 0.5f;
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base3A.Tower_Base3A'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base3B.Tower_Base3B'"));
@@ -51,9 +51,9 @@ void ABuilding_Arrow_Tower::Tick(float DeltaTime)
 	if (Target) {
 		FVector AimLocation = Target->GetActorLocation() + FVector(0, 0, 150);
 		FRotator Rot = UKismetMathLibrary::FindLookAtRotation(TurretStaticMeshComponent->GetComponentLocation(), AimLocation);
-		FRotator NewRotation = UKismetMathLibrary::RInterpTo(TurretStaticMeshComponent->GetComponentRotation(), Rot, DeltaTime, 3) - GetActorRotation();
-	    TurretStaticMeshComponent->SetRelativeRotation(FRotator(NewRotation));
-		ProjectileSpawnRotation = FRotator(NewRotation);
+		TurretRotation = UKismetMathLibrary::RInterpTo(TurretStaticMeshComponent->GetComponentRotation(), Rot, DeltaTime, 3) - GetActorRotation();
+	    TurretStaticMeshComponent->SetRelativeRotation(TurretRotation);
+		ProjectileSpawn->SetRelativeRotation(TurretRotation);
 	}
 
 }

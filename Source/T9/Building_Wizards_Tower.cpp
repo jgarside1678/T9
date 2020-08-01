@@ -5,13 +5,14 @@
 #include "MainPlayerController.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "MainPlayerState.h"
+#include "Alliance_Wizard.h"
 #include "Projectile_Arrow.h"
 
 ABuilding_Wizards_Tower::ABuilding_Wizards_Tower(const FObjectInitializer& ObjectInitializer) {
 	// XP / Cost / Maxhealth / Damage
 
 	Projectile = AProjectile_Arrow::StaticClass();
-	ProjectileSpawnLocation += FVector(0.0f, 0.0f, 260.0f);
+	ProjectileSpawn->SetRelativeLocation(FVector(0,0,0.0f));
 	ProjectileDelay = 0.5f;
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1A.Tower_Base1A'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1B.Tower_Base1B'"));
@@ -31,6 +32,14 @@ ABuilding_Wizards_Tower::ABuilding_Wizards_Tower(const FObjectInitializer& Objec
 void ABuilding_Wizards_Tower::BeginPlay()
 {
 	Super::BeginPlay();
+	FActorSpawnParameters SpawnParams;
+	FVector Location = GetActorLocation();
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	BuildingDefender = GetWorld()->SpawnActor<AAllianceCharacter>(AAlliance_Wizard::StaticClass(), FVector(Location.X, Location.Y, 320), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+	if (BuildingDefender) {
+		BuildingDefender->SpawnInit(this, Level, true, false);
+		BuildingDefender->SetActorScale3D(FVector(0.7));
+	}
 }
 
 void ABuilding_Wizards_Tower::Upgrade()

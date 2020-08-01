@@ -9,40 +9,6 @@
 
 
 
-//USTRUCT(BlueprintType)
-//struct T9_API FSkelMeshMergeSectionMapping_BP
-//{
-//    GENERATED_BODY()
-//        /** Indices to final section entries of the merged skeletal mesh */
-//        UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh Merge Params")
-//        TArray<int32> SectionIDs;
-//};
-///**
-//* Used to wrap a set of UV Transforms for one mesh.
-//*/
-//USTRUCT(BlueprintType)
-//struct T9_API FSkelMeshMergeUVTransform
-//{
-//    GENERATED_BODY()
-//        /** A list of how UVs should be transformed on a given mesh, where index represents a specific UV channel. */
-//        UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh Merge Params")
-//        TArray<FTransform> UVTransforms;
-//};
-///**
-//* Blueprint equivalent of FSkelMeshMergeUVTransforms
-//* Info to map all the sections about how to transform their UVs
-//*/
-//USTRUCT(BlueprintType)
-//struct T9_API FSkelMeshMergeUVTransformMapping
-//{
-//    GENERATED_BODY()
-//        /** For each UV channel on each mesh, how the UVS should be transformed. */
-//        UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh Merge Params")
-//        TArray<FSkelMeshMergeUVTransform> UVTransformsPerMesh;
-//};
-/**
-* Struct containing all parameters used to perform a Skeletal Mesh merge.
-*/
 USTRUCT(BlueprintType)
 struct T9_API FSkeletalMeshMergeParams
 {

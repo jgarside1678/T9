@@ -39,6 +39,21 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
 		class UBoxComponent* BoxCollider;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
+		class AActor* Spawner;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
+		class ADefensiveBuildingActor* BuildingSpawn;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
+		class USceneComponent* SpawnLocation;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
+		bool Active = true;
+
+	UFUNCTION()
+		void ToggleActive(bool Input);
+
 
 private:
 
@@ -51,7 +66,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-	    void ProjectileInnit(AActor* TargetActor, float AttackDamage, float ProjectileDelay = 0);
+	    void ProjectileInnit(AActor* TargetActor, float AttackDamage, AActor* SpawnActor, float ProjectileDelay = 0);
 
 
 };

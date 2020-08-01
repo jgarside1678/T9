@@ -62,7 +62,7 @@ EBTNodeResult::Type UAI_FindTarget::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 				if (Cast<AEnemyCharacter>(NPC)) {
 					SpawnedAlliance = PS->SpawnedAllianceCharacters;
 					for (int x = 0; x < SpawnedAlliance.Num(); x++) {
-						if ((SpawnedAlliance[x] != nullptr) && (!SpawnedAlliance[x]->IsPendingKill())) {
+						if ((SpawnedAlliance[x] != nullptr) && (!SpawnedAlliance[x]->IsPendingKill()) && (!SpawnedAlliance[x]->CheckInvulnerable())) {
 							DistanceToActor = (Origin - SpawnedAlliance[x]->GetActorLocation()).Size();
 							if (NPC->AwarenessDistance != 0 && NPC->AwarenessDistance < DistanceToActor) continue;
 							if (ClosestActor == nullptr) {
@@ -81,7 +81,7 @@ EBTNodeResult::Type UAI_FindTarget::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 				else if (Cast<AAllianceCharacter>(NPC)) {
 					SpawnedEnemies = PS->SpawnedEnemyCharacters;
 					for (int x = 0; x < SpawnedEnemies.Num(); x++) {
-						if ((SpawnedEnemies[x] != nullptr) && (!SpawnedEnemies[x]->IsPendingKill())) {
+						if ((SpawnedEnemies[x] != nullptr) && (!SpawnedEnemies[x]->IsPendingKill()) && (!SpawnedEnemies[x]->CheckInvulnerable())) {
 							DistanceToActor = (Origin - SpawnedEnemies[x]->GetActorLocation()).Size();
 							if (NPC->AwarenessDistance != 0 && NPC->AwarenessDistance < DistanceToActor) continue;
 							if (ClosestActor == nullptr) {

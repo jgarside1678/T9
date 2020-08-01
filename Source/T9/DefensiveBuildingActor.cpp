@@ -4,6 +4,12 @@
 #include "DamageInterface.h"
 #include "TimerManager.h"
 
+
+ADefensiveBuildingActor::ADefensiveBuildingActor() {
+	ProjectileSpawn = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileSpawn"));
+	ProjectileSpawn->SetupAttachment(StaticMeshComponent);
+}
+
 void ADefensiveBuildingActor::BeginPlay()
 {
 	Super::BeginPlay();
@@ -46,15 +52,14 @@ void ADefensiveBuildingActor::SetTarget()
 
 void ADefensiveBuildingActor::AttackTarget()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Attack Target Called"));
 	if (Target != nullptr && !Target->IsPendingKill()) {
 		UE_LOG(LogTemp, Warning, TEXT("Attack"));
 		FActorSpawnParameters SpawnParams;
-		FVector Location = GetActorLocation() + ProjectileSpawnLocation;
+		FVector Location = GetActorLocation() + ProjectileSpawn->GetComponentLocation();
 		if (Projectile) {
 			if (!TargetInterface->CheckIfDead()) {
-				AProjectile* SpawnedActorRef = GetWorld()->SpawnActor<AProjectile>(Projectile, Location, ProjectileSpawnRotation, SpawnParams);
-				SpawnedActorRef->ProjectileInnit(Target, GetDamage(), ProjectileDelay);
+				AProjectile* SpawnedActorRef = GetWorld()->SpawnActor<AProjectile>(Projectile, Location, ProjectileSpawn->GetComponentRotation(), SpawnParams);
+				SpawnedActorRef->ProjectileInnit(Target, GetDamage(), this, ProjectileDelay);
 			}
 		}
 		else TargetInterface->DamageEnemy(Target, GetDamage());

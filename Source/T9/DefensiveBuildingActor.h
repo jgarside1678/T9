@@ -23,7 +23,15 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY()
+		class USceneComponent* ProjectileSpawn;
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+		FRotator TurretRotation;
+
 protected:
+	ADefensiveBuildingActor();
 
 	class IDamageInterface* TargetInterface;
 
@@ -42,12 +50,13 @@ protected:
 	UFUNCTION()
 	   void AttackTarget();
 
-	UPROPERTY()
-		FVector ProjectileSpawnLocation = FVector(0,0,100);
 
 	UPROPERTY()
 		FRotator ProjectileSpawnRotation = FRotator(0, 0, 0);
 
 	UPROPERTY()
 		float ProjectileDelay = 0.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* TurretStaticMeshComponent;
 };
