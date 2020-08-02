@@ -35,10 +35,9 @@ void ABuilding_Wizards_Tower::BeginPlay()
 	FActorSpawnParameters SpawnParams;
 	FVector Location = GetActorLocation();
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	BuildingDefender = GetWorld()->SpawnActor<AAllianceCharacter>(AAlliance_Wizard::StaticClass(), FVector(Location.X, Location.Y, 320), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+	BuildingDefender = GetWorld()->SpawnActor<AAllianceCharacter>(AAlliance_Wizard::StaticClass(), FVector(Location.X, Location.Y, 350), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 	if (BuildingDefender) {
 		BuildingDefender->SpawnInit(this, Level, true, false);
-		BuildingDefender->SetActorScale3D(FVector(0.7));
 	}
 }
 

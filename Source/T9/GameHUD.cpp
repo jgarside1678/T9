@@ -8,11 +8,13 @@
 #include "MainPlayerController.h"
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/WidgetComponent.h"
 #include "SelectInterface.h"
 #include "HUDWidget.h"
 #include "SelectMenuWidget.h"
 #include "BuildMenuWidget.h"
 #include "GameGridActor.h"
+#include "ItemActor.h"
 
 
 AGameHUD::AGameHUD() {
@@ -36,11 +38,8 @@ AGameHUD::AGameHUD() {
 	}
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> Widget3(TEXT("WidgetBlueprint'/Game/UI/SelectMenu.SelectMenu_C'"));
-	SelectMenuClass = Widget3.Class;
-	if (SelectMenuClass)
-	{
-		SelectMenuWidget = CreateWidget<USelectMenuWidget>(GetWorld(), SelectMenuClass);
-	}
+	if (Widget3.Succeeded()) SelectMenuWidget = CreateWidget<USelectMenuWidget>(GetWorld(), Widget3.Class);
+
 
 	UWorld* World = GetWorld();
 	if (World) {
@@ -121,6 +120,9 @@ void AGameHUD::SetGameObjectSelected(FHitResult Hit)
 {
 	if (SelectedObject) {
 		if (SelectMenuWidget)SelectMenuWidget->RemoveFromViewport();
+		if (AItemActor* Item = Cast<AItemActor>(SelectedObject)) {
+			if(Item->WidgetComponent) Item->WidgetComponent->SetVisibility(false);
+		}
 		if (ISelectInterface* Select = Cast<ISelectInterface>(HitActor)) Select->SetUnSelected();
 	}
 
@@ -131,6 +133,9 @@ void AGameHUD::SetGameObjectSelected(FHitResult Hit)
 		if (ISelectInterface* Select = Cast<ISelectInterface>(HitActor)) {
 			Select->SetSelected();
 			SelectMenuWidget->AddToViewport();
+		}
+		else if (AItemActor* Item = Cast<AItemActor>(SelectedObject)) {
+			if (Item->WidgetComponent) Item->WidgetComponent->SetVisibility(true);
 		}
 		else SelectMenuWidget->RemoveFromViewport();
 	}

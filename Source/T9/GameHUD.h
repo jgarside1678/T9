@@ -94,9 +94,6 @@ protected:
 		class UBuildMenuWidget* BuildMenuWidget;
 
 	UPROPERTY()
-		TSubclassOf<UUserWidget> SelectMenuClass;
-
-	UPROPERTY()
 		class USelectMenuWidget* SelectMenuWidget;
 
 
@@ -106,8 +103,6 @@ protected:
 	UPROPERTY()
 		class UHUDWidget* HUDMenuWidget;
 
-	//TSharedPtr<class SBuildWidget> BuildingWidget;
 
-	//TSharedPtr<class SWidget> BuildingWidgetContainer;
 
 };

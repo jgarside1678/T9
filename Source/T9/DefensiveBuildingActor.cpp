@@ -2,6 +2,7 @@
 #include "DefensiveBuildingActor.h"
 #include "EnemyCharacter.h"
 #include "DamageInterface.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "TimerManager.h"
 
 
@@ -71,6 +72,13 @@ void ADefensiveBuildingActor::AttackTarget()
 
 void ADefensiveBuildingActor::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
+	if (Target && TurretStaticMeshComponent) {
+		FVector AimLocation = Target->GetActorLocation() + FVector(0, 0, 150);
+		FRotator Rot = UKismetMathLibrary::FindLookAtRotation(TurretStaticMeshComponent->GetComponentLocation(), AimLocation);
+		TurretRotation = UKismetMathLibrary::RInterpTo(TurretStaticMeshComponent->GetComponentRotation(), Rot, DeltaTime, 3) - GetActorRotation();
+		TurretStaticMeshComponent->SetRelativeRotation(TurretRotation);
+		ProjectileSpawn->SetRelativeRotation(TurretRotation);
+	}
 }
 
 

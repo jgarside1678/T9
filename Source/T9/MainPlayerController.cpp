@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "MainPlayerController.h"
 #include "MainPlayerState.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
@@ -79,7 +78,7 @@ void AMainPlayerController::OpenCloseBuildMenu()
 
 void AMainPlayerController::SelectPressed() {
 	FHitResult Hit;
-	bool ValidHit = GetHitResultUnderCursorByChannel((ETraceTypeQuery)ECC_Visibility, true, Hit);
+	bool ValidHit = GetHitResultUnderCursorByChannel((ETraceTypeQuery)ECC_PhysicsBody, true, Hit);
 	if (Hit.Actor.IsValid()) {
 		HUDPointer->SetGameObjectSelected(Hit);
 	}

@@ -2,7 +2,6 @@
 
 #include "Building_Arrow_Tower.h"
 #include "MainPlayerController.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "MainPlayerState.h"
 #include "Projectile_Arrow.h"
 
@@ -48,12 +47,5 @@ void ABuilding_Arrow_Tower::Upgrade()
 void ABuilding_Arrow_Tower::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (Target) {
-		FVector AimLocation = Target->GetActorLocation() + FVector(0, 0, 150);
-		FRotator Rot = UKismetMathLibrary::FindLookAtRotation(TurretStaticMeshComponent->GetComponentLocation(), AimLocation);
-		TurretRotation = UKismetMathLibrary::RInterpTo(TurretStaticMeshComponent->GetComponentRotation(), Rot, DeltaTime, 3) - GetActorRotation();
-	    TurretStaticMeshComponent->SetRelativeRotation(TurretRotation);
-		ProjectileSpawn->SetRelativeRotation(TurretRotation);
-	}
 
 }
