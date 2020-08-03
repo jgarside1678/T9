@@ -57,12 +57,12 @@ AItemActor::AItemActor()
 
 
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("Select"));
+	WidgetComponent->SetupAttachment(RootComponent);
 	static ConstructorHelpers::FClassFinder<UUserWidget> Widget(TEXT("WidgetBlueprint'/Game/UI/ItemPickUp.ItemPickUp_C'"));
 	if (Widget.Succeeded()) WidgetClass = Widget.Class;
 	if (WidgetComponent) {
-		WidgetComponent->SetupAttachment(ItemAnchor);
+		//WidgetComponent->SetupAttachment(ItemAnchor);
 		WidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
-		WidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, -200));
 		if (WidgetClass != nullptr) {
 			WidgetComponent->SetWidgetClass(WidgetClass);
 		}
@@ -86,6 +86,8 @@ void AItemActor::BeginPlay()
 		}
 		ItemPickUp = Cast<UItemPickUpWidget>(WidgetComponent->GetUserWidgetObject());
 		if(ItemPickUp)ItemPickUp->ItemMenuInit(this);
+		FVector BoxExtent = BoxCollider->GetScaledBoxExtent();
+		WidgetComponent->SetRelativeLocation(FVector(0, 0, -600));
 	}
 }
 

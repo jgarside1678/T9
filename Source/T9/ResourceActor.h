@@ -54,6 +54,9 @@ protected:
 	UPROPERTY()
 		int OutlineColour = 1;
 
+	UPROPERTY()
+		FVector BoxExtentMultiplier = FVector(1);
+
 
 public:	
 	// Called every frame
@@ -72,5 +75,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		virtual FString GetName();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* GridSpace;
+
+	UFUNCTION()
+		void ResourceInit(class AGameGridActor* Grid);
 
 };

@@ -27,6 +27,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void ShowItemInfo();
 
+	UFUNCTION(BlueprintCallable)
+		FString GetItemName();
+
 private:
 
 	UPROPERTY()

@@ -391,20 +391,22 @@ void AGameGridActor::GenerateTerrain() {
 	GetRandomSections(Sections);
 
 	for (int x = 0; x < Sections.Num(); x++) {
-		AActor* WoodResource;
+		AResourceActor* WoodResource;
 		FActorSpawnParameters SpawnParams;
 		float XPosition = (Sections[x].X *100) +GetActorLocation().X;
 		float YPosition = (Sections[x].Y * 100) + GetActorLocation().Y;
-		WoodResource = GetWorld()->SpawnActor<AActor>(AResource_Wood::StaticClass(), FVector(XPosition, YPosition, 0.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		WoodResource = GetWorld()->SpawnActor<AResourceActor>(AResource_Wood::StaticClass(), FVector(XPosition, YPosition, 5.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		WoodResource->ResourceInit(this);
 	}
 
 	GetRandomSections(Sections);
 	for (int x = 0; x < Sections.Num(); x++) {
-		AActor* StoneResource;
+		AResourceActor* StoneResource;
 		FActorSpawnParameters SpawnParams;
 		float XPosition = (Sections[x].X * 100) + GetActorLocation().X;
 		float YPosition = (Sections[x].Y * 100) + GetActorLocation().Y;
-		StoneResource = GetWorld()->SpawnActor<AActor>(AResource_Stone::StaticClass(), FVector(XPosition, YPosition, 0.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		StoneResource = GetWorld()->SpawnActor<AResourceActor>(AResource_Stone::StaticClass(), FVector(XPosition, YPosition, 5.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		StoneResource->ResourceInit(this);
 	}
 
 }
@@ -414,6 +416,9 @@ void AGameGridActor::ToggleGridSpaces(bool Input) {
 
 	for (int x = 0; x < PS->SpawnedBuildings.Num(); x++) {
 		if (PS->SpawnedBuildings[x] && PS->SpawnedBuildings[x]->GridSpace) PS->SpawnedBuildings[x]->GridSpace->SetVisibility(Input);
+	}
+	for (int x = 0; x < PS->SpawnedResources.Num(); x++) {
+		if (PS->SpawnedResources[x] && PS->SpawnedResources[x]->GridSpace) PS->SpawnedResources[x]->GridSpace->SetVisibility(Input);
 	}
 }
 

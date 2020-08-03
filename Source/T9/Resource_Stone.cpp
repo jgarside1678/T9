@@ -9,6 +9,7 @@ AResource_Stone::AResource_Stone() {
 	ResourceType = Stone;
 	Name = "Stone Quarry";
 	CollectionDistance = FVector(50);
+	BoxExtentMultiplier = FVector(6);
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Assets/Fantasy_Village/meshes/stones/SM_stone_a.SM_stone_a'"));
 	if (Mesh.Succeeded()) {
 		TArray<FVector2D> Sections;
@@ -33,7 +34,7 @@ AResource_Stone::AResource_Stone() {
 			}
 		}
 	}
-	BoxCollider->SetBoxExtent(FVector(300));
+	BoxCollider->SetBoxExtent(BoxExtentMultiplier*100);
 
 
 }

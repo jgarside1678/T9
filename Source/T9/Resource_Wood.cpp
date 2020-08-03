@@ -9,6 +9,7 @@ AResource_Wood::AResource_Wood() {
 	ResourceType = Wood;
 	Name = "Oak Forest";
 	CollectionDistance = FVector(50);
+	BoxExtentMultiplier = FVector(10);
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Props/trees/Fol_Tree_07.Fol_Tree_07'"));
 	if (Mesh.Succeeded()) {
 		TArray<FVector2D> Sections;
@@ -34,7 +35,7 @@ AResource_Wood::AResource_Wood() {
 			}
 		}
 	}
-	BoxCollider->SetBoxExtent(FVector(900));
+	BoxCollider->SetBoxExtent(BoxExtentMultiplier * 100);
 
 
 }

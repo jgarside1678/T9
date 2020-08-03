@@ -6,6 +6,7 @@
 #include "MainPlayerController.h"
 #include "DrawDebugHelpers.h"
 #include "MainPlayerState.h"
+#include "GameGridActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/InstancedStaticMeshComponent.h"
 
@@ -14,11 +15,25 @@ AResourceActor::AResourceActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	StaticMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Static Mesh Component"));
-	RootComponent = StaticMeshComponent;
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
 	BoxCollider->SetupAttachment(RootComponent);
 	BoxCollider->SetCollisionProfileName("Trigger");
+	RootComponent = BoxCollider;
+	StaticMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Static Mesh Component"));
+	StaticMeshComponent->SetupAttachment(RootComponent);
+	GridSpace = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GridSpace"));
+	GridSpace->SetupAttachment(RootComponent);
+	if (GridSpace) {
+		GridSpace->SetCustomDepthStencilValue(OutlineColour);
+		GridSpace->SetRenderCustomDepth(true);
+		GridSpace->SetVisibility(false);
+		static ConstructorHelpers::FObjectFinder<UStaticMesh> Plane(TEXT("StaticMesh'/Engine/BasicShapes/Plane.Plane'"));
+		static ConstructorHelpers::FObjectFinder<UMaterialInstance> PlaneColour(TEXT("MaterialInstanceConstant'/Game/Materials/Grid/GridColour_Resources.GridColour_Resources'"));
+		if (Plane.Succeeded()) {
+			GridSpace->SetStaticMesh(Plane.Object);
+			GridSpace->SetMaterial(0, PlaneColour.Object);
+		}
+	}
 }
 
 // Called when the game starts or when spawned
@@ -69,5 +84,13 @@ void AResourceActor::SetUnSelected()
 FString AResourceActor::GetName()
 {
 	return Name;
+}
+
+void AResourceActor::ResourceInit(AGameGridActor* Grid)
+{
+	FVector Location = GetActorLocation() - (BoxExtentMultiplier * 100);
+	Grid->SetTilesActive(Location, BoxExtentMultiplier.X*2, BoxExtentMultiplier.Y*2);
+	GridSpace->SetWorldScale3D(FVector(BoxExtentMultiplier.X * 2, BoxExtentMultiplier.Y * 2, 1));
+	GridSpace->SetRelativeLocation(FVector(0, 0, 1));
 }
 

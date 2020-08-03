@@ -26,6 +26,13 @@ void UItemPickUpWidget::ShowItemInfo()
 {
 }
 
+FString UItemPickUpWidget::GetItemName() {
+	if (Item) {
+		return Item->GetItemName();
+	}
+	return FString("");
+}
+
 void UItemPickUpWidget::NativeConstruct() {
 	PC = (AMainPlayerController*)GetWorld()->GetFirstPlayerController();
 	PS = (AMainPlayerState*)PC->PlayerState;
