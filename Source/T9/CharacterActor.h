@@ -96,6 +96,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
 		bool NeedsController = true;
 
+	UFUNCTION()
+	    virtual void DeathInit();
+
 
 public:	
 	// Called every frame

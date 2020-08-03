@@ -10,4 +10,5 @@ AItem_Wooden_Pickaxe::AItem_Wooden_Pickaxe() {
 		ItemMesh->SetStaticMesh(Mesh.Object);
 		ItemMesh->SetRelativeLocation(FVector(63, -23, 0));
 	}
+	GoldValue = 10;
 }

@@ -5,11 +5,11 @@
 #include "CoreMinimal.h"
 #include "BuildingActor.h"
 #include "ResourceActor.h"
+#include "ItemActor.h"
 #include "TerrainActor.h"
 #include "CharacterActor.h"
 #include "GameFramework/PlayerState.h"
 #include "MainPlayerState.generated.h"
-
 /**
  * 
  */
@@ -47,6 +47,8 @@ private:
 	UPROPERTY()
 		TMap<FString, int> Building_MaxCount = { {"Town Hall", 231}, {"Arrow Tower", 400} };;
 
+	UPROPERTY(VisibleAnywhere)
+		TArray<AItemActor*> Inventory;
 
 public:
 
@@ -160,4 +162,14 @@ public:
 
 	UFUNCTION()
 		void SetMaxBuildingCount(FString Name, int Number);
+
+
+	UFUNCTION()
+		bool AddItemToInventory(AItemActor* Item);
+
+	UFUNCTION()
+		bool RemoveItemFromInventory(int InventorySlot);
+
+	UFUNCTION()
+		bool CheckForItemInInventory(AItemActor* Item, int& ItemIndex);
 };

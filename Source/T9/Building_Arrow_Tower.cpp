@@ -10,6 +10,7 @@ ABuilding_Arrow_Tower::ABuilding_Arrow_Tower(const FObjectInitializer& ObjectIni
 	TurretStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TurretMesh"));
 	TurretStaticMeshComponent->SetupAttachment(StaticMeshComponent);
 	TurretStaticMeshComponent->SetRelativeLocation(FVector(0, 0, 330.0));
+	TurretStaticMeshComponent->SetCanEverAffectNavigation(false);
 	Projectile = AProjectile_Arrow::StaticClass();
 	ProjectileSpawn->SetupAttachment(TurretStaticMeshComponent);
 	ProjectileSpawn->SetRelativeLocation(FVector(0.0f, 0.0f, 30.0f));

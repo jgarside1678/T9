@@ -85,6 +85,7 @@ void AItemActor::BeginPlay()
 			WidgetComponent->SetWidgetClass(WidgetClass);
 		}
 		ItemPickUp = Cast<UItemPickUpWidget>(WidgetComponent->GetUserWidgetObject());
+		if(ItemPickUp)ItemPickUp->ItemMenuInit(this);
 	}
 }
 
@@ -101,12 +102,31 @@ void AItemActor::Tick(float DeltaTime)
 	FHitResult HitDetails = FHitResult(ForceInit);
 	bool bIsHit = GetWorld()->LineTraceSingleByChannel( HitDetails, Start, End, ECC_Visibility,	TraceParams	);
 	if (bIsHit) {
-		UE_LOG(LogTemp, Warning, TEXT("eewww"));
 		float thing = FMath::Lerp(100000, 0, ((HitDetails.Location - Start).Size() / 160));
 		Primitive->AddForce(HitDetails.ImpactNormal* thing);
 		if(thing > 10000) Primitive->SetLinearDamping(0.4);
 		Primitive->SetAngularDamping(0);
 	}
 	ItemAnchor->AddLocalRotation(FRotator(0, 0.5, 0));
+}
+
+int AItemActor::GetItemGoldValue()
+{
+	return GoldValue;
+}
+
+FString AItemActor::GetItemName()
+{
+	return ItemName;
+}
+
+int AItemActor::GetItemID()
+{
+	return ItemID;
+}
+
+UImage* AItemActor::GetItemImage()
+{
+	return ItemImage;
 }
 

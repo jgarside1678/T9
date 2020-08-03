@@ -6,6 +6,7 @@
 #include "Enemy_Succubus_Controller.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Item_Wooden_Pickaxe.h"
 
 AEnemy_Succubus::AEnemy_Succubus(const FObjectInitializer& ObjectInitializer) {
 	Levels.Add(1, FCharacterLevels{ 50, 0, 300, 0, 1000 });
@@ -35,6 +36,9 @@ AEnemy_Succubus::AEnemy_Succubus(const FObjectInitializer& ObjectInitializer) {
 		}
 	}
 	AIControllerClass = AEnemy_Succubus_Controller::StaticClass();
+
+	DropTable.Add(FLoot{ 1, AItem_Wooden_Pickaxe::StaticClass() });
+	DropTable.Add(FLoot{ 3, nullptr });
 }
 
 

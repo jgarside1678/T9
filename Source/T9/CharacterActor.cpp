@@ -177,26 +177,30 @@ void ACharacterActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage)
 			if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Levels.Num()].MaxHealth);
 		}
 		if (CurrentHealth <= 0) {
-			IsDead = true;
-			if (Levels.Contains(Level)) {
-				PS->AddCurrentXP(Levels[Level].KillXP);
-				PS->AddGold(Levels[Level].KillGold);
-			}
-			else if (Levels.Contains(Levels.Num())) {
-				PS->AddCurrentXP(Levels[Levels.Num()].KillXP);
-				PS->AddGold(Levels[Levels.Num()].KillGold);
-			}
-			Cast<UCharacterMovementComponent>(GetMovementComponent())->MaxWalkSpeed = 0;
-			FTimerDelegate Delegate;
-			Delegate.BindLambda([this] { Destroy(); });
-			GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, Delegate, DeathTime, false);
-			if (SpawnBuilding) {
-				UBuildingSpawnComponent* SpawnComponent = Cast<UBuildingSpawnComponent>(SpawnBuilding->GetComponentByClass(UBuildingSpawnComponent::StaticClass()));
-				if (SpawnComponent) {
-					SpawnComponent->CurrentSpawnCount--;
-					SpawnComponent->Respawn();
-				}
-			}
+			DeathInit();
+		}
+	}
+}
+
+void ACharacterActor::DeathInit() {
+	IsDead = true;
+	if (Levels.Contains(Level)) {
+		PS->AddCurrentXP(Levels[Level].KillXP);
+		PS->AddGold(Levels[Level].KillGold);
+	}
+	else if (Levels.Contains(Levels.Num())) {
+		PS->AddCurrentXP(Levels[Levels.Num()].KillXP);
+		PS->AddGold(Levels[Levels.Num()].KillGold);
+	}
+	Cast<UCharacterMovementComponent>(GetMovementComponent())->MaxWalkSpeed = 0;
+	FTimerDelegate Delegate;
+	Delegate.BindLambda([this] { Destroy(); });
+	GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, Delegate, DeathTime, false);
+	if (SpawnBuilding) {
+		UBuildingSpawnComponent* SpawnComponent = Cast<UBuildingSpawnComponent>(SpawnBuilding->GetComponentByClass(UBuildingSpawnComponent::StaticClass()));
+		if (SpawnComponent) {
+			SpawnComponent->CurrentSpawnCount--;
+			SpawnComponent->Respawn();
 		}
 	}
 }

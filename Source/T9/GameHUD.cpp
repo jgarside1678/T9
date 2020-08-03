@@ -24,18 +24,10 @@ AGameHUD::AGameHUD() {
 
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> Widget1(TEXT("WidgetBlueprint'/Game/UI/BuildMenu.BuildMenu_C'"));
-	BuildMenuClass = Widget1.Class;
-	if (BuildMenuClass)
-	{
-		BuildMenuWidget = CreateWidget<UBuildMenuWidget>(GetWorld(), BuildMenuClass);
-	}
+	if (Widget1.Succeeded()) BuildMenuWidget = CreateWidget<UBuildMenuWidget>(GetWorld(), Widget1.Class);
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> Widget2(TEXT("WidgetBlueprint'/Game/UI/HUDMenu.HUDMenu_C'"));
-	HUDMenuClass = Widget2.Class;
-	if (HUDMenuClass)
-	{
-		HUDMenuWidget = CreateWidget<UHUDWidget>(GetWorld(), HUDMenuClass);
-	}
+	if(Widget2.Succeeded())	HUDMenuWidget = CreateWidget<UHUDWidget>(GetWorld(), Widget2.Class);
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> Widget3(TEXT("WidgetBlueprint'/Game/UI/SelectMenu.SelectMenu_C'"));
 	if (Widget3.Succeeded()) SelectMenuWidget = CreateWidget<USelectMenuWidget>(GetWorld(), Widget3.Class);

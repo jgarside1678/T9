@@ -85,20 +85,15 @@ protected:
 	UPROPERTY()
 		class AGameGridActor* GameGrid;
 
+
 	virtual void BeginPlay() override;
 
-	UPROPERTY()
-	    TSubclassOf<UUserWidget> BuildMenuClass;
 
 	UPROPERTY()
 		class UBuildMenuWidget* BuildMenuWidget;
 
 	UPROPERTY()
 		class USelectMenuWidget* SelectMenuWidget;
-
-
-	UPROPERTY()
-		TSubclassOf<UUserWidget> HUDMenuClass;
 
 	UPROPERTY()
 		class UHUDWidget* HUDMenuWidget;

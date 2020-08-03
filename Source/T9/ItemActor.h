@@ -64,11 +64,28 @@ protected:
 	UPROPERTY()
 		class UItemPickUpWidget* ItemPickUp;
 
+	UPROPERTY()
+		int GoldValue = 0;
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY()
 		class UWidgetComponent* WidgetComponent;
+
+
+	UFUNCTION(BlueprintCallable)
+		int GetItemGoldValue();
+
+	UFUNCTION(BlueprintCallable)
+		FString GetItemName();
+
+	UFUNCTION(BlueprintCallable)
+		int GetItemID();
+
+	UFUNCTION(BlueprintCallable)
+		class UImage* GetItemImage();
 
 };

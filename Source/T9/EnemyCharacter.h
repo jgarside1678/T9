@@ -9,6 +9,19 @@
 /**
  * 
  */
+
+USTRUCT()
+struct FLoot {
+
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere)
+		int LootChance = 0;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class AItemActor> ItemClass;
+};
+
 UCLASS()
 class T9_API AEnemyCharacter : public ACharacterActor
 {
@@ -21,6 +34,13 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void DeathInit();
+
+	UPROPERTY()
+		TArray<FLoot> DropTable;
+
+	virtual void GenerateLoot();
 
 public:
 	// Called every frame
