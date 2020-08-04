@@ -183,7 +183,6 @@ void ABuildingActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage)
 		if (SpawnComp) ((UBuildingSpawnComponent*)SpawnComp)->KillAll();
 		if (Grid) Grid->SetTilesUnactive(BuildingCornerLocation, GridXLength, GridYLength, GridRotation);
 		IsDead = true;
-		if(BuildingDefender) BuildingDefender->Destroy();
 		PS->SetBuildingCount(BuildingName, GetBuildingCount() - 1);
 		PS->BuildingArrayClean();
 		this->Destroy();
@@ -284,3 +283,4 @@ int ABuildingActor::GetMaxBuildingCount() {
 	if (PS->GetMaxBuildingCount(BuildingName)) return PS->GetMaxBuildingCount(BuildingName);
 	return 1;
 }
+

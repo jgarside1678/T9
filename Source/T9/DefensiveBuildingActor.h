@@ -5,13 +5,15 @@
 #include "CoreMinimal.h"
 #include "Projectile.h"
 #include "BuildingActor.h"
+#include "AllianceCharacter.h"
 #include "DefensiveBuildingActor.generated.h"
 
-/**
- * 
- */
+
 UENUM()
     enum TargetPiority { Closest, HighestHP, LowestHP, Random };
+
+UENUM()
+    enum TowerType { Turret, Character, Default };
 
 
 UCLASS()
@@ -29,6 +31,17 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
 		FRotator TurretRotation;
+
+
+	UPROPERTY()
+		TEnumAsByte<TowerType> Type = Default;
+
+
+    UFUNCTION(BlueprintCallable, Category = "Mesh Merge", meta = (UnsafeDuringActorConstruction = "true"))
+        static class USkeletalMesh* MergeMeshes(const FSkeletalMeshMergeParams& Params);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
+		class USkeletalMeshComponent* BuildingDefender;
 
 protected:
 	ADefensiveBuildingActor();
@@ -48,8 +61,7 @@ protected:
 	virtual void SetTarget();
 
 	UFUNCTION()
-	   void AttackTarget();
-
+	   virtual void AttackTarget();
 
 	UPROPERTY()
 		FRotator ProjectileSpawnRotation = FRotator(0, 0, 0);
@@ -59,4 +71,23 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* TurretStaticMeshComponent;
+
+
+    UPROPERTY(EditAnywhere)
+        TArray<USkeletalMesh*> MeshPeices;
+
+    UFUNCTION()
+        void MeshInit();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
+		FVector DefenderDisplacement = FVector(0);
+
 };
+
+
+
+
+
+
+
+

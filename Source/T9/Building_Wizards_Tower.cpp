@@ -6,17 +6,22 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "MainPlayerState.h"
 #include "Alliance_Wizard.h"
-#include "Projectile_Arrow.h"
+#include "Projectile_Magic_Fire.h"
+
 
 ABuilding_Wizards_Tower::ABuilding_Wizards_Tower(const FObjectInitializer& ObjectInitializer) {
 	// XP / Cost / Maxhealth / Damage
-
-	Projectile = AProjectile_Arrow::StaticClass();
-	ProjectileSpawn->SetRelativeLocation(FVector(0,0,0.0f));
-	ProjectileDelay = 0.5f;
+	Disabled = true;
+	Projectile = AProjectile_Magic_Fire::StaticClass();
+	//ProjectileSpawn->SetRelativeLocation(FVector(0,0,0.0f));
+	ProjectileDelay = 1.0f;
+	DefenderDisplacement.Z = 250;
+	BuildingDefender = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Building Defender"));
+	BuildingDefender->SetupAttachment(StaticMeshComponent);
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1A.Tower_Base1A'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1B.Tower_Base1B'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1C.Tower_Base1C'"));
+	//static ConstructorHelpers::FObjectFinder<UAnimSequence> AnimationMont(TEXT("AnimSequence'/Game/AI/Alliance/StylizedHumanMale/Animations/Standing_1H_Magic_Attack_01_mixamo_com.Standing_1H_Magic_Attack_01_mixamo_com'"));
 	if (BaseMesh.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(BaseMesh.Object);
 	}
@@ -27,18 +32,52 @@ ABuilding_Wizards_Tower::ABuilding_Wizards_Tower(const FObjectInitializer& Objec
 	BuildingDetectionRange = Upgrades[Level].Attack.AttackRangeMultipler;
 	ResetHealth();
 	BuildingName = "Wizards Tower";
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> BodyMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanMale/Meshes/ModularParts/SK_Body.SK_Body'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> BeltMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanMale/Meshes/ModularParts/SK_Belt.SK_Belt'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> BootsMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanMale/Meshes/ModularParts/SK_Boots.SK_Boots'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> BrowsMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanMale/Meshes/ModularParts/SK_Brows_02.SK_Brows_02'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> HairMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanMale/Meshes/ModularParts/SK_Hair_01.SK_Hair_01'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> LowerBodyMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanMale/Meshes/ModularParts/SK_Pants.SK_Pants'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> UpperBodyMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanMale/Meshes/ModularParts/SK_Shirt.SK_Shirt'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> BeardMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanMale/Meshes/ModularParts/SK_Beard_02.SK_Beard_02'"));
+	//static ConstructorHelpers::FObjectFinder<UStaticMesh> ItemMesh(TEXT("StaticMesh'/Game/Meshes/Weapons/Pickaxe.Pickaxe'"));
+	if (BodyMesh.Succeeded())MeshPeices.Add(BodyMesh.Object);
+	if (BeltMesh.Succeeded())MeshPeices.Add(BeltMesh.Object);
+	if (BootsMesh.Succeeded())MeshPeices.Add(BootsMesh.Object);
+	if (BrowsMesh.Succeeded())MeshPeices.Add(BrowsMesh.Object);
+	if (HairMesh.Succeeded())MeshPeices.Add(HairMesh.Object);
+	if (LowerBodyMesh.Succeeded())MeshPeices.Add(LowerBodyMesh.Object);
+	if (UpperBodyMesh.Succeeded())MeshPeices.Add(UpperBodyMesh.Object);
+	if (BeardMesh.Succeeded())MeshPeices.Add(BeardMesh.Object);
+	//MeshInit();
+	BuildingDefender->SetSkeletalMesh(MergeMeshes(FSkeletalMeshMergeParams(MeshPeices, MeshPeices[0]->Skeleton)));
+	BuildingDefender->SetRelativeLocation(DefenderDisplacement);
+	//if (ItemMesh.Succeeded()) {
+	//	MainHandItemMesh->SetStaticMesh(ItemMesh.Object);
+	//	MainHandItemMesh->SetRelativeScale3D(FVector(0.5));
+	//	MainHandItemMesh->SetRelativeLocation(FVector(22.000000, -59.000000, 31.000000));
+	//	MainHandItemMesh->SetRelativeRotation(FRotator(0, 309.599152f, 0));
+	//}
+
+
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Alliance/StylizedHumanMale/Animations/Alliance_LumberJack_AnimBP.Alliance_LumberJack_AnimBP_C'"));
+	if (AnimationAsset.Succeeded()) {
+		BuildingDefender->AnimClass = AnimationAsset.Class;
+	}
 }
 
 void ABuilding_Wizards_Tower::BeginPlay()
 {
 	Super::BeginPlay();
-	FActorSpawnParameters SpawnParams;
-	FVector Location = GetActorLocation();
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	BuildingDefender = GetWorld()->SpawnActor<AAllianceCharacter>(AAlliance_Wizard::StaticClass(), FVector(Location.X, Location.Y, 350), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
-	if (BuildingDefender) {
-		BuildingDefender->SpawnInit(this, Level, true, false);
-	}
+	//FActorSpawnParameters SpawnParams;
+	//FVector Location = GetActorLocation();
+	//SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	//BuildingDefender = GetWorld()->SpawnActor<AAllianceCharacter>(AAlliance_Wizard::StaticClass(), FVector(Location.X, Location.Y, DefenderDisplacement.Z), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+	//if (BuildingDefender) {
+	//	BuildingDefender->SpawnInit(this, Level, true, false);
+	//}
+	Disabled = false;
 }
 
 void ABuilding_Wizards_Tower::Upgrade()
@@ -50,4 +89,5 @@ void ABuilding_Wizards_Tower::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
+
 

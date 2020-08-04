@@ -31,6 +31,9 @@ protected:
 	    float ProjectileMovementDelay = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+		float ProjectileSpeed = 1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 		class UProjectileMovementComponent* ProjectileMovement;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")

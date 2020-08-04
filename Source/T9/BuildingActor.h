@@ -169,9 +169,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		class UAudioComponent* UpgradeAudio;
 
-	//Alliance Solider for use in archer/wizard towers
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
-		class AAllianceCharacter* BuildingDefender;
+		bool Disabled = false;
 
 public:
 	// Called every frame
@@ -266,5 +265,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* GridSpace;
+
 };
 

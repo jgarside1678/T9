@@ -5,6 +5,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "DamageInterface.h"
 #include "DefensiveBuildingActor.h"
+#include "AllianceCharacter.h"
 
 // Sets default values
 AProjectile::AProjectile() :
@@ -63,11 +64,16 @@ void AProjectile::Tick(float DeltaTime)
 		if (Active) {
 			FVector Direction = (Target->GetActorLocation() - GetActorLocation() + FVector(0, 0, Target->GetSimpleCollisionHalfHeight())).GetSafeNormal();
 			ProjectileMovement->Velocity += Direction * 50000.f * DeltaTime;
-			ProjectileMovement->Velocity = ProjectileMovement->Velocity.GetSafeNormal() * 1500.0f;
+			ProjectileMovement->Velocity = ProjectileMovement->Velocity.GetSafeNormal() * ProjectileSpeed * 1000;
 		}
-		else {
-			SetActorLocation(SpawnLocation->GetComponentLocation());
-			if(BuildingSpawn) SetActorRelativeRotation(BuildingSpawn->TurretRotation);
+		else if(BuildingSpawn) {
+			if (BuildingSpawn->Type == Turret) {
+				SetActorLocation(SpawnLocation->GetComponentLocation());
+				SetActorRelativeRotation(BuildingSpawn->TurretRotation);
+			}
+			else if (BuildingSpawn->Type == Character) {
+				if(USkeletalMeshComponent* SpawnCharacter = BuildingSpawn->BuildingDefender) SetActorLocation(SpawnCharacter->GetSocketLocation("hand_r"));
+			}
 		}
 	}
 	else this->Destroy();

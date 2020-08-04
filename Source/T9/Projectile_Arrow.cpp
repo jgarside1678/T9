@@ -4,7 +4,7 @@
 
 AProjectile_Arrow::AProjectile_Arrow(const FObjectInitializer& ObjectInitializer) {
 
-
+	ProjectileSpeed = 1.5;
 	const ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Assets/bow_arrow.bow_arrow'"));
 	if (Mesh.Succeeded()) {
 		StaticMeshComp->SetStaticMesh(Mesh.Object);
