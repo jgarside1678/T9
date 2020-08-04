@@ -48,6 +48,6 @@ void ABuilding_Wizards_Tower::Upgrade()
 
 void ABuilding_Wizards_Tower::Tick(float DeltaTime)
 {
-
+	Super::Tick(DeltaTime);
 }
 

@@ -4,7 +4,7 @@
 #include "DamageInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "TimerManager.h"
-
+#include "AllianceCharacter.h"
 
 ADefensiveBuildingActor::ADefensiveBuildingActor() {
 	ProjectileSpawn = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileSpawn"));
@@ -78,6 +78,13 @@ void ADefensiveBuildingActor::Tick(float DeltaTime) {
 		TurretRotation = UKismetMathLibrary::RInterpTo(TurretStaticMeshComponent->GetComponentRotation(), Rot, DeltaTime, 3) - GetActorRotation();
 		TurretStaticMeshComponent->SetRelativeRotation(TurretRotation);
 		ProjectileSpawn->SetRelativeRotation(TurretRotation);
+	}
+	else if (Target && BuildingDefender) {
+		FVector AimLocation = Target->GetActorLocation() + FVector(0, 0, 150);
+		FRotator Rot = UKismetMathLibrary::FindLookAtRotation(BuildingDefender->GetActorLocation(), AimLocation);
+		TurretRotation = UKismetMathLibrary::RInterpTo(BuildingDefender->GetActorRotation(), Rot, DeltaTime, 3) - GetActorRotation();
+		BuildingDefender->SetActorRotation(TurretRotation);
+		ProjectileSpawn->SetRelativeRotation(FRotator(0,0, TurretRotation.Yaw));
 	}
 }
 
