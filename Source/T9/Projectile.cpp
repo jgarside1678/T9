@@ -14,7 +14,7 @@ AProjectile::AProjectile() :
 	BoxCollider(CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider")))
 {
 	PrimaryActorTick.bCanEverTick = true;
-
+	StaticMeshComp->SetCanEverAffectNavigation(false);
 	RootComponent = BoxCollider;
 	StaticMeshComp->SetupAttachment(RootComponent);
 	ProjectileMovement->UpdatedComponent = BoxCollider;
@@ -38,13 +38,13 @@ void AProjectile::ProjectileInnit(AActor* TargetActor, float AttackDamage, AActo
 	Spawner = SpawnActor;
 	ProjectileMovementDelay = ProjectileDelay;
 	BuildingSpawn = Cast<ADefensiveBuildingActor>(Spawner);
-	if (BuildingSpawn) SpawnLocation = BuildingSpawn->ProjectileSpawn;
+	if (BuildingSpawn) ProjectileSpawn = BuildingSpawn->ProjectileSpawn;
 	if (ProjectileMovementDelay > 0) {
-		Active = false;
 		FTimerDelegate TickDelay;
 		TickDelay.BindUFunction(this, FName("ToggleActive"), true);
 		GetWorldTimerManager().SetTimer(ProjectileMovementDelayHandle, TickDelay, ProjectileMovementDelay, false, ProjectileMovementDelay);
 	}
+	else Active = true;
 }
 
 void AProjectile::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -62,16 +62,19 @@ void AProjectile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if ((Target != nullptr) && (Target->IsValidLowLevel())&& (!Target->IsPendingKill())) {
 		if (Active) {
+			UE_LOG(LogTemp, Warning, TEXT("00000"));
 			FVector Direction = (Target->GetActorLocation() - GetActorLocation() + FVector(0, 0, Target->GetSimpleCollisionHalfHeight())).GetSafeNormal();
 			ProjectileMovement->Velocity += Direction * 50000.f * DeltaTime;
 			ProjectileMovement->Velocity = ProjectileMovement->Velocity.GetSafeNormal() * ProjectileSpeed * 1000;
 		}
 		else if(BuildingSpawn) {
 			if (BuildingSpawn->Type == Turret) {
-				SetActorLocation(SpawnLocation->GetComponentLocation());
+				UE_LOG(LogTemp, Warning, TEXT("Turret"));
+				SetActorLocation(ProjectileSpawn->GetComponentLocation());
 				SetActorRelativeRotation(BuildingSpawn->TurretRotation);
 			}
 			else if (BuildingSpawn->Type == Character) {
+				UE_LOG(LogTemp, Warning, TEXT("Character"));
 				if(USkeletalMeshComponent* SpawnCharacter = BuildingSpawn->BuildingDefender) SetActorLocation(SpawnCharacter->GetSocketLocation("hand_r"));
 			}
 		}

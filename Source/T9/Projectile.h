@@ -49,10 +49,10 @@ protected:
 		class ADefensiveBuildingActor* BuildingSpawn;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
-		class USceneComponent* SpawnLocation;
+		class USceneComponent* ProjectileSpawn;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
-		bool Active = true;
+		bool Active = false;
 
 	UFUNCTION()
 		void ToggleActive(bool Input);

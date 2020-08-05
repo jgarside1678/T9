@@ -21,13 +21,7 @@ struct FBuildingMenu : public FTableRowBase {
 		TSubclassOf<AActor> Building;
 
 	UPROPERTY(EditAnywhere)
-		FString Type;
-
-	UPROPERTY(EditAnywhere)
-		float BuildingWidthY;
-
-	UPROPERTY(EditAnywhere)
-		float BuildingHeightX;
+		FBuildingCosts Cost;
 };
 
 

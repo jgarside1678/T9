@@ -64,9 +64,12 @@ void ADefensiveBuildingActor::AttackTarget()
 		if (!Disabled) {
 			UE_LOG(LogTemp, Warning, TEXT("Attack"));
 			FActorSpawnParameters SpawnParams;
-			if (BuildingDefender) ProjectileSpawn->SetWorldLocation(BuildingDefender->GetSocketLocation("hand_r"));
-			FVector Location = GetActorLocation() + ProjectileSpawn->GetComponentLocation();
-			FRotator Rotation = ProjectileSpawn->GetComponentRotation();
+			if (BuildingDefender) {
+				ProjectileSpawn->SetWorldLocation(BuildingDefender->GetSocketLocation("hand_r"));
+				if (DefenderAttackAnimation)	BuildingDefender->PlayAnimation(DefenderAttackAnimation, false);
+			}
+			FVector Location = ProjectileSpawn->GetComponentLocation();
+			FRotator Rotation = ProjectileSpawn->GetRelativeRotation();
 			if (Projectile) {
 				if (!TargetInterface->CheckIfDead()) {
 					AProjectile* SpawnedActorRef = GetWorld()->SpawnActor<AProjectile>(Projectile, Location, Rotation, SpawnParams);
@@ -85,15 +88,15 @@ void ADefensiveBuildingActor::Tick(float DeltaTime) {
 	if (Target && TurretStaticMeshComponent) {
 		FVector AimLocation = Target->GetActorLocation() + FVector(0, 0, 150);
 		FRotator Rot = UKismetMathLibrary::FindLookAtRotation(TurretStaticMeshComponent->GetComponentLocation(), AimLocation);
-		TurretRotation = UKismetMathLibrary::RInterpTo(TurretStaticMeshComponent->GetComponentRotation(), Rot, DeltaTime, 3) - GetActorRotation();
-		TurretStaticMeshComponent->SetRelativeRotation(TurretRotation);
+		TurretRotation = UKismetMathLibrary::RInterpTo(TurretStaticMeshComponent->GetRelativeRotation(), Rot - GetActorRotation(), DeltaTime, 3);
+		TurretStaticMeshComponent->SetRelativeRotation(FRotator(0, TurretRotation.Yaw, 0));
 		ProjectileSpawn->SetRelativeRotation(TurretRotation);
 	}
 	else if (Target && BuildingDefender) {
 		FVector AimLocation = Target->GetActorLocation() + FVector(0, 0, 150);
 		FRotator Rot = UKismetMathLibrary::FindLookAtRotation(BuildingDefender->GetComponentLocation(), AimLocation);
-		TurretRotation = UKismetMathLibrary::RInterpTo(BuildingDefender->GetComponentRotation(), Rot, DeltaTime, 3);
-		BuildingDefender->SetRelativeRotation(FRotator(0, TurretRotation.Yaw, 0));
+		TurretRotation = UKismetMathLibrary::RInterpTo(BuildingDefender->GetRelativeRotation(), Rot - GetActorRotation(), DeltaTime, 3);
+		BuildingDefender->SetRelativeRotation(FRotator(0,TurretRotation.Yaw, 0));
 		ProjectileSpawn->SetRelativeRotation(TurretRotation);
 	}
 }

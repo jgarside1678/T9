@@ -80,7 +80,10 @@ protected:
         void MeshInit();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
-		FVector DefenderDisplacement = FVector(0);
+		class USceneComponent* DefenderDisplacement;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
+		class UAnimationAsset* DefenderAttackAnimation;
 
 };
 

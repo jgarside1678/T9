@@ -28,7 +28,7 @@ AResourceActor::AResourceActor()
 		GridSpace->SetRenderCustomDepth(true);
 		GridSpace->SetVisibility(false);
 		static ConstructorHelpers::FObjectFinder<UStaticMesh> Plane(TEXT("StaticMesh'/Engine/BasicShapes/Plane.Plane'"));
-		static ConstructorHelpers::FObjectFinder<UMaterialInstance> PlaneColour(TEXT("MaterialInstanceConstant'/Game/Materials/Grid/GridColour_Resources.GridColour_Resources'"));
+		static ConstructorHelpers::FObjectFinder<UMaterialInstance> PlaneColour(TEXT("MaterialInstanceConstant'/Game/Materials/Grid/GridSpace_Resources.GridSpace_Resources'"));
 		if (Plane.Succeeded()) {
 			GridSpace->SetStaticMesh(Plane.Object);
 			GridSpace->SetMaterial(0, PlaneColour.Object);

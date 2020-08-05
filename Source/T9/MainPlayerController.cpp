@@ -117,13 +117,10 @@ void AMainPlayerController::SelectInteract() {
 		if (HUDPointer->SelectedBuildMenuObject) {
 			FBuildingMenu* SelectedBuilding = HUDPointer->SelectedBuildMenuObject;
 			ABuildingActor* Building = Cast<ABuildingActor>(HUDPointer->PreviewBuilding);
-			if (Building && (PS->GetBuildingCount(Building->GetName()) < PS->GetMaxBuildingCount(Building->GetName()))) {
-				if (PS->ResourceCheck(Building->GetCost())) {
-					if (*SelectedBuilding->Type == FString("Building"))	GameGrid->BuildBuildingOnTile(*SelectedBuilding);
-					else if (*SelectedBuilding->Type == FString("Wall"))	GameGrid->BuildWallOnTile(*SelectedBuilding);
-				}
-				else UE_LOG(LogTemp, Warning, TEXT("No M0NEY P00R Boi"));
+			if (Building && (PS->GetBuildingCount(Building->GetName()) < PS->GetMaxBuildingCount(Building->GetName())) && PS->ResourceCheck(Building->GetCost())) {
+				GameGrid->BuildBuildingOnTile(*SelectedBuilding);
 			}
+			else UE_LOG(LogTemp, Warning, TEXT("Conditions to build were not met."));
 		}
 		else UE_LOG(LogTemp, Warning, TEXT("No Object Found"));
 	}

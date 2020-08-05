@@ -19,7 +19,7 @@
 
 AGameHUD::AGameHUD() {
 
-	static ConstructorHelpers::FObjectFinder<UDataTable> BuildingsDataTableObject(TEXT("DataTable'/Game/DataTables/BuildingsMenu.BuildingsMenu'"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> BuildingsDataTableObject(TEXT("DataTable'/Game/DataTables/Buildings.Buildings'"));
 	BuildMenuBuildings = BuildingsDataTableObject.Object;
 
 
@@ -62,8 +62,8 @@ void AGameHUD::SetSelectedBuildMenuObject(FString Selection) {
 		static const FString ContextString(TEXT("Spawn Buildings Context"));
 		SelectedBuildMenuObject = BuildMenuBuildings->FindRow<FBuildingMenu>(FName(Selection), ContextString, true);
 		if (SelectedBuildMenuObject) {
-			GameGrid->ScaleSelectionTile(SelectedBuildMenuObject->BuildingHeightX, SelectedBuildMenuObject->BuildingWidthY);
 			PreviewBuilding = GameGrid->CreatePreviewObject(*SelectedBuildMenuObject);
+			if (ABuildingActor* Building = Cast<ABuildingActor>(PreviewBuilding)) GameGrid->ScaleSelectionTile(Building->GridLength.X, Building->GridLength.Y);
 		}
 
 	}

@@ -29,9 +29,12 @@ ABuildingActor::ABuildingActor()
 	BuildingRangeCollider->SetCollisionProfileName("Trigger");
 	BuildingRangeCollider->SetCanEverAffectNavigation(false);
 	RootComponent = BuildingRangeCollider;
-
+	//Needed Because all the meshs are made for a right handed cartesian graph ffs.
+	MeshDisplacement = CreateDefaultSubobject<USceneComponent>(TEXT("MeshDisplacement"));
+	MeshDisplacement->SetupAttachment(RootComponent);
+	MeshDisplacement->SetRelativeRotation(FRotator(0, -90, 0));
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
-	StaticMeshComponent->SetupAttachment(RootComponent);
+	StaticMeshComponent->SetupAttachment(MeshDisplacement);
 	if (StaticMeshComponent) {
 		StaticMeshComponent->SetCustomDepthStencilValue(OutlineColour);
 		StaticMeshComponent->SetRenderCustomDepth(false);
@@ -43,7 +46,7 @@ ABuildingActor::ABuildingActor()
 		GridSpace->SetCustomDepthStencilValue(OutlineColour);
 		GridSpace->SetRenderCustomDepth(true);
 		static ConstructorHelpers::FObjectFinder<UStaticMesh> Plane(TEXT("StaticMesh'/Engine/BasicShapes/Plane.Plane'"));
-		static ConstructorHelpers::FObjectFinder<UMaterialInstance> PlaneColour(TEXT("MaterialInstanceConstant'/Game/Materials/Grid/GridColour_Buildings.GridColour_Buildings'"));
+		static ConstructorHelpers::FObjectFinder<UMaterialInstance> PlaneColour(TEXT("MaterialInstanceConstant'/Game/Materials/Grid/GridSpace_Buildings.GridSpace_Buildings'"));
 		if (Plane.Succeeded()) {
 			GridSpace->SetStaticMesh(Plane.Object);
 			GridSpace->SetMaterial(0, PlaneColour.Object);
@@ -152,16 +155,14 @@ void ABuildingActor::ResetHealth()
 
 
 
-void ABuildingActor::BuildingInnit(AGameGridActor* BuildingGrid, FVector PivotLocation, FVector CornerLocation, float XLength, float YLength, int Rotation)
+void ABuildingActor::BuildingInnit(AGameGridActor* BuildingGrid, FVector PivotLocation, FVector CornerLocation, int Rotation)
 {
 	Grid = BuildingGrid;
 	BuildingCenterLocation = PivotLocation;
 	BuildingCornerLocation = CornerLocation;
-	GridXLength = XLength;
-	GridYLength = YLength;
 	GridRotation = Rotation;
 	GridSpace->SetRelativeLocation(FVector(0,0, 1));
-	GridSpace->SetRelativeScale3D(FVector(XLength, YLength, 1));
+	GridSpace->SetRelativeScale3D(FVector(GridLength.X, GridLength.Y, 1));
 }
 
 void ABuildingActor::GetBuildingRangeCollider(FVector& Origin, FVector& BoxExtent)
@@ -181,7 +182,7 @@ void ABuildingActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage)
 	if (CurrentHealth <= 0) {
 		UActorComponent* SpawnComp = GetComponentByClass(UBuildingSpawnComponent::StaticClass());
 		if (SpawnComp) ((UBuildingSpawnComponent*)SpawnComp)->KillAll();
-		if (Grid) Grid->SetTilesUnactive(BuildingCornerLocation, GridXLength, GridYLength, GridRotation);
+		if (Grid) Grid->SetTilesUnactive(BuildingCornerLocation, GridLength.X, GridLength.Y, GridRotation);
 		IsDead = true;
 		PS->SetBuildingCount(BuildingName, GetBuildingCount() - 1);
 		PS->BuildingArrayClean();
@@ -199,7 +200,7 @@ void ABuildingActor::RemoveBuilding()
 	PS->AddGold(TotalCost*0.5);
 	UActorComponent* SpawnComp = GetComponentByClass(UBuildingSpawnComponent::StaticClass());
 	if (SpawnComp) ((UBuildingSpawnComponent*)SpawnComp)->KillAll();
-	if (Grid) Grid->SetTilesUnactive(BuildingCornerLocation, GridXLength, GridYLength, GridRotation);
+	if (Grid) Grid->SetTilesUnactive(BuildingCornerLocation, GridLength.X, GridLength.Y, GridRotation);
 	IsDead = true;
 	if (PS) {
 		PS->BuildingArrayClean();

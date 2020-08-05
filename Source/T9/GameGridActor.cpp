@@ -257,7 +257,7 @@ ABuildingActor* AGameGridActor::BuildBuildingOnTile(FBuildingMenu ObjectToBuild)
 			UE_LOG(LogTemp, Warning, TEXT("Object Spawned"));
 			//BuiltBuildings.Add(SpawnedActorRef);
 			SetTilesActive(SelectedGridLocation, SelectionLengthY, SelectionLengthX);
-			SpawnedActorRef->BuildingInnit(this, SelectionGridPivotLocation, SelectedGridLocation, SelectionLengthX, SelectionLengthY, SelectionRotationY);
+			SpawnedActorRef->BuildingInnit(this, SelectionGridPivotLocation, SelectedGridLocation, SelectionRotationY);
 			if (PS) {
 				PS->RemoveResources(SpawnedActorRef->GetCost());
 				PS->AddCurrentXP(SpawnedActorRef->GetBuildXP());

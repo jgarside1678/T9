@@ -134,6 +134,9 @@ protected:
 		class AGameGridActor* Grid;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+		class USceneComponent* MeshDisplacement;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* StaticMeshComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
@@ -186,7 +189,7 @@ public:
 
 	//For initalising spawn arguments
 	UFUNCTION()
-		void BuildingInnit(AGameGridActor* BuildingGrid, FVector BuildingCenterLocation, FVector BuildingCornerLocation, float GridXLength, float GridYLength, int Rotation);
+		void BuildingInnit(AGameGridActor* BuildingGrid, FVector BuildingCenterLocation, FVector BuildingCornerLocation, int Rotation);
 
 	UPROPERTY()
 		int GridRotation;
@@ -198,10 +201,7 @@ public:
 		FVector BuildingCornerLocation;
 
 	UPROPERTY()
-		float GridXLength;
-
-	UPROPERTY()
-		float GridYLength;
+		FVector2D GridLength = FVector2D(1);
 
 	UFUNCTION(BlueprintCallable)
 		void GetBuildingRangeCollider(FVector& Origin, FVector& BoxExtent);

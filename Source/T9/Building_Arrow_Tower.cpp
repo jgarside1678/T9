@@ -7,6 +7,8 @@
 
 ABuilding_Arrow_Tower::ABuilding_Arrow_Tower(const FObjectInitializer& ObjectInitializer) {
 	// XP / Cost / Maxhealth / Damage
+	Type = Turret;
+	GridLength = FVector2D(3);
 	TurretStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TurretMesh"));
 	TurretStaticMeshComponent->SetupAttachment(StaticMeshComponent);
 	TurretStaticMeshComponent->SetRelativeLocation(FVector(0, 0, 330.0));
