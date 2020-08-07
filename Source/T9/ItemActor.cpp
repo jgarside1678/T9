@@ -15,7 +15,8 @@ AItemActor::AItemActor()
 	PrimaryActorTick.bCanEverTick = true;
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
 	BoxCollider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	BoxCollider->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+	BoxCollider->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+	BoxCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Block);
 	BoxCollider->SetHiddenInGame(false);
 	BoxCollider->SetCanEverAffectNavigation(false);
 	BoxCollider->SetMassOverrideInKg(NAME_None, 10);
@@ -28,6 +29,7 @@ AItemActor::AItemActor()
 	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMesh"));
 	ItemMesh->SetupAttachment(ItemAnchor);
 	ItemMesh->SetCanEverAffectNavigation(false);
+	ItemMesh->SetCollisionProfileName("NoCollision");
 	//ItemAnchor->SetWorldRotation(FRotator(0));
 	//FVector Location = ItemAnchor->GetComponentLocation();
 	//ItemAnchor->SetWorldLocation(FVector(Location.X, Location.Y, 10));
@@ -57,16 +59,16 @@ AItemActor::AItemActor()
 
 
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("Select"));
-	WidgetComponent->SetupAttachment(RootComponent);
+	WidgetComponent->SetupAttachment(ItemAnchor);
 	static ConstructorHelpers::FClassFinder<UUserWidget> Widget(TEXT("WidgetBlueprint'/Game/UI/ItemPickUp.ItemPickUp_C'"));
 	if (Widget.Succeeded()) WidgetClass = Widget.Class;
 	if (WidgetComponent) {
-		//WidgetComponent->SetupAttachment(ItemAnchor);
+		WidgetComponent->SetupAttachment(RootComponent);
 		WidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
+		WidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, -800.0f));
 		if (WidgetClass != nullptr) {
 			WidgetComponent->SetWidgetClass(WidgetClass);
 		}
-		WidgetComponent->SetVisibility(false);
 	}
 
 
@@ -83,11 +85,11 @@ void AItemActor::BeginPlay()
 	if (WidgetComponent) {
 		if (WidgetClass != nullptr) {
 			WidgetComponent->SetWidgetClass(WidgetClass);
+			WidgetComponent->SetVisibility(false);
 		}
 		ItemPickUp = Cast<UItemPickUpWidget>(WidgetComponent->GetUserWidgetObject());
 		if(ItemPickUp)ItemPickUp->ItemMenuInit(this);
 		FVector BoxExtent = BoxCollider->GetScaledBoxExtent();
-		WidgetComponent->SetRelativeLocation(FVector(0, 0, -600));
 	}
 }
 
