@@ -53,6 +53,8 @@ void AMainPlayerController::SetupInputComponent()
 
 	InputComponent->BindAction("Key_E", IE_Pressed, this, &AMainPlayerController::OpenCloseBuildMenu);
 
+	InputComponent->BindAction("Tab", IE_Pressed, this, &AMainPlayerController::ToggleInventory);
+
 	InputComponent->BindAction("MiddleMouse", IE_Pressed, this, &AMainPlayerController::MiddleMouseButtonPressed);
 	InputComponent->BindAction("MiddleMouse", IE_Released, this, &AMainPlayerController::MiddleMouseButtonReleased);
 
@@ -74,6 +76,14 @@ void AMainPlayerController::OpenCloseBuildMenu()
 		HUDPointer->RemoveBuildMenu();
 	}
 	else HUDPointer->ShowBuildMenu();
+}
+
+void AMainPlayerController::ToggleInventory()
+{
+	if (HUDPointer->InventoryState) {
+		HUDPointer->HideInventory();
+	}
+	else HUDPointer->ShowInventory();
 }
 
 void AMainPlayerController::SelectPressed() {

@@ -1,7 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "MainPlayerState.h"
 #include "BuildingActor.h"
+#include "Widgets/InventoryComponent.h"
 #include "Building_TownHall.h"
+
+
+AMainPlayerState::AMainPlayerState()
+{
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+}
+
 
 void AMainPlayerState::BuildingArrayClean()
 {
@@ -179,28 +187,10 @@ void AMainPlayerState::SetMaxBuildingCount(FString Name, int Number) {
 	if (Building_MaxCount.Contains(Name))  Building_MaxCount[Name] = Number;
 }
 
-bool AMainPlayerState::AddItemToInventory(AItemActor* Item)
+UInventoryComponent* AMainPlayerState::GetInventory()
 {
-	AItemActor* InventoryItem = NewObject<AItemActor>(Item->GetClass());
-	Inventory.Add(InventoryItem);
-	Item->Destroy();
-	return true;
+	return InventoryComponent;
 }
 
-bool AMainPlayerState::RemoveItemFromInventory(int InventorySlot)
-{
-	if (Inventory.Num() >= InventorySlot) {
-		Inventory.RemoveAt(InventorySlot);
-		return true;
-	}
-	return false;
-}
 
-bool AMainPlayerState::CheckForItemInInventory(AItemActor* Item, int& ItemIndex)
-{
-	if (Inventory.Contains(Item)) {
-		ItemIndex = Inventory.IndexOfByKey(Item);
-		return true;
-	}
-	return false;
-}
+

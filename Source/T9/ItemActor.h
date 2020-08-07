@@ -44,7 +44,7 @@ protected:
 		FString ItemName;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
-		class UImage* ItemImage;
+		class UTexture2D* ItemImage;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		class UPrimitiveComponent* Primitive;
@@ -86,6 +86,6 @@ public:
 		int GetItemID();
 
 	UFUNCTION(BlueprintCallable)
-		class UImage* GetItemImage();
+		class UTexture2D* GetItemImage();
 
 };

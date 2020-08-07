@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "BuildingActor.h"
 #include "ResourceActor.h"
-#include "ItemActor.h"
 #include "TerrainActor.h"
 #include "CharacterActor.h"
 #include "GameFramework/PlayerState.h"
@@ -13,10 +12,14 @@
 /**
  * 
  */
+
+
 UCLASS()
 class T9_API AMainPlayerState : public APlayerState
 {
 	GENERATED_BODY()
+
+		AMainPlayerState();
 
 private:
 
@@ -48,7 +51,7 @@ private:
 		TMap<FString, int> Building_MaxCount = { {"Town Hall", 231}, {"Arrow Tower", 400} };;
 
 	UPROPERTY(VisibleAnywhere)
-		TArray<AItemActor*> Inventory;
+		class UInventoryComponent* InventoryComponent;
 
 public:
 
@@ -163,13 +166,27 @@ public:
 	UFUNCTION()
 		void SetMaxBuildingCount(FString Name, int Number);
 
+	//INVENTORY -----------------------
 
-	UFUNCTION()
-		bool AddItemToInventory(AItemActor* Item);
+	UFUNCTION(BlueprintCallable)
+		class UInventoryComponent* GetInventory();
 
-	UFUNCTION()
-		bool RemoveItemFromInventory(int InventorySlot);
+	//UPROPERTY()
+	//	int Capacity = 0;
 
-	UFUNCTION()
-		bool CheckForItemInInventory(AItemActor* Item, int& ItemIndex);
+	//UPROPERTY(BlueprintAssignable)
+	//	FOnInventoryUpdated OnInventoryUpdate;
+
+	//UFUNCTION(BlueprintCallable)
+	//	bool AddItemToInventory(AItemActor* Item);
+
+	//UFUNCTION(BlueprintCallable)
+	//	bool RemoveItemFromInventory(int InventorySlot);
+
+	//UFUNCTION(BlueprintCallable)
+	//	bool CheckForItemInInventory(AItemActor* Item, int& ItemIndex);
+
+	//UFUNCTION(BlueprintCallable)
+	//	TArray<AItemActor*> GetInventory();
+
 };

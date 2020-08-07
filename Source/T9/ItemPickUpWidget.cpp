@@ -4,13 +4,14 @@
 #include "ItemPickUpWidget.h"
 #include "MainPlayerState.h"
 #include "MainPlayerController.h"
+#include "Widgets/InventoryComponent.h"
 #include "ItemActor.h"
 #include "GameHUD.h"
 
 
 void UItemPickUpWidget::PickUpItem() {
 	if (PS && Item) {
-		PS->AddItemToInventory(Item);
+		PS->GetInventory()->AddItemToInventory(Item);
 	}
 }
 

@@ -15,6 +15,7 @@
 #include "BuildMenuWidget.h"
 #include "GameGridActor.h"
 #include "ItemActor.h"
+#include "Widgets/Inventory.h"
 
 
 AGameHUD::AGameHUD() {
@@ -32,6 +33,9 @@ AGameHUD::AGameHUD() {
 	static ConstructorHelpers::FClassFinder<UUserWidget> Widget3(TEXT("WidgetBlueprint'/Game/UI/SelectMenu.SelectMenu_C'"));
 	if (Widget3.Succeeded()) SelectMenuWidget = CreateWidget<USelectMenuWidget>(GetWorld(), Widget3.Class);
 
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> Inventory(TEXT("WidgetBlueprint'/Game/UI/Inventory_BP.Inventory_BP_C'"));
+	if (Inventory.Succeeded()) InventoryWidget = CreateWidget<UInventory>(GetWorld(), Inventory.Class);
 
 	UWorld* World = GetWorld();
 	if (World) {
@@ -87,6 +91,22 @@ void AGameHUD::ShowBuildMenu()
 		//	FInputModeGameAndUI InputMode;
 		//	PC->SetInputMode(FInputModeGameOnly());
 		//}
+	}
+}
+
+void AGameHUD::ShowInventory()
+{
+	if (InventoryWidget) {
+		InventoryWidget->AddToViewport();
+		InventoryState = true;
+	}
+}
+
+void AGameHUD::HideInventory()
+{
+	if (InventoryWidget) {
+		InventoryWidget->RemoveFromViewport();
+		InventoryState = false;
 	}
 }
 

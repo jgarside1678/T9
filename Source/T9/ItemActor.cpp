@@ -129,7 +129,7 @@ int AItemActor::GetItemID()
 	return ItemID;
 }
 
-UImage* AItemActor::GetItemImage()
+UTexture2D* AItemActor::GetItemImage()
 {
 	return ItemImage;
 }

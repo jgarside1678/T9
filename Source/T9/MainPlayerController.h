@@ -25,6 +25,8 @@ public:
 
 	void OpenCloseBuildMenu();
 
+	void ToggleInventory();
+
 	AGameHUD* HUDPointer;
 
 protected:

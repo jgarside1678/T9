@@ -42,12 +42,18 @@ public:
 	void ShowBuildMenu();
 	void RemoveBuildMenu();
 
+	void ShowInventory();
+	void HideInventory();
+
 	void SetGameObjectSelected(FHitResult Hit);
 
 	FBuildingMenu* SelectedBuildMenuObject;
 
 	UPROPERTY()
 		bool BuildMenuState = false;
+
+	UPROPERTY()
+		bool InventoryState = false;
 
 	UPROPERTY()
 		class UDataTable* BuildMenuBuildings;
@@ -91,6 +97,9 @@ protected:
 
 	UPROPERTY()
 		class UHUDWidget* HUDMenuWidget;
+
+	UPROPERTY()
+		class UInventory* InventoryWidget;
 
 
 
