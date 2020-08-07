@@ -134,3 +134,13 @@ UTexture2D* AItemActor::GetItemImage()
 	return ItemImage;
 }
 
+Type AItemActor::GetItemType()
+{
+	return ItemType;
+}
+
+SubType AItemActor::GetItemSubType()
+{
+	return ItemSubType;
+}
+

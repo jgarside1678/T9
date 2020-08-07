@@ -6,7 +6,28 @@
 #include "GameFramework/Actor.h"
 #include "ItemActor.generated.h"
 
-UENUM()
+
+UENUM(BlueprintType)
+enum Type
+{
+	AnyType UMETA(DisplayName = "Any"),
+	Tool UMETA(DisplayName = "Tool"),
+	Weapon UMETA(DisplayName = "Weapon"),
+	Other UMETA(DisplayName = "Other")
+};
+
+UENUM(BlueprintType)
+enum SubType
+{
+	AnySubType UMETA(DisplayName = "Any"),
+	PickAxe UMETA(DisplayName = "PickAxe"),
+	Axe UMETA(DisplayName = "Axe"),
+	Bow UMETA(DisplayName = "Bow"),
+	Spear UMETA(DisplayName = "Spear")
+};
+
+
+UENUM(BlueprintType)
 enum Rarity
 {
 	Common UMETA(DisplayName = "Common"),
@@ -42,6 +63,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		FString ItemName;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		TEnumAsByte<Type> ItemType = AnyType;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		TEnumAsByte<SubType> ItemSubType = AnySubType;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		class UTexture2D* ItemImage;
@@ -87,5 +114,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		class UTexture2D* GetItemImage();
+
+	UFUNCTION(BlueprintCallable)
+		Type GetItemType();
+
+	UFUNCTION(BlueprintCallable)
+		SubType GetItemSubType();
 
 };

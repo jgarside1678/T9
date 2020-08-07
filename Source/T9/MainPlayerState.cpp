@@ -8,6 +8,10 @@
 AMainPlayerState::AMainPlayerState()
 {
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+	InventoryComponent->SetCapacity(60);
+	for (int x = 0; x < InventoryComponent->GetCapacity()-1; x++) {
+		InventoryComponent->AddInventorySlot(FSlot{});
+	}
 }
 
 

@@ -3,3 +3,6 @@
 
 #include "ItemTool.h"
 
+AItemTool::AItemTool() {
+	ItemType = Tool;
+}

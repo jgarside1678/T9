@@ -13,5 +13,6 @@ UCLASS()
 class T9_API AItemTool : public AItemActor
 {
 	GENERATED_BODY()
-	
+public:
+	AItemTool();
 };

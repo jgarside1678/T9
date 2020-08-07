@@ -54,8 +54,6 @@ void ACameraPawn::Tick(float DeltaTime)
 		CameraMovement->Deceleration = 100020;
 		CameraMovement->Acceleration = 100220;
 		CameraMovement->MaxSpeed = ScrollAmount/200 *200 + 1200;
-		//	CameraMovement->ConsumeInputVector();
-		//	CameraMovement->
 	}
 }
 
