@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "T9/ItemActor.h"
+#include "T9/Items/ItemActor.h"
 #include "InventoryComponent.generated.h"
 
 
@@ -64,11 +64,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool AddItemToInventory(AItemActor* Item);
 
-	//UFUNCTION(BlueprintCallable)
-	//	bool RemoveItemFromInventory(int InventorySlot);
+	UFUNCTION(BlueprintCallable)
+		bool RemoveItemFromInventory(int InventorySlot);
 
-	//UFUNCTION(BlueprintCallable)
-	//	bool CheckForItemInInventory(AItemActor* Item, int& ItemIndex);
+	UFUNCTION(BlueprintCallable)
+		bool CheckForItemInInventory(AItemActor* Item, int& ItemIndex);
 
 	UFUNCTION(BlueprintCallable)
 		TArray<FSlot> GetItems();
@@ -81,6 +81,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void AddInventorySlot(FSlot Slot);
+
+	//Adds Inventory slots with given parameter untill inventory capacity is full.
+	UFUNCTION(BlueprintCallable)
+		void FillInventorySlots(FSlot Slot);
 
 		
 };

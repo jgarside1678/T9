@@ -2,10 +2,10 @@
 
 
 #include "T9GameModeBase.h"
-#include "GameGridActor.h"
+#include "T9/Actors/GameGridActor.h"
 #include "CameraPawn.h"
 #include "MainPlayerController.h"
-#include "GameHUD.h"
+#include "T9/Widgets/GameHUD.h"
 #include "MainPlayerState.h"
 #include <Runtime\Engine\Classes\Kismet\GameplayStatics.h>
 

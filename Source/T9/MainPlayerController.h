@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DrawDebugHelpers.h"
-#include "GameHUD.h"
+#include "T9/Widgets/GameHUD.h"
 #include "GameFramework/PlayerController.h"
 #include "MainPlayerController.generated.h"
 

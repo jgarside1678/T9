@@ -1,17 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "MainPlayerState.h"
-#include "BuildingActor.h"
 #include "Widgets/InventoryComponent.h"
-#include "Building_TownHall.h"
+#include "T9/Actors/Buildings/Building_TownHall.h"
 
 
 AMainPlayerState::AMainPlayerState()
 {
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
-	InventoryComponent->SetCapacity(60);
-	for (int x = 0; x < InventoryComponent->GetCapacity()-1; x++) {
-		InventoryComponent->AddInventorySlot(FSlot{});
-	}
+	InventoryComponent->SetCapacity(32);
+	InventoryComponent->FillInventorySlots(FSlot{});
 }
 
 

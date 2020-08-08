@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BuildingActor.h"
-#include "ResourceActor.h"
-#include "TerrainActor.h"
-#include "CharacterActor.h"
+#include "T9/Actors/Buildings/BuildingActor.h"
+#include "T9/Actors/Resources/ResourceActor.h"
+#include "T9/Actors/Terrain/TerrainActor.h"
+#include "T9/Characters/CharacterActor.h"
 #include "GameFramework/PlayerState.h"
 #include "MainPlayerState.generated.h"
 /**

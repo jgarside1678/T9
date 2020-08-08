@@ -2,7 +2,7 @@
 
 
 #include "Inventory.h"
-#include "T9/GameHUD.h"
+#include "GameHUD.h"
 #include "T9/MainPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "T9/MainPlayerState.h"

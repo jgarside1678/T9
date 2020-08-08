@@ -55,24 +55,27 @@ bool UInventoryComponent::AddItemToInventory(AItemActor* Item)
 	return true;
 }
 
-//bool UInventoryComponent::RemoveItemFromInventory(int InventorySlot)
-//{
-//	if (Inventory.Num() >= InventorySlot) {
-//		Inventory.RemoveAt(InventorySlot);
-//		OnInventoryUpdate.Broadcast();
-//		return true;
-//	}
-//	return false;
-//}
-//
-//bool UInventoryComponent::CheckForItemInInventory(AItemActor* Item, int& ItemIndex)
-//{
-//	if (Inventory.Contains(Item)) {
-//		ItemIndex = Inventory.IndexOfByKey(Item);
-//		return true;
-//	}
-//	return false;
-//}
+bool UInventoryComponent::RemoveItemFromInventory(int InventorySlot)
+{
+	if (Inventory.Num() >= InventorySlot) {
+		Inventory[InventorySlot].Item = nullptr;
+		Inventory[InventorySlot].SlotUsed = false;
+		OnInventoryUpdate.Broadcast();
+		return true;
+	}
+	return false;
+}
+
+bool UInventoryComponent::CheckForItemInInventory(AItemActor* Item, int& ItemIndex)
+{
+	for (int x = 0; x < Inventory.Num(); x++) {
+		if (Inventory[x].Item == Item) {
+			ItemIndex = x;
+			return true;
+		}
+	}
+	return false;
+}
 
 TArray<FSlot> UInventoryComponent::GetItems()
 {
@@ -92,6 +95,13 @@ int UInventoryComponent::GetCapacity()
 void UInventoryComponent::AddInventorySlot(FSlot Slot)
 {
 	if(Inventory.Num() < Capacity)	Inventory.Add(Slot);
+}
+
+void UInventoryComponent::FillInventorySlots(FSlot Slot)
+{
+	for (int x = Inventory.Num(); x < Capacity; x++) {
+		Inventory.Add(Slot);
+	}
 }
 
 
