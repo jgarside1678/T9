@@ -14,6 +14,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "DrawDebugHelpers.h"
 #include "CameraPawn.h"
+#include "Engine/DataTable.h"
 
 static TSubclassOf<ABuildingActor> ObjectToSpawn;
 
@@ -123,14 +124,21 @@ void AMainPlayerController::MouseMove(float axis) {
 
 void AMainPlayerController::SelectInteract() {
 	if ((GameGrid != nullptr) && (PS != nullptr)) {
-		if (HUDPointer->SelectedBuildMenuObject) {
-			FBuildingMenu* SelectedBuilding = HUDPointer->SelectedBuildMenuObject;
-			ABuildingActor* Building = Cast<ABuildingActor>(HUDPointer->PreviewBuilding);
-			if (Building && (PS->GetBuildingCount(Building->GetName()) < PS->GetMaxBuildingCount(Building->GetName())) && PS->ResourceCheck(Building->GetCost())) {
-				GameGrid->BuildBuildingOnTile(*SelectedBuilding);
+		if (HUDPointer->SelectedBuildMenuObject.Building != NULL) {
+				ABuildingActor* Building = Cast<ABuildingActor>(HUDPointer->PreviewBuilding);
+				if (Building) {
+					if ((PS->GetBuildingCount(Building->GetName()) < PS->GetMaxBuildingCount(Building->GetName())) && PS->ResourceCheck(Building->GetCost())) {
+						GameGrid->BuildBuildingOnTile(HUDPointer->SelectedBuildMenuObject);
+					}
+					else UE_LOG(LogTemp, Warning, TEXT("Conditions to build were not met."));
+				}
+				else UE_LOG(LogTemp, Warning, TEXT("FUCK"));
 			}
-			else UE_LOG(LogTemp, Warning, TEXT("Conditions to build were not met."));
 		}
 		else UE_LOG(LogTemp, Warning, TEXT("No Object Found"));
 	}
+
+
+AGameGridActor* AMainPlayerController::GetGrid() {
+	return GameGrid;
 }

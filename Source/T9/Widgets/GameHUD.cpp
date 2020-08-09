@@ -12,7 +12,7 @@
 #include "T9/Interfaces/SelectInterface.h"
 #include "HUDWidget.h"
 #include "SelectMenuWidget.h"
-#include "BuildMenuWidget.h"
+#include "BuildMenu.h"
 #include "T9/Actors/GameGridActor.h"
 #include "T9/Items/ItemActor.h"
 #include "Inventory.h"
@@ -20,12 +20,10 @@
 
 AGameHUD::AGameHUD() {
 
-	static ConstructorHelpers::FObjectFinder<UDataTable> BuildingsDataTableObject(TEXT("DataTable'/Game/DataTables/Buildings.Buildings'"));
-	BuildMenuBuildings = BuildingsDataTableObject.Object;
 
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> Widget1(TEXT("WidgetBlueprint'/Game/UI/BuildMenu.BuildMenu_C'"));
-	if (Widget1.Succeeded()) BuildMenuWidget = CreateWidget<UBuildMenuWidget>(GetWorld(), Widget1.Class);
+	static ConstructorHelpers::FClassFinder<UUserWidget> Widget1(TEXT("WidgetBlueprint'/Game/UI/BuildMenu_BP.BuildMenu_BP_C'"));
+	if (Widget1.Succeeded()) BuildMenuWidget = CreateWidget<UBuildMenu>(GetWorld(), Widget1.Class);
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> Widget2(TEXT("WidgetBlueprint'/Game/UI/HUDMenu.HUDMenu_C'"));
 	if(Widget2.Succeeded())	HUDMenuWidget = CreateWidget<UHUDWidget>(GetWorld(), Widget2.Class);
@@ -57,19 +55,15 @@ void AGameHUD::BeginPlay()
 
 }
 
-void AGameHUD::SetSelectedBuildMenuObject(FString Selection) {
-	if (BuildMenuBuildings) {
-		if (SelectedBuildMenuObject) {
-			GameGrid->DestroyPreviewObject();
-			PreviewBuilding = nullptr;
-		}
-		static const FString ContextString(TEXT("Spawn Buildings Context"));
-		SelectedBuildMenuObject = BuildMenuBuildings->FindRow<FBuildingMenu>(FName(Selection), ContextString, true);
-		if (SelectedBuildMenuObject) {
-			PreviewBuilding = GameGrid->CreatePreviewObject(*SelectedBuildMenuObject);
-			if (ABuildingActor* Building = Cast<ABuildingActor>(PreviewBuilding)) GameGrid->ScaleSelectionTile(Building->GridLength.X, Building->GridLength.Y);
-		}
-
+void AGameHUD::SetSelectedBuildMenuObject(FBuildingMenuSlot Selection) {
+	if (SelectedBuildMenuObject.Building != NULL) {
+		GameGrid->DestroyPreviewObject();
+		PreviewBuilding = nullptr;
+	}
+	SelectedBuildMenuObject = Selection;
+	if (SelectedBuildMenuObject.Building != NULL) {
+		PreviewBuilding = GameGrid->CreatePreviewObject(SelectedBuildMenuObject);
+		if (ABuildingActor* Building = Cast<ABuildingActor>(PreviewBuilding)) GameGrid->ScaleSelectionTile(Building->GridLength.X, Building->GridLength.Y);
 	}
 }
 
@@ -113,7 +107,6 @@ void AGameHUD::HideInventory()
 void AGameHUD::RemoveBuildMenu()
 {
 	//Reseting
-	SelectedBuildMenuObject = nullptr;
 	GameGrid->ScaleSelectionTile(1, 1);
 	GameGrid->DestroyPreviewObject();
 	GameGrid->SetActorHiddenInGame(true);

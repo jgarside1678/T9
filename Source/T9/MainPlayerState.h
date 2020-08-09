@@ -148,22 +148,22 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PlayerInfo")
 		void AddCurrentXP(float Number);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		bool CheckXP();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void LevelUp();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		int GetBuildingCount(FString Name);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		int GetMaxBuildingCount(FString Name);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void SetBuildingCount(FString Name, int Number);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void SetMaxBuildingCount(FString Name, int Number);
 
 	//INVENTORY -----------------------

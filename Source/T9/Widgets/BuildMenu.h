@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "BuildMenuWidget.generated.h"
+#include "BuildMenu.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class T9_API UBuildMenuWidget : public UUserWidget
+class T9_API UBuildMenu : public UUserWidget
 {
 	GENERATED_BODY()
 public:
 
-	UBuildMenuWidget(const FObjectInitializer& ObjectInit);
+	UBuildMenu(const FObjectInitializer& ObjectInit);
 
 	virtual void NativeConstruct() override;
 
@@ -27,8 +27,8 @@ public:
 		class AMainPlayerController* PC;
 
 	UFUNCTION(BlueprintCallable, Category = "WidgetFunctions")
-	void SelectBuilding(FString Selection);
-
-	UFUNCTION(BlueprintCallable, Category = "WidgetFunctions")
 	void RotateSelection();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class UDataTable* BuildMenuBuildings;
 };

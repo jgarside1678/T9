@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "DrawDebugHelpers.h"
 #include "T9/Widgets/GameHUD.h"
+#include "T9/Widgets/BuildMenu_Slot.h"
 #include "GameFramework/PlayerController.h"
 #include "MainPlayerController.generated.h"
 
@@ -28,6 +29,11 @@ public:
 	void ToggleInventory();
 
 	AGameHUD* HUDPointer;
+
+
+	UFUNCTION(BlueprintCallable)
+		class AGameGridActor* GetGrid();
+
 
 protected:
 
@@ -57,5 +63,6 @@ protected:
 
 	UPROPERTY()
 		class AGameGridActor* GameGrid;
+
 
 };

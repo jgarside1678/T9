@@ -7,24 +7,12 @@
 #include "T9/Actors/Walls/WallActor.h"
 #include "GameFramework/HUD.h"
 #include "Engine/DataTable.h"
+#include "BuildMenu_Slot.h"
 #include "GameHUD.generated.h"
 
 /**
  * 
  */
-USTRUCT()
-struct FBuildingMenu : public FTableRowBase {
-
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<AActor> Building;
-
-	UPROPERTY(EditAnywhere)
-		FBuildingCosts Cost;
-};
-
-
 
 
 UCLASS()
@@ -36,7 +24,6 @@ public:
 	AGameHUD();
 
 	//virtual void DrawHUD() override; //same as tick
-	void SetSelectedBuildMenuObject(FString Selection);
 	void RotateSelectedBuilding(float RotationAmount);
 
 	void ShowBuildMenu();
@@ -47,7 +34,11 @@ public:
 
 	void SetGameObjectSelected(FHitResult Hit);
 
-	FBuildingMenu* SelectedBuildMenuObject;
+	FBuildingMenuSlot SelectedBuildMenuObject;
+
+
+	UFUNCTION(BlueprintCallable)
+	void SetSelectedBuildMenuObject(FBuildingMenuSlot Selection);
 
 	UPROPERTY()
 		bool BuildMenuState = false;
@@ -55,8 +46,8 @@ public:
 	UPROPERTY()
 		bool InventoryState = false;
 
-	UPROPERTY()
-		class UDataTable* BuildMenuBuildings;
+	//UPROPERTY()
+	//	class UDataTable* BuildMenuBuildings;
 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Game Selection")
@@ -90,7 +81,7 @@ protected:
 
 
 	UPROPERTY()
-		class UBuildMenuWidget* BuildMenuWidget;
+		class UBuildMenu* BuildMenuWidget;
 
 	UPROPERTY()
 		class USelectMenuWidget* SelectMenuWidget;

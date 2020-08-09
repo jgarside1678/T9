@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "T9/Widgets/GameHUD.h"
+#include "T9/Widgets/BuildMenu_Slot.h"
 #include "GameGridActor.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBuildingConstructed);
 
 UCLASS()
 class T9_API AGameGridActor : public AActor
@@ -25,6 +27,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	bool IsGridSlotUsed[189][189];
+
+	UPROPERTY(BlueprintAssignable)
+		FOnBuildingConstructed OnBuildingConstructed;
 
 	UFUNCTION()
 		void SetTilesActive(FVector Location, int TilesWidth, int TilesHeight);
@@ -91,10 +96,10 @@ public:
 		void SetSelectedTile();
 
 	UFUNCTION()
-		class ABuildingActor* BuildBuildingOnTile(FBuildingMenu ObjectToBuild);
+		class ABuildingActor* BuildBuildingOnTile(FBuildingMenuSlot ObjectToBuild);
 
-	UFUNCTION()
-		class AWallActor* BuildWallOnTile(FBuildingMenu ObjectToBuild);
+	//UFUNCTION()
+	//	class AWallActor* BuildWallOnTile(FBuildingMenuSlot ObjectToBuild);
 
 	UFUNCTION()
 		void ToggleSelectionTile(bool Toggle);
@@ -113,7 +118,7 @@ public:
 		class UMaterial* PreviewMaterial;
 
 	UFUNCTION()
-		AActor* CreatePreviewObject(FBuildingMenu ObjectToBuild);
+		AActor* CreatePreviewObject(FBuildingMenuSlot ObjectToBuild);
 
 	UFUNCTION()
 		void MovePreviewObject(FVector Location);
