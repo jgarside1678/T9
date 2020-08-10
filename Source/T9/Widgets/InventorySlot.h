@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "InventoryComponent.h"
 #include "InventorySlot.generated.h"
 
 /**
@@ -19,10 +20,19 @@ public:
 
 	virtual void NativeConstruct() override;
 
+	virtual void NativeOnInitialized() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		class AGameHUD* HUD;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		class AMainPlayerController* PC;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		class UInventory* Inventory;
+
+	//UFUNCTION(BlueprintCallable)
+	//	void InventorySlotPressed(FSlot ItemSlot);
+
 };

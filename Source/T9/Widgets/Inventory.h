@@ -20,9 +20,16 @@ public:
 	virtual void NativeConstruct() override;
 
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
-		class AGameHUD* HUD;
+	virtual void NativeOnInitialized() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class AGameHUD* HUDPointer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class AMainPlayerController* PC;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		class UInventorySelect* InventorySelect;
 };

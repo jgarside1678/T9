@@ -104,7 +104,7 @@ void AGameHUD::HideInventory()
 	}
 }
 
-void AGameHUD::RemoveBuildMenu()
+void AGameHUD::HideBuildMenu()
 {
 	//Reseting
 	GameGrid->ScaleSelectionTile(1, 1);

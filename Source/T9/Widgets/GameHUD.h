@@ -24,12 +24,19 @@ public:
 	AGameHUD();
 
 	//virtual void DrawHUD() override; //same as tick
+	UFUNCTION(BlueprintCallable)
 	void RotateSelectedBuilding(float RotationAmount);
 
+	UFUNCTION(BlueprintCallable)
 	void ShowBuildMenu();
-	void RemoveBuildMenu();
 
+	UFUNCTION(BlueprintCallable)
+	void HideBuildMenu();
+
+	UFUNCTION(BlueprintCallable)
 	void ShowInventory();
+
+	UFUNCTION(BlueprintCallable)
 	void HideInventory();
 
 	void SetGameObjectSelected(FHitResult Hit);
@@ -40,10 +47,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetSelectedBuildMenuObject(FBuildingMenuSlot Selection);
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Game Menus")
 		bool BuildMenuState = false;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Game Menus")
 		bool InventoryState = false;
 
 	//UPROPERTY()

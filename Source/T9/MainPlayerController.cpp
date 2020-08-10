@@ -73,7 +73,7 @@ void AMainPlayerController::MiddleMouseButtonReleased() {
 void AMainPlayerController::OpenCloseBuildMenu()
 {
 	if (HUDPointer->BuildMenuState) {
-		HUDPointer->RemoveBuildMenu();
+		HUDPointer->HideBuildMenu();
 	}
 	else HUDPointer->ShowBuildMenu();
 }
