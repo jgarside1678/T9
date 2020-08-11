@@ -68,13 +68,13 @@ public:
 	void GetClosestStaticMesh(FVector Location, FVector& ClosestMeshLocation, FVector& ClosestMeshBounds);
 
 	UFUNCTION()
-		virtual void SetSelected();
+		virtual void SetSelected() override;
 
 	UFUNCTION()
-		virtual void SetUnSelected();
+		virtual void SetUnSelected() override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual FString GetName();
+		virtual FString GetName() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* GridSpace;

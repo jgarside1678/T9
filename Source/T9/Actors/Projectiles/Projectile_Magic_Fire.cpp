@@ -6,7 +6,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "Components/BoxComponent.h"
 
-AProjectile_Magic_Fire::AProjectile_Magic_Fire(const FObjectInitializer& ObjectInitializer) {
+AProjectile_Magic_Fire::AProjectile_Magic_Fire(const FObjectInitializer& ObjectInitializer) : Super() {
 	ProjectileSpeed = 3;
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> MythicalParticle(TEXT("NiagaraSystem'/Game/Particles/sA_Projectilevfx/Vfx/Fx/Niagara_Systems/NS_Projectile2_Small.NS_Projectile2_Small'"));
 	ParticleEffect =  MythicalParticle.Object;

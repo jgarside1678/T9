@@ -58,7 +58,7 @@ protected:
 	UPROPERTY()
 		TEnumAsByte<TargetPiority> AttackPiority = Closest;
 
-	virtual void SetTarget();
+	virtual void SetTarget() override;
 
 	UFUNCTION()
 	   virtual void AttackTarget();

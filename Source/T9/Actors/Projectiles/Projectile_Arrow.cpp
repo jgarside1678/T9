@@ -2,7 +2,7 @@
 #include "Projectile_Arrow.h"
 #include "Components/BoxComponent.h"
 
-AProjectile_Arrow::AProjectile_Arrow(const FObjectInitializer& ObjectInitializer) {
+AProjectile_Arrow::AProjectile_Arrow(const FObjectInitializer& ObjectInitializer) : Super() {
 
 	ProjectileSpeed = 1.5;
 	const ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Assets/bow_arrow.bow_arrow'"));

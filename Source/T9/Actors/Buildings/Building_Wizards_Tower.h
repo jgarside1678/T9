@@ -23,5 +23,5 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	virtual void Upgrade();
+	virtual void Upgrade() override;
 };
