@@ -151,3 +151,8 @@ SubType AItemActor::GetItemSubType()
 void AItemActor::Despawn() {
 	if (this) this->Destroy();
 }
+
+Rarity AItemActor::GetItemRarity()
+{
+	return ItemRarity;
+}

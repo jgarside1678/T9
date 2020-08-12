@@ -124,6 +124,9 @@ public:
 		Type GetItemType();
 
 	UFUNCTION(BlueprintCallable)
+		Rarity GetItemRarity();
+
+	UFUNCTION(BlueprintCallable)
 		SubType GetItemSubType();
 
 };
