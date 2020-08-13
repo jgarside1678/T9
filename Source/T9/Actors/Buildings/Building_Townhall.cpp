@@ -15,7 +15,7 @@ ABuilding_Townhall::ABuilding_Townhall(const FObjectInitializer& ObjectInitializ
 	//static ConstructorHelpers::FObjectFinder<UAnimSequence> AnimationMont(TEXT("AnimSequence'/Game/AI/Alliance/StylizedHumanMale/Animations/Standing_1H_Magic_Attack_01_mixamo_com.Standing_1H_Magic_Attack_01_mixamo_com'"));
 	if (BaseMesh.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(BaseMesh.Object);
-		StaticMeshComponent->SetWorldScale3D(FVector(7,7,4));
+		StaticMeshComponent->SetWorldScale3D(FVector(6,6,4));
 	}
 
 	//{Level, FBuildingUpgrades{XP, Maxhealth, FBuildingCosts{Gold, Wood, Stone, Food}, Damage, AttackSpeed, FBuildingProduction{Gold, Wood, Stone, Food}}

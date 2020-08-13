@@ -96,7 +96,7 @@ protected:
 	UPROPERTY()
 		class UItemPickUpWidget* ItemPickUp;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		int GoldValue = 0;
 
 
