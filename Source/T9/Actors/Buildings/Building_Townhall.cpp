@@ -19,9 +19,9 @@ ABuilding_Townhall::ABuilding_Townhall(const FObjectInitializer& ObjectInitializ
 	}
 
 	//{Level, FBuildingUpgrades{XP, Maxhealth, FBuildingCosts{Gold, Wood, Stone, Food}, Damage, AttackSpeed, FBuildingProduction{Gold, Wood, Stone, Food}}
-	Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 1000.0f, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{0,0, 2}, FBuildingProduction{100} });
-	Upgrades.Add(2, FBuildingUpgrades{ 250.0f, 5000.0f, FBuildingCosts{250, 20, 20, 20}, FBuildingAttack{0,0, 5}, FBuildingProduction{200} });
-	Upgrades.Add(3, FBuildingUpgrades{ 500.0f, 10000.0f, FBuildingCosts{500, 50, 50, 50}, FBuildingAttack{0,0, 6}, FBuildingProduction{300} });
+	Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 100, 1000.0f, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{0,0, 2}, FBuildingProduction{100} });
+	Upgrades.Add(2, FBuildingUpgrades{ 250.0f, 250, 5000.0f, FBuildingCosts{250, 20, 20, 20}, FBuildingAttack{0,0, 5}, FBuildingProduction{200} });
+	Upgrades.Add(3, FBuildingUpgrades{ 500.0f, 500, 10000.0f, FBuildingCosts{500, 50, 50, 50}, FBuildingAttack{0,0, 6}, FBuildingProduction{300} });
 	BuildingDetectionRange = Upgrades[Level].Attack.AttackRangeMultipler;
 	BuildingName = "Town Hall";
 	SpawnComponent = CreateDefaultSubobject<UBuildingSpawnComponent>(TEXT("Spawn Component"));

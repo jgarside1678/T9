@@ -64,7 +64,7 @@ ABuildingActor::ABuildingActor()
 void ABuildingActor::BeginPlay()
 {
 	Super::BeginPlay();
-	if (Upgrades.Num() == 0) Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 100.0f, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{}, FBuildingProduction{0} });
+	if (Upgrades.Num() == 0) Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 100 ,100.0f, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{}, FBuildingProduction{0} });
 	if (StaticMeshComponent->GetStaticMesh()) {
 		BuildingExtent = StaticMeshComponent->GetStaticMesh()->GetBoundingBox().GetExtent();
 		BuildingRangeCollider->SetBoxExtent(BuildingExtent * Upgrades[Level].Attack.AttackRangeMultipler);
@@ -77,6 +77,7 @@ void ABuildingActor::BeginPlay()
 	}
 	PC = (AMainPlayerController*)GetWorld()->GetFirstPlayerController();
 	PS = (AMainPlayerState*)PC->PlayerState;
+	PS->AddPower(Upgrades[Level].PowerRating);
 	ResetHealth();
 	TArray<AActor*> CollidingActors;
 	GetOverlappingActors(CollidingActors, AEnemyCharacter::StaticClass());
@@ -186,6 +187,7 @@ void ABuildingActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage)
 		IsDead = true;
 		PS->SetBuildingCount(BuildingName, GetBuildingCount() - 1);
 		PS->BuildingArrayClean();
+		PS->AddGold(-Upgrades[Level].PowerRating);
 		this->Destroy();
 	}
 }
@@ -197,12 +199,13 @@ void ABuildingActor::DamageEnemy(AActor* Actor, float AmountOfDamage)
 
 void ABuildingActor::RemoveBuilding()
 {
-	PS->AddGold(TotalCost*0.5);
 	UActorComponent* SpawnComp = GetComponentByClass(UBuildingSpawnComponent::StaticClass());
 	if (SpawnComp) ((UBuildingSpawnComponent*)SpawnComp)->KillAll();
 	if (Grid) Grid->SetTilesUnactive(BuildingCornerLocation, GridLength.X, GridLength.Y, GridRotation);
 	IsDead = true;
 	if (PS) {
+		PS->AddGold(TotalCost * 0.5);
+		PS->AddPower(-Upgrades[Level].PowerRating);
 		PS->BuildingArrayClean();
 		PS->SetBuildingCount(BuildingName, GetBuildingCount() - 1);
 	}
@@ -242,6 +245,8 @@ void ABuildingActor::Upgrade() {
 		//	UpgradeAudio->SetActive(true);
 		//}
 		Level++;
+
+		PS->AddPower(Upgrades[Level].PowerRating - Upgrades[Level - 1].PowerRating);
 
 		//Update Spawned Characters
 		UActorComponent* SpawnComp = GetComponentByClass(UBuildingSpawnComponent::StaticClass());

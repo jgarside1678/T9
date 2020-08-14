@@ -169,6 +169,55 @@ void AMainPlayerState::LevelUp() {
 	//Do Level up things;
 }
 
+int AMainPlayerState::GetPower()
+{
+	return Power;
+}
+
+void AMainPlayerState::AddPower(int Amount)
+{
+	Power += Amount;
+	UpdateRank();
+}
+
+void AMainPlayerState::UpdateRank()
+{
+	if (RankThresholds.Contains(CurrentRank)) {
+		int Index = TEnumAsByte<Rank>(CurrentRank);
+		if (RankThresholds[CurrentRank] <= Power) {
+			for (int x = Index; x < 11; x++) {
+				Index++;
+				if (RankThresholds.Contains((Rank)Index)) {
+					if (RankThresholds[(Rank)Index] > Power) break;
+					else CurrentRank = (Rank)Index;
+				}
+				else break;
+			}
+		}
+		else {
+			for (int x = Index; x >= 0; x--) {
+				Index--;
+				if (RankThresholds.Contains((Rank)Index)) {
+					CurrentRank = (Rank)Index;
+					if (RankThresholds[(Rank)Index] <= Power) break;
+				}
+				else break;
+			}
+		}
+		RankChange.Broadcast();
+	}
+}
+
+void AMainPlayerState::ChangeRank(Rank NewRank)
+{
+	CurrentRank = NewRank;
+}
+
+Rank AMainPlayerState::GetRank()
+{
+	return CurrentRank;
+}
+
 
 int AMainPlayerState::GetBuildingCount(FString Name) {
 	if (Building_Count.Contains(Name)) 	return Building_Count[Name];

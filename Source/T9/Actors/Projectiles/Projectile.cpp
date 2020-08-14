@@ -62,19 +62,16 @@ void AProjectile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if ((Target != nullptr) && (Target->IsValidLowLevel())&& (!Target->IsPendingKill())) {
 		if (Active) {
-			UE_LOG(LogTemp, Warning, TEXT("00000"));
 			FVector Direction = (Target->GetActorLocation() - GetActorLocation() + FVector(0, 0, Target->GetSimpleCollisionHalfHeight())).GetSafeNormal();
 			ProjectileMovement->Velocity += Direction * 50000.f * DeltaTime;
 			ProjectileMovement->Velocity = ProjectileMovement->Velocity.GetSafeNormal() * ProjectileSpeed * 1000;
 		}
 		else if(BuildingSpawn) {
 			if (BuildingSpawn->Type == Turret) {
-				UE_LOG(LogTemp, Warning, TEXT("Turret"));
 				SetActorLocation(ProjectileSpawn->GetComponentLocation());
 				SetActorRelativeRotation(BuildingSpawn->TurretRotation);
 			}
 			else if (BuildingSpawn->Type == Character) {
-				UE_LOG(LogTemp, Warning, TEXT("Character"));
 				if(USkeletalMeshComponent* SpawnCharacter = BuildingSpawn->BuildingDefender) SetActorLocation(SpawnCharacter->GetSocketLocation("hand_r"));
 			}
 		}

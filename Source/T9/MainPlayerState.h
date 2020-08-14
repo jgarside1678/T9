@@ -12,6 +12,24 @@
 /**
  * 
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRankChange);
+
+
+UENUM(BlueprintType)
+enum Rank
+{
+	Peasent UMETA(DisplayName = "Peasent"),
+	Esquire UMETA(DisplayName = "Esquire/Esquiress"),
+	Knight UMETA(DisplayName = "Knight/Lady"),
+	Baron UMETA(DisplayName = "Baron/Baroness"),
+	Viscount UMETA(DisplayName = "Viscount/Viscountess"),
+	Earl UMETA(DisplayName = "Earl/Countess"),
+	Marquess UMETA(DisplayName = "Marquess/Marchinoness"),
+	Duke UMETA(DisplayName = "Duke/Duchess"),
+	Prince UMETA(DisplayName = "Prince/Princess"),
+	King UMETA(DisplayName = "King/Queen"),
+	Emperor UMETA(DisplayName = "Emperor/Emperoress")
+};
 
 
 UCLASS()
@@ -39,6 +57,15 @@ private:
 	    int Level = 1;
 
 	UPROPERTY()
+		int Power = 1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+		TEnumAsByte<Rank> CurrentRank = Peasent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+		TMap<TEnumAsByte<Rank>, int> RankThresholds = { {Peasent, 0}, {Esquire, 250}, {Knight, 700} , {Baron, 1400} , {Viscount, 2100},{Earl, 3500} ,{Marquess, 5200} ,{Duke, 7500} ,{Prince, 11000} ,{King, 15000} ,{Emperor, 25000} };
+
+	UPROPERTY()
 	    float CurrentXP = 0;
 
 	UPROPERTY()
@@ -54,6 +81,9 @@ private:
 		class UInventoryComponent* InventoryComponent;
 
 public:
+
+	UPROPERTY(BlueprintAssignable)
+		FOnRankChange RankChange;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 		TArray<ABuildingActor*> SpawnedBuildings;
@@ -124,6 +154,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PlayerInfo")
 		int GetFood();
 
+	//Level and XP
+
 	UFUNCTION(BlueprintCallable, Category = "PlayerInfo")
 	    void SetLevel(int Number);
 
@@ -154,6 +186,25 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void LevelUp();
 
+	//Power
+
+	UFUNCTION(BlueprintCallable)
+		int GetPower();
+
+	UFUNCTION(BlueprintCallable)
+		void AddPower(int Amount);
+
+	UFUNCTION(BlueprintCallable)
+		void UpdateRank();
+
+	UFUNCTION(BlueprintCallable)
+		void ChangeRank(Rank NewRank);
+
+	UFUNCTION(BlueprintCallable)
+	    Rank GetRank();
+
+	//Building Counts
+
 	UFUNCTION(BlueprintCallable)
 		int GetBuildingCount(FString Name);
 
@@ -171,22 +222,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 		class UInventoryComponent* GetInventory();
 
-	//UPROPERTY()
-	//	int Capacity = 0;
-
-	//UPROPERTY(BlueprintAssignable)
-	//	FOnInventoryUpdated OnInventoryUpdate;
-
-	//UFUNCTION(BlueprintCallable)
-	//	bool AddItemToInventory(AItemActor* Item);
-
-	//UFUNCTION(BlueprintCallable)
-	//	bool RemoveItemFromInventory(int InventorySlot);
-
-	//UFUNCTION(BlueprintCallable)
-	//	bool CheckForItemInInventory(AItemActor* Item, int& ItemIndex);
-
-	//UFUNCTION(BlueprintCallable)
-	//	TArray<AItemActor*> GetInventory();
 
 };

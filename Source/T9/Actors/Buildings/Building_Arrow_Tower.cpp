@@ -28,9 +28,9 @@ ABuilding_Arrow_Tower::ABuilding_Arrow_Tower(const FObjectInitializer& ObjectIni
 	}
 	if(TurretMesh.Succeeded())		TurretStaticMeshComponent->SetStaticMesh(TurretMesh.Object);
 	//{Level, FBuildingUpgrades{XP, FBuildingCosts{Gold, Wood, Stone, Food}, Maxhealth, FBuildingAttack{Damage, AttackSpeed, AttackRange}, FBuildingProduction{Gold, Wood, Stone, Food}}
-	Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 1000.0f, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{40, 3, 10}, FBuildingProduction{} });
-	Upgrades.Add(2, FBuildingUpgrades{ 250.0f, 5000.0f, FBuildingCosts{250, 20, 20, 20}, FBuildingAttack{60, 3, 10}, FBuildingProduction{}, BaseMesh1.Object, TurretMesh1.Object });
-	Upgrades.Add(3, FBuildingUpgrades{ 500.0f, 10000.0f, FBuildingCosts{500, 50, 50, 50}, FBuildingAttack{100, 3, 10}, FBuildingProduction{}, BaseMesh2.Object, TurretMesh2.Object });
+	Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 100, 1000.0f, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{40, 3, 10}, FBuildingProduction{} });
+	Upgrades.Add(2, FBuildingUpgrades{ 250.0f, 200, 5000.0f, FBuildingCosts{250, 20, 20, 20}, FBuildingAttack{60, 3, 10}, FBuildingProduction{}, BaseMesh1.Object, TurretMesh1.Object });
+	Upgrades.Add(3, FBuildingUpgrades{ 500.0f, 300, 10000.0f, FBuildingCosts{500, 50, 50, 50}, FBuildingAttack{100, 3, 10}, FBuildingProduction{}, BaseMesh2.Object, TurretMesh2.Object });
 	BuildingDetectionRange = Upgrades[Level].Attack.AttackRangeMultipler;
 	ResetHealth();
 	BuildingName = "Arrow Tower";

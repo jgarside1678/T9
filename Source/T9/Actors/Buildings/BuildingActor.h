@@ -72,6 +72,9 @@ struct FBuildingUpgrades {
 		float XP;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int PowerRating = 100;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float MaxHealth;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
