@@ -50,6 +50,15 @@ bool AMainPlayerState::RemoveResources(FBuildingCosts Cost)
 	return false;
 }
 
+bool AMainPlayerState::AddResources(FBuildingCosts Cost)
+{
+	Gold += Cost.Gold;
+	Wood += Cost.Wood;
+	Stone += Cost.Stone;
+	Food += Cost.Food;
+	return true;
+}
+
 void AMainPlayerState::SetGold(int Amount)
 {
 	Gold = Amount;
@@ -216,6 +225,14 @@ void AMainPlayerState::ChangeRank(Rank NewRank)
 Rank AMainPlayerState::GetRank()
 {
 	return CurrentRank;
+}
+
+int AMainPlayerState::GetNextRankPower()
+{
+	int Index = TEnumAsByte<Rank>(CurrentRank);
+	Index++;
+	if (RankThresholds.Contains((Rank)Index)) return RankThresholds[(Rank)Index];
+	return 1;
 }
 
 

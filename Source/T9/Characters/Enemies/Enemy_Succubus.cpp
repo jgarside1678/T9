@@ -51,7 +51,6 @@ void AEnemy_Succubus::Attack(AActor* Target, int Number) {
 	if (AttackStreak < 2) {
 		if (CurrentPhase != Channelling) {
 			CurrentMontage = AttackMontage;
-			UE_LOG(LogTemp, Warning, TEXT("Attack"));
 			PlayAnimMontage(CurrentMontage);
 		}
 		Super::Attack(Target);

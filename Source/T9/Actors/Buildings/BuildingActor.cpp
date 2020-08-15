@@ -82,7 +82,7 @@ void ABuildingActor::BeginPlay()
 	TArray<AActor*> CollidingActors;
 	GetOverlappingActors(CollidingActors, AEnemyCharacter::StaticClass());
 	if(CollidingActors.Num() > 0) SetTarget();
-	TotalCost = Upgrades[Level].Cost.Gold;
+	TotalCosts = Upgrades[Level].Cost;
 	PS->SetBuildingCount(BuildingName, GetBuildingCount() + 1);
 	PS->SpawnedBuildings.Add(this);
 }
@@ -181,14 +181,8 @@ void ABuildingActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage)
 {
 	CurrentHealth -= AmountOfDamage;
 	if (CurrentHealth <= 0) {
-		UActorComponent* SpawnComp = GetComponentByClass(UBuildingSpawnComponent::StaticClass());
-		if (SpawnComp) ((UBuildingSpawnComponent*)SpawnComp)->KillAll();
-		if (Grid) Grid->SetTilesUnactive(BuildingCornerLocation, GridLength.X, GridLength.Y, GridRotation);
-		IsDead = true;
-		PS->SetBuildingCount(BuildingName, GetBuildingCount() - 1);
-		PS->BuildingArrayClean();
-		PS->AddGold(-Upgrades[Level].PowerRating);
-		this->Destroy();
+		SetDisabled(true);
+		CurrentHealth = 0;
 	}
 }
 
@@ -204,8 +198,10 @@ void ABuildingActor::RemoveBuilding()
 	if (Grid) Grid->SetTilesUnactive(BuildingCornerLocation, GridLength.X, GridLength.Y, GridRotation);
 	IsDead = true;
 	if (PS) {
-		PS->AddGold(TotalCost * 0.5);
-		PS->AddPower(-Upgrades[Level].PowerRating);
+		PS->AddResources(TotalCosts*0.5);
+		if (!Disabled) {
+			PS->AddPower(-Upgrades[Level].PowerRating);
+		}
 		PS->BuildingArrayClean();
 		PS->SetBuildingCount(BuildingName, GetBuildingCount() - 1);
 	}
@@ -240,6 +236,8 @@ void ABuildingActor::EndOverlap(UPrimitiveComponent* OverlappedComponent,
 
 void ABuildingActor::Upgrade() {
 	if (Upgrades.Contains(Level+1) && PS->RemoveResources(Upgrades[Level].Cost)) {
+		TotalCosts += Upgrades[Level].Cost;
+
 		//if (UpgradeAudio) {
 		//	UpgradeAudio->SetActive(false);
 		//	UpgradeAudio->SetActive(true);
@@ -257,7 +255,6 @@ void ABuildingActor::Upgrade() {
 		PS->AddCurrentXP(Upgrades[Level].XP);
 		BuildingRangeCollider->SetBoxExtent(BuildingExtent * Upgrades[Level].Attack.AttackRangeMultipler);
 		ResetHealth();
-		TotalCost += Upgrades[Level].Cost.Gold;
 	}
 	else UE_LOG(LogTemp, Warning, TEXT("Not enough money to upgrade"));
 
@@ -279,6 +276,42 @@ float ABuildingActor::GetDamage() {
 	else return 0;
 }
 
+void ABuildingActor::RestoreBuilding()
+{
+	if (Disabled && PS->RemoveResources(Upgrades[Level].Cost * 0.5)) {
+		ResetHealth();
+		SetDisabled(false);
+	}
+}
+
+void ABuildingActor::ToggleDisabled()
+{
+	SetDisabled(!Disabled);
+}
+
+void ABuildingActor::SetDisabled(bool Input)
+{
+	Target = nullptr;
+	Disabled = Input;
+	UActorComponent* SpawnComp = GetComponentByClass(UBuildingSpawnComponent::StaticClass());
+	if (Disabled) {
+		if (SpawnComp) ((UBuildingSpawnComponent*)SpawnComp)->KillAll();
+		PS->AddPower(-Upgrades[Level].PowerRating);
+		SetActorTickEnabled(false);
+	}
+	else {
+		SetActorTickEnabled(true);
+		if (SpawnComp) ((UBuildingSpawnComponent*)SpawnComp)->Init();
+		PS->AddPower(Upgrades[Level].PowerRating);
+		SetTarget();
+	}
+}
+
+bool ABuildingActor::GetDisabled()
+{
+	return Disabled;
+}
+
 int ABuildingActor::GetBuildingCount()
 {
 	if(PS->GetBuildingCount(BuildingName)) return PS->GetBuildingCount(BuildingName);
@@ -290,3 +323,12 @@ int ABuildingActor::GetMaxBuildingCount() {
 	return 1;
 }
 
+
+FBuildingUpgrades ABuildingActor::GetCurrentStats() {
+	return Upgrades[Level];
+}
+
+FBuildingUpgrades ABuildingActor::GetUpgradeStats() {
+	if(Upgrades.Contains(Level+1))	return Upgrades[Level + 1];
+	return FBuildingUpgrades();
+}

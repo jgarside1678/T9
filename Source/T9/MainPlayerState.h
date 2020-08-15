@@ -118,6 +118,9 @@ public:
 	UFUNCTION(Category = "PlayerInfo")
 		bool RemoveResources(FBuildingCosts Cost);
 
+	UFUNCTION(Category = "PlayerInfo")
+		bool AddResources(FBuildingCosts Cost);
+
 	UFUNCTION(BlueprintCallable, Category = "PlayerInfo")
 	    void SetGold(int Amount);
 
@@ -202,6 +205,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	    Rank GetRank();
+
+	UFUNCTION(BlueprintCallable)
+		int GetNextRankPower();
+
+
 
 	//Building Counts
 

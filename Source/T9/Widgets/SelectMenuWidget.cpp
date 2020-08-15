@@ -16,3 +16,17 @@ void USelectMenuWidget::NativeConstruct()
 void USelectMenuWidget::UpdateMenu(AActor* Object)
 {
 }
+
+void USelectMenuWidget::TabLeft()
+{
+	--CurrentTab;
+}
+
+void USelectMenuWidget::TabRight()
+{
+	++CurrentTab;
+}
+
+void USelectMenuWidget::SetTab(ESelectTab Tab)
+{
+}

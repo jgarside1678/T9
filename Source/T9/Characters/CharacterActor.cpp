@@ -75,7 +75,7 @@ void ACharacterActor::BeginPlay()
 void ACharacterActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if (GetActorLocation().Z < -100) this->Destroy();
 }
 
 // Called to bind functionality to input

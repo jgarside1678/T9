@@ -60,27 +60,29 @@ void ADefensiveBuildingActor::SetTarget()
 
 void ADefensiveBuildingActor::AttackTarget()
 {
-	if (Target != nullptr && !Target->IsPendingKill()) {
-		if (!Disabled) {
+	if (!Disabled) {
+		if (Target != nullptr && !Target->IsPendingKill()) {
 			UE_LOG(LogTemp, Warning, TEXT("Attack"));
 			FActorSpawnParameters SpawnParams;
 			if (BuildingDefender) {
+				UE_LOG(LogTemp, Warning, TEXT("Attack2"));
 				ProjectileSpawn->SetWorldLocation(BuildingDefender->GetSocketLocation("hand_r"));
 				if (DefenderAttackAnimation)	BuildingDefender->PlayAnimation(DefenderAttackAnimation, false);
 			}
 			FVector Location = ProjectileSpawn->GetComponentLocation();
 			FRotator Rotation = ProjectileSpawn->GetRelativeRotation();
 			if (Projectile) {
+				UE_LOG(LogTemp, Warning, TEXT("Attack3"));
 				if (!TargetInterface->CheckIfDead()) {
 					AProjectile* SpawnedActorRef = GetWorld()->SpawnActor<AProjectile>(Projectile, Location, Rotation, SpawnParams);
 					SpawnedActorRef->ProjectileInnit(Target, GetDamage(), this, ProjectileDelay);
 				}
 			}
 			else TargetInterface->DamageEnemy(Target, GetDamage());
+			GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ADefensiveBuildingActor::AttackTarget, Upgrades[Level].Attack.AttackSpeed, false, Upgrades[Level].Attack.AttackSpeed);
 		}
-		GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ADefensiveBuildingActor::AttackTarget, Upgrades[Level].Attack.AttackSpeed, false, Upgrades[Level].Attack.AttackSpeed);
+		else SetTarget();
 	}
-	else SetTarget();
 }
 
 void ADefensiveBuildingActor::Tick(float DeltaTime) {

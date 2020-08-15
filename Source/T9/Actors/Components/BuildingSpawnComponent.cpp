@@ -50,13 +50,13 @@ void UBuildingSpawnComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 AActor* UBuildingSpawnComponent::Spawn() {
 	if (CurrentSpawnCount < MaxSpawnCount) {
-		CurrentSpawnCount++;
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = SpawnParamCollision;
 		AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(ActorToSpawn, SpawnLocation, FRotator(0.0f,0.0f,0.0f), SpawnParams);
 		ACharacterActor* SpawnedCharacter = (ACharacterActor*)SpawnedActorRef;
 		ActorsSpawned.Add(SpawnedActorRef);
 		if (SpawnedCharacter) {
+			CurrentSpawnCount++;
 			if(OwningBuilding)	SpawnedCharacter->SpawnInit(MyOwner, OwningBuilding->GetLevel());
 			else if(PS) SpawnedCharacter->SpawnInit(MyOwner, PS->GetLevel());
 			else SpawnedCharacter->SpawnInit(MyOwner);

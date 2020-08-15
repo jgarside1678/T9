@@ -115,6 +115,7 @@ void AItemActor::Tick(float DeltaTime)
 		Primitive->SetAngularDamping(0);
 	}
 	ItemAnchor->AddLocalRotation(FRotator(0, 0.5, 0));
+	if (Start.Z < -50) SetActorLocation(FVector(Start.X, Start.Y, 50));
 }
 
 int AItemActor::GetItemGoldValue()

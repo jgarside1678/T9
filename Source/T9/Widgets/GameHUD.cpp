@@ -28,7 +28,7 @@ AGameHUD::AGameHUD() {
 	static ConstructorHelpers::FClassFinder<UUserWidget> Widget2(TEXT("WidgetBlueprint'/Game/UI/HUDMenu.HUDMenu_C'"));
 	if(Widget2.Succeeded())	HUDMenuWidget = CreateWidget<UHUDWidget>(GetWorld(), Widget2.Class);
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> Widget3(TEXT("WidgetBlueprint'/Game/UI/SelectMenu.SelectMenu_C'"));
+	static ConstructorHelpers::FClassFinder<UUserWidget> Widget3(TEXT("WidgetBlueprint'/Game/UI/SelectMenu1.SelectMenu1_C'"));
 	if (Widget3.Succeeded()) SelectMenuWidget = CreateWidget<USelectMenuWidget>(GetWorld(), Widget3.Class);
 
 

@@ -40,7 +40,7 @@ EBTNodeResult::Type UAI_FindTarget::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 			if (NPC->TargetBuildings) {
 				BuiltBuildings = PS->SpawnedBuildings;
 				for (int x = 0; x < BuiltBuildings.Num(); x++) {
-					if ((BuiltBuildings[x] != nullptr) && (!BuiltBuildings[x]->IsPendingKill())) {
+					if ((BuiltBuildings[x] != nullptr) && (!BuiltBuildings[x]->IsPendingKill()) && !BuiltBuildings[x]->GetDisabled()) {
 						DistanceToActor = (Origin - BuiltBuildings[x]->GetActorLocation()).Size();
 						if (NPC->AwarenessDistance != 0 && NPC->AwarenessDistance < DistanceToActor) continue;
 						if (ClosestActor == nullptr) {

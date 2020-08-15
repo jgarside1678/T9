@@ -17,6 +17,22 @@ struct FBuildingCosts {
 
 	GENERATED_BODY()
 
+		FBuildingCosts& operator+=(const FBuildingCosts& rhs) {
+		Gold += rhs.Gold;
+		Wood += rhs.Wood;		
+		Stone += rhs.Stone;
+		Food += rhs.Food;
+		return *this;
+	}
+
+	FBuildingCosts& operator*(float rhs) {
+		Gold *= rhs;
+		Wood *= rhs;
+		Stone *= rhs;
+		Food *= rhs;
+		return *this;
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int Gold = 0;
 
@@ -131,7 +147,7 @@ protected:
 		TMap<int32, FBuildingUpgrades> Upgrades;
 
 	UPROPERTY(VisibleAnywhere, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
-		float TotalCost;
+		FBuildingCosts TotalCosts;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Meta = (AllowPrivateAccess = "true"))
 		class AGameGridActor* Grid;
@@ -268,6 +284,31 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* GridSpace;
+
+	//Disable Building
+
+	UFUNCTION(BlueprintCallable)
+		void RestoreBuilding();
+
+	UFUNCTION()
+		void ToggleDisabled();
+
+	UFUNCTION()
+		void SetDisabled(bool Input);
+
+	UFUNCTION()
+		bool GetDisabled();
+
+
+	//Functions used for Menus
+
+	UFUNCTION(BlueprintCallable)
+		FBuildingUpgrades GetCurrentStats();
+
+	UFUNCTION(BlueprintCallable)
+		FBuildingUpgrades GetUpgradeStats();
+
+
 
 };
 
