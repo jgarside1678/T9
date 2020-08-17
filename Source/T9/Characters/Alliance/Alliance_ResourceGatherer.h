@@ -12,21 +12,21 @@
  */
 
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FGathererUpgrades {
 
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int GatherAmount = 50;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float MaxResourceInventory = 50;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float MaxHealth = 100;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float Damage = 10;
 
 };
@@ -58,6 +58,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Gathering", Meta = (AllowPrivateAccess = "true"))
 		virtual bool CheckFullInventory();
+
+
+	UFUNCTION(BlueprintCallable, Category = "Gathering", Meta = (AllowPrivateAccess = "true"))
+		FGathererUpgrades GetCurrentStats();
+
+	UFUNCTION(BlueprintCallable, Category = "Gathering", Meta = (AllowPrivateAccess = "true"))
+		FGathererUpgrades GetUpgradeStats();
 
 protected:
 

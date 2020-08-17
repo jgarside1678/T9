@@ -32,4 +32,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		class UInventorySelect* InventorySelect;
+
+	//Filter Buttons
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		class UTexture2D* FilterImageOn;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		class UTexture2D* FilterImageOff;
 };

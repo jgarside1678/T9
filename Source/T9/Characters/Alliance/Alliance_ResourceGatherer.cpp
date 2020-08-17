@@ -52,3 +52,17 @@ bool AAlliance_ResourceGatherer::CheckFullInventory()
 	}
 	return false;
 }
+
+FGathererUpgrades AAlliance_ResourceGatherer::GetCurrentStats()
+{
+	if (Upgrades.Contains(Level)) return Upgrades[Level];
+	else return FGathererUpgrades();
+}
+
+FGathererUpgrades AAlliance_ResourceGatherer::GetUpgradeStats()
+{
+	if (Upgrades.Contains(Level+1)) return Upgrades[Level+1];
+	else if(Upgrades.Contains(Level)) return Upgrades[Level];
+	else return FGathererUpgrades();
+}
+

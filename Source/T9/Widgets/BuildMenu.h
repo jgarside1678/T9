@@ -19,11 +19,18 @@ public:
 
 	virtual void NativeConstruct() override;
 
+	virtual void NativeOnInitialized() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+	virtual void NativePreConstruct() override;
+
+	//UPROPERTY(meta = (BindWidget))
+	//	class UCanvasPanel* MyCanvasPanel;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BuildMenu")
 		class AGameHUD* HUD;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BuildMenu")
 		class AMainPlayerController* PC;
 
 	UFUNCTION(BlueprintCallable, Category = "WidgetFunctions")

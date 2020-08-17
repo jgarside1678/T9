@@ -72,10 +72,10 @@ private:
 	    float RequiredXP = 100;
 
 	UPROPERTY()
-		TMap<FString, int> Building_Count = { {"Town Hall", 0}, {"Arrow Tower", 0} };
+		TMap<FString, int> Building_Count = { {"Town Hall", 0}, {"Arrow Tower", 0}, {"Wizards Tower", 0} };
 
 	UPROPERTY()
-		TMap<FString, int> Building_MaxCount = { {"Town Hall", 231}, {"Arrow Tower", 400} };;
+		TMap<FString, int> Building_MaxCount = { {"Town Hall", 231}, {"Arrow Tower", 400}, {"Wizards Tower", 3} };;
 
 	UPROPERTY(VisibleAnywhere)
 		class UInventoryComponent* InventoryComponent;
