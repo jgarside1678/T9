@@ -23,6 +23,7 @@ public:
 
 	void LevelUpInit(int Level);
 
+	void CreatePreviewWidget(class UTexture2D* Image, int Amount);
 
 protected:
 
@@ -32,9 +33,15 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 		class UImage* SpinningEffect;
 
+	UPROPERTY(meta = (BindWidget))
+		class UWrapBox* NewItemsBox;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LevelUpMain")
 		int Angle = 0;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LevelUpMain")
+		TSubclassOf<UUserWidget> ItemClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LevelUpMain")
 		class AGameHUD* GameHUD;

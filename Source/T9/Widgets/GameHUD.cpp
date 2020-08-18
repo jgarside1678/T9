@@ -173,3 +173,8 @@ void AGameHUD::PlayerLevelUp(int Level)
 	GetWorldTimerManager().SetTimer(LevelUpTimerHandle, this, &AGameHUD::HideLevelUp, 5, false, 5);
 }
 
+ULevelUp* AGameHUD::GetLevelUpWidget()
+{
+	return LevelUpWidget;
+}
+

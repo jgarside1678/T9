@@ -7,6 +7,7 @@
 #include "T9/Actors/Resources/ResourceActor.h"
 #include "T9/Actors/Terrain/TerrainActor.h"
 #include "T9/Characters/CharacterActor.h"
+#include "Engine/DataTable.h"
 #include "GameFramework/PlayerState.h"
 #include "MainPlayerState.generated.h"
 /**
@@ -29,6 +30,45 @@ enum Rank
 	Prince UMETA(DisplayName = "Prince/Princess"),
 	King UMETA(DisplayName = "King/Queen"),
 	Emperor UMETA(DisplayName = "Emperor/Emperoress")
+};
+
+USTRUCT(BlueprintType)
+struct FBuildingCounts {
+
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int BuildingCount = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int BuildingMaxCount = 1;
+
+};
+
+USTRUCT(BlueprintType)
+struct FBuildingCountsIncrease {
+
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString BuildingName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UTexture2D* PreviewImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int BuildingMaxCountIncrease = 1;
+
+};
+
+USTRUCT(BlueprintType)
+struct FPlayerLevelUpgrades : public FTableRowBase {
+
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<FBuildingCountsIncrease> BuildingIncreases;
+
 };
 
 
@@ -80,10 +120,18 @@ private:
 	    float RequiredXP = 100;
 
 	UPROPERTY()
-		TMap<FString, int> Building_Count = { {"Town Hall", 0}, {"Arrow Tower", 0}, {"Wizards Tower", 0} };
+		TMap<FString, FBuildingCounts> BuildingCounts = { {"Town Hall", FBuildingCounts{0, 1}}, {"Arrow Tower", FBuildingCounts{0, 3}}, {"Wizards Tower", FBuildingCounts{0, 100}}};
 
 	UPROPERTY()
-		TMap<FString, int> Building_MaxCount = { {"Town Hall", 231}, {"Arrow Tower", 400}, {"Wizards Tower", 3} };;
+		class UDataTable* PlayerLevels;
+
+	TArray<FPlayerLevelUpgrades*> PlayerLevelsArray;
+
+	//UPROPERTY()
+	//	TMap<FString, int> Building_Count = { {"Town Hall", 0}, {"Arrow Tower", 0}, {"Wizards Tower", 0} };
+
+	//UPROPERTY()
+	//	TMap<FString, int> Building_MaxCount = { {"Town Hall", 231}, {"Arrow Tower", 400}, {"Wizards Tower", 3} };
 
 	UPROPERTY(VisibleAnywhere)
 		class UInventoryComponent* InventoryComponent;

@@ -4,6 +4,7 @@
 #include "MainPlayerController.h"
 #include "T9/Widgets/GameHUD.h"
 #include "Kismet/GameplayStatics.h"
+#include "T9/Widgets/LevelUp.h"
 #include "T9/Actors/Buildings/Building_TownHall.h"
 
 
@@ -12,6 +13,13 @@ AMainPlayerState::AMainPlayerState()
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 	InventoryComponent->SetCapacity(32);
 	InventoryComponent->FillInventorySlots(FSlot{});
+
+	static ConstructorHelpers::FObjectFinder<UDataTable> Levels(TEXT("DataTable'/Game/DataTables/PlayerLevels.PlayerLevels'"));
+	if (Levels.Succeeded()) {
+		PlayerLevels = Levels.Object;
+		const TCHAR* Context = new TCHAR('Q');
+		PlayerLevels->GetAllRows(Context, PlayerLevelsArray);
+	}
 }
 
 
@@ -184,7 +192,15 @@ void AMainPlayerState::LevelUp() {
 	HUD->PlayerLevelUp(Level);
 	SetCurrentXP(temp);
 	SetRequiredXp(Level * 100);
-	if (Level == 3) Building_MaxCount["Arrow Tower"] += 1;
+	if (PlayerLevelsArray.Num() >= Level) {
+		for (int x = 0; x < PlayerLevelsArray[Level-1]->BuildingIncreases.Num(); x++) {
+			if (PlayerLevelsArray[Level - 1] && BuildingCounts.Contains(PlayerLevelsArray[Level - 1]->BuildingIncreases[x].BuildingName)) {
+				BuildingCounts[PlayerLevelsArray[Level - 1]->BuildingIncreases[x].BuildingName].BuildingMaxCount += PlayerLevelsArray[Level - 1]->BuildingIncreases[x].BuildingMaxCountIncrease;
+				HUD->GetLevelUpWidget()->CreatePreviewWidget(PlayerLevelsArray[Level - 1]->BuildingIncreases[x].PreviewImage, PlayerLevelsArray[Level - 1]->BuildingIncreases[x].BuildingMaxCountIncrease);
+			}
+		}
+	}
+	//if (Level == 3) BuildingCounts["Arrow Tower"] += 1;
 	//Do Level up things;
 }
 
@@ -247,21 +263,21 @@ int AMainPlayerState::GetNextRankPower()
 
 
 int AMainPlayerState::GetBuildingCount(FString Name) {
-	if (Building_Count.Contains(Name)) 	return Building_Count[Name];
+	if (BuildingCounts.Contains(Name)) 	return BuildingCounts[Name].BuildingCount;
 	else return 0;
 }
 
 int AMainPlayerState::GetMaxBuildingCount(FString Name) {
-	if (Building_MaxCount.Contains(Name)) 	return Building_MaxCount[Name];
+	if (BuildingCounts.Contains(Name)) 	return BuildingCounts[Name].BuildingMaxCount;
 	else return 1;
 }
 
 void AMainPlayerState::SetBuildingCount(FString Name, int Number) {
-	if (Building_Count.Contains(Name))  Building_Count[Name] = Number;
+	if (BuildingCounts.Contains(Name))  BuildingCounts[Name].BuildingCount = Number;
 }
 
 void AMainPlayerState::SetMaxBuildingCount(FString Name, int Number) {
-	if (Building_MaxCount.Contains(Name))  Building_MaxCount[Name] = Number;
+	if (BuildingCounts.Contains(Name))  BuildingCounts[Name].BuildingMaxCount = Number;
 }
 
 UInventoryComponent* AMainPlayerState::GetInventory()

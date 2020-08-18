@@ -308,7 +308,7 @@ ABuildingActor* AGameGridActor::BuildBuildingOnTile(FBuildingMenuSlot ObjectToBu
 void AGameGridActor::ToggleSelectionTile(bool Toggle)
 {
 
-	SelectionMesh->SetVisibility(Toggle);
+	if(SelectionMesh) SelectionMesh->SetVisibility(Toggle);
 	if (PreviewBuilding) PreviewBuilding->SetActorHiddenInGame(!Toggle);
 
 }

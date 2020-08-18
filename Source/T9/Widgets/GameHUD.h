@@ -75,10 +75,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void HideLevelUp();
 
-	UFUNCTION(BlueprintCallable, Category = "Game Selection")
+	UFUNCTION(BlueprintCallable)
 		void PlayerLevelUp(int Level);
 
-
+	UFUNCTION(BlueprintCallable)
+     	ULevelUp* GetLevelUpWidget();
 
 protected:
 

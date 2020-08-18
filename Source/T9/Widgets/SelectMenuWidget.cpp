@@ -129,10 +129,12 @@ void USelectMenuWidget::UpdateStatsTab()
 				StatsName2->SetText(FText::FromString(ANSI_TO_TCHAR("Max Inventory")));
 				StatsName3->SetText(FText::FromString(ANSI_TO_TCHAR("Gatherer Damage")));
 				StatsName4->SetText(FText::FromString(ANSI_TO_TCHAR("Gatherer Health")));
-				StatsBase1->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().GatherAmount)));
-				StatsBase2->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().MaxResourceInventory)));
-				StatsBase3->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().Damage)));
-				StatsBase4->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().MaxHealth)));
+				if (ResourceCharacter) {
+					StatsBase1->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().GatherAmount)));
+					StatsBase2->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().MaxResourceInventory)));
+					StatsBase3->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().Damage)));
+					StatsBase4->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().MaxHealth)));
+				}
 			}
 		}
 	}
@@ -185,14 +187,16 @@ void USelectMenuWidget::UpdateUprgadesTab()
 				UpgradesName2->SetText(FText::FromString(ANSI_TO_TCHAR("Max Inventory")));
 				UpgradesName3->SetText(FText::FromString(ANSI_TO_TCHAR("Gatherer Damage")));
 				UpgradesName4->SetText(FText::FromString(ANSI_TO_TCHAR("Gatherer Health")));
-				UpgradesOld1->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().GatherAmount)));
-				UpgradesOld2->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().MaxResourceInventory)));
-				UpgradesOld3->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().Damage)));
-				UpgradesOld4->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().MaxHealth)));
-				UpgradesNew1->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeStats().GatherAmount)));
-				UpgradesNew2->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeStats().MaxResourceInventory)));
-				UpgradesNew3->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeStats().Damage)));
-				UpgradesNew4->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeStats().MaxHealth)));
+				if (ResourceCharacter) {
+					UpgradesOld1->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().GatherAmount)));
+					UpgradesOld2->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().MaxResourceInventory)));
+					UpgradesOld3->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().Damage)));
+					UpgradesOld4->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().MaxHealth)));
+					UpgradesNew1->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeStats().GatherAmount)));
+					UpgradesNew2->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeStats().MaxResourceInventory)));
+					UpgradesNew3->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeStats().Damage)));
+					UpgradesNew4->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeStats().MaxHealth)));
+				}
 			}
 		}
 	}
