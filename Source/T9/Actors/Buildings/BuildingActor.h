@@ -194,6 +194,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		bool Disabled = false;
 
+
+	//Building Inventory
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Inventory")
+		class  UInventoryComponent* InventoryComponent;
+
 public:
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;
@@ -308,7 +314,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 		FBuildingUpgrades GetUpgradeStats();
 
+	//Inventory Functions
 
+	UFUNCTION(BlueprintCallable)
+		class UInventoryComponent* GetInventory();
 
 };
 

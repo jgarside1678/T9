@@ -39,7 +39,15 @@ class T9_API AMainPlayerState : public APlayerState
 
 		AMainPlayerState();
 
+	virtual void BeginPlay() override;
+
 private:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+		class AMainPlayerController* PC;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
+		class AGameHUD* HUD;
 
 	UPROPERTY()
 	    int Gold = 100000;

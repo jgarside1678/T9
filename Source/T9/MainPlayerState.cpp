@@ -1,6 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "MainPlayerState.h"
 #include "Widgets/InventoryComponent.h"
+#include "MainPlayerController.h"
+#include "T9/Widgets/GameHUD.h"
+#include "Kismet/GameplayStatics.h"
 #include "T9/Actors/Buildings/Building_TownHall.h"
 
 
@@ -11,6 +14,12 @@ AMainPlayerState::AMainPlayerState()
 	InventoryComponent->FillInventorySlots(FSlot{});
 }
 
+
+void AMainPlayerState::BeginPlay()
+{
+	PC = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	HUD = Cast<AGameHUD>(PC->GetHUD());
+}
 
 void AMainPlayerState::BuildingArrayClean()
 {
@@ -172,6 +181,7 @@ bool AMainPlayerState::CheckXP() {
 void AMainPlayerState::LevelUp() {
 	float temp = CurrentXP - RequiredXP;
 	Level += 1;
+	HUD->PlayerLevelUp(Level);
 	SetCurrentXP(temp);
 	SetRequiredXp(Level * 100);
 	if (Level == 3) Building_MaxCount["Arrow Tower"] += 1;

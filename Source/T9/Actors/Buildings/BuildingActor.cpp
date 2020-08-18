@@ -9,6 +9,7 @@
 #include "T9/Actors/Components/BuildingSpawnComponent.h"
 #include "T9/MainPlayerController.h"
 #include "T9/MainPlayerState.h"
+#include "T9/Widgets/InventoryComponent.h"
 #include "T9/Characters/Enemies/EnemyCharacter.h"
 #include "T9/Characters/Alliance/AllianceCharacter.h"
 #include "Particles/ParticleSystemComponent.h"
@@ -56,6 +57,10 @@ ABuildingActor::ABuildingActor()
 	//static ConstructorHelpers::FObjectFinder<USoundBase> UpgradeSound(TEXT("SoundCue'/Game/Ultimate_SFX_Bundle/Pirate_Sounds_Pro/Cues/Reparing_ship/Reparing_ship_6_Cue.Reparing_ship_6_Cue'"));
  //   UpgradeAudio = UGameplayStatics::SpawnSound2D(this, UpgradeSound.Object, 0.2);
 	//if(UpgradeAudio) UpgradeAudio->SetActive(false);
+
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+	InventoryComponent->SetCapacity(6);
+	InventoryComponent->FillInventorySlots(FSlot{});
 
 }
 
@@ -331,4 +336,9 @@ FBuildingUpgrades ABuildingActor::GetCurrentStats() {
 FBuildingUpgrades ABuildingActor::GetUpgradeStats() {
 	if(Upgrades.Contains(Level+1))	return Upgrades[Level + 1];
 	return FBuildingUpgrades();
+}
+
+UInventoryComponent* ABuildingActor::GetInventory()
+{
+	return InventoryComponent;
 }

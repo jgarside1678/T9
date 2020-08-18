@@ -13,8 +13,9 @@
 #include "HUDWidget.h"
 #include "SelectMenuWidget.h"
 #include "BuildMenu.h"
+#include "LevelUp.h"
 #include "T9/Actors/GameGridActor.h"
-#include "T9/Items/ItemActor.h"
+#include "T9/Actors/Items/ItemActor.h"
 #include "Inventory.h"
 
 
@@ -34,6 +35,9 @@ AGameHUD::AGameHUD() {
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> Inventory(TEXT("WidgetBlueprint'/Game/UI/Inventory_BP.Inventory_BP_C'"));
 	if (Inventory.Succeeded()) InventoryWidget = CreateWidget<UInventory>(GetWorld(), Inventory.Class);
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> LevelUp(TEXT("WidgetBlueprint'/Game/UI/LevelUp_BP.LevelUp_BP_C'"));
+	if (LevelUp.Succeeded()) LevelUpWidget = CreateWidget<ULevelUp>(GetWorld(), LevelUp.Class);
 
 	UWorld* World = GetWorld();
 	if (World) {
@@ -74,8 +78,7 @@ void AGameHUD::RotateSelectedBuilding(float RotationAmount)
 
 void AGameHUD::ShowBuildMenu()
 {
-
-	GameGrid->ToggleSelectionTile(true);
+	if(GameGrid) GameGrid->ToggleSelectionTile(true);
 	if (BuildMenuWidget) {
 		BuildMenuState = true;
 		BuildMenuWidget->AddToViewport();
@@ -149,5 +152,24 @@ void AGameHUD::SetGameObjectSelected(FHitResult Hit)
 
 USelectMenuWidget* AGameHUD::GetSelectMenu() {
 	return SelectMenuWidget;
+}
+
+void AGameHUD::ShowLevelUp()
+{
+	LevelUpWidget->AddToViewport();
+}
+
+void AGameHUD::HideLevelUp()
+{
+	LevelUpWidget->RemoveFromViewport();
+}
+
+void AGameHUD::PlayerLevelUp(int Level)
+{
+	if(LevelUpWidget->IsInViewport()) HideLevelUp();
+	GetWorld()->GetTimerManager().ClearTimer(LevelUpTimerHandle);
+	LevelUpWidget->LevelUpInit(Level);
+	ShowLevelUp();
+	GetWorldTimerManager().SetTimer(LevelUpTimerHandle, this, &AGameHUD::HideLevelUp, 5, false, 5);
 }
 

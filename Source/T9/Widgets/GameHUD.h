@@ -69,9 +69,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Game Selection")
 		class USelectMenuWidget* GetSelectMenu();
 
+	UFUNCTION(BlueprintCallable)
+		void ShowLevelUp();
+
+	UFUNCTION(BlueprintCallable)
+		void HideLevelUp();
+
+	UFUNCTION(BlueprintCallable, Category = "Game Selection")
+		void PlayerLevelUp(int Level);
+
 
 
 protected:
+
+	FTimerHandle LevelUpTimerHandle;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -97,7 +108,10 @@ protected:
 		class UHUDWidget* HUDMenuWidget;
 
 	UPROPERTY()
-		class UInventory* InventoryWidget;
+		class UInventory* InventoryWidget;	
+	
+	UPROPERTY()
+		class ULevelUp* LevelUpWidget;
 
 
 

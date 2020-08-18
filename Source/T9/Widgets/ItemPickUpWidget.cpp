@@ -5,7 +5,7 @@
 #include "T9/MainPlayerState.h"
 #include "T9/MainPlayerController.h"
 #include "InventoryComponent.h"
-#include "T9/Items/ItemActor.h"
+#include "T9/Actors/Items/ItemActor.h"
 #include "GameHUD.h"
 
 

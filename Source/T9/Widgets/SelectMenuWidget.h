@@ -85,6 +85,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "WidgetFunctions")
 		void UpdateItemsTab();
 
+
+	UFUNCTION(BlueprintCallable, Category = "WidgetFunctions")
+		void InitializeSelectedInventory();
+
 protected:
 	//Tab Orange Buttons
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Selectwidget")
@@ -224,4 +228,14 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* FoodAmount;
 
+
+	//Items// Inventory
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		class  UInventoryComponent* SelectedInventory;
+
+	UPROPERTY(meta = (BindWidget))
+		class UWrapBox* InventoryBox;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		TSubclassOf<UUserWidget> SelectSlot;
 };

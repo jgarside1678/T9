@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "T9/Items/ItemActor.h"
+#include "T9/Actors/Items/ItemActor.h"
 #include "ItemTool.generated.h"
 
 /**

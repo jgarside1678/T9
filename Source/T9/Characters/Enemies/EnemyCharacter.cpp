@@ -3,7 +3,7 @@
 
 #include "EnemyCharacter.h"
 #include "T9/MainPlayerState.h"
-#include "T9/Items/ItemActor.h"
+#include "T9/Actors/Items/ItemActor.h"
 #include "T9/Widgets/HealthBarWidget.h"
 
 AEnemyCharacter::AEnemyCharacter() {

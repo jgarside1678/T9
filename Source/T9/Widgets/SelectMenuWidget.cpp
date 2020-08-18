@@ -8,6 +8,9 @@
 #include "Components/TextBlock.h"
 #include "Components/Overlay.h"
 #include "Components/PanelWidget.h"
+#include "Components/WrapBox.h"
+#include "Select_Slot.h"
+#include "T9/Widgets/InventoryComponent.h"
 #include "T9/Characters/Alliance/Alliance_ResourceGatherer.h"
 #include "T9/Actors/Components/BuildingSpawnComponent.h"
 #include "T9/Actors/Buildings/DefensiveBuildingActor.h"
@@ -22,6 +25,11 @@ USelectMenuWidget::USelectMenuWidget(const FObjectInitializer& ObjectInit) : Sup
 	if (SpriteOff.Succeeded()) {
 		TabButtonImageOff = SpriteOff.Object;
 	}
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> SlotBP(TEXT("WidgetBlueprint'/Game/UI/Select_Slot_BP.Select_Slot_BP_C'"));
+	if (SlotBP.Succeeded()) {
+		SelectSlot = SlotBP.Class;
+	}
 }
 
 void USelectMenuWidget::NativeConstruct()
@@ -30,6 +38,8 @@ void USelectMenuWidget::NativeConstruct()
 	if (SelectedActor) {
 		SelectedBuilding = Cast<ABuildingActor>(SelectedActor);
 		SelectedObjectInterface = TScriptInterface<ISelectInterface>(SelectedActor);
+		if (SelectedBuilding) SelectedInventory = SelectedBuilding->GetInventory();
+		else SelectedInventory = nullptr;
 	}
 	Super::NativeConstruct();
 }
@@ -211,5 +221,18 @@ void USelectMenuWidget::UpdateUprgadesTab()
 
 void USelectMenuWidget::UpdateItemsTab()
 {
+}
+
+void USelectMenuWidget::InitializeSelectedInventory()
+{
+	InventoryBox->ClearChildren();
+	if (SelectedInventory) {
+		TArray<FSlot> SelectedInventoryItems = SelectedInventory->GetItems();
+		for (int x = 0; x < SelectedInventoryItems.Num(); x++) {
+			USelect_Slot* NewSlot = Cast<USelect_Slot>(CreateWidget(InventoryBox, SelectSlot));
+			NewSlot->InitSlot(SelectedInventoryItems[x]);
+			InventoryBox->AddChild(NewSlot);
+		}
+	}
 }
 

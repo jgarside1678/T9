@@ -56,18 +56,21 @@ void ACharacterActor::BeginPlay()
 		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Level].MaxHealth);
 	}
 
+	float Height = 0;
+	//Used to for Spacing between characters and other objects
+	if (GetCapsuleComponent()) {
+		CapsuleRadius = GetCapsuleComponent()->GetScaledCapsuleRadius();
+		Height = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();// *GetActorScale3D().Z;
+		GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -Height));
+		GetMesh()->AddLocalRotation(FRotator(0, -90, 0));
+	}
+	if (GetActorScale3D().Z > 1) SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, Height));
+
 	if (MovementComponent) {
 		MovementComponent->SetAvoidanceEnabled(true);
 		MovementComponent->AvoidanceConsiderationRadius = CapsuleRadius * 3;
 	}
 
-	//Used to for Spacing between characters and other objects
-	if (GetCapsuleComponent()) {
-		CapsuleRadius = GetCapsuleComponent()->GetScaledCapsuleRadius();
-		float Height = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
-		GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -Height));
-		GetMesh()->AddLocalRotation(FRotator(0, -90, 0));
-	}
 	SheathMainHand();
 }
 
