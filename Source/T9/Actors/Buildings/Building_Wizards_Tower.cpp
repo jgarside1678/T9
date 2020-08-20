@@ -7,12 +7,13 @@
 #include "T9/MainPlayerState.h"
 #include "T9/Characters/Alliance/Alliance_Wizard.h"
 #include "T9/Actors/Projectiles/Projectile_Magic_Fire.h"
+#include "T9/Actors/Projectiles/Projectile_Magic_Water.h"
 
 
 ABuilding_Wizards_Tower::ABuilding_Wizards_Tower(const FObjectInitializer& ObjectInitializer) {
 	// XP / Cost / Maxhealth / Damage
 	Type = Character;
-	Projectile = AProjectile_Magic_Fire::StaticClass();
+	Projectile = AProjectile_Magic_Water::StaticClass();
 	GridLength = FVector2D(3);
 	//ProjectileSpawn->SetRelativeLocation(FVector(0,0,0.0f));
 	ProjectileDelay = 0.9f;
