@@ -62,23 +62,21 @@ void ADefensiveBuildingActor::AttackTarget()
 {
 	if (!Disabled) {
 		if (Target != nullptr && !Target->IsPendingKill()) {
-			UE_LOG(LogTemp, Warning, TEXT("Attack"));
-			FActorSpawnParameters SpawnParams;
-			if (BuildingDefender) {
-				UE_LOG(LogTemp, Warning, TEXT("Attack2"));
-				ProjectileSpawn->SetWorldLocation(BuildingDefender->GetSocketLocation("hand_r"));
-				if (DefenderAttackAnimation)	BuildingDefender->PlayAnimation(DefenderAttackAnimation, false);
-			}
-			FVector Location = ProjectileSpawn->GetComponentLocation();
-			FRotator Rotation = ProjectileSpawn->GetRelativeRotation();
-			if (Projectile) {
-				UE_LOG(LogTemp, Warning, TEXT("Attack3"));
-				if (!TargetInterface->CheckIfDead()) {
-					AProjectile* SpawnedActorRef = GetWorld()->SpawnActor<AProjectile>(Projectile, Location, Rotation, SpawnParams);
-					SpawnedActorRef->ProjectileInnit(Target, GetDamage(), this, ProjectileDelay);
+			if (TargetInterface->IsDamageable()) {
+				FActorSpawnParameters SpawnParams;
+				if (BuildingDefender) {
+					UE_LOG(LogTemp, Warning, TEXT("Attack2"));
+					ProjectileSpawn->SetWorldLocation(BuildingDefender->GetSocketLocation("hand_r"));
+					if (DefenderAttackAnimation)	BuildingDefender->PlayAnimation(DefenderAttackAnimation, false);
 				}
+				FVector Location = ProjectileSpawn->GetComponentLocation();
+				FRotator Rotation = ProjectileSpawn->GetRelativeRotation();
+				if (Projectile && RecentlyRendered) {
+					AProjectile* SpawnedActorRef = GetWorld()->SpawnActor<AProjectile>(Projectile, Location, Rotation, SpawnParams);
+					SpawnedActorRef->ProjectileInnit(Target, GetDamage(), this, ProjectileDelay, Enemy);
+				}
+				else TargetInterface->TakeDamage(this, GetDamage(), Enemy);
 			}
-			else TargetInterface->DamageEnemy(Target, GetDamage());
 			GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ADefensiveBuildingActor::AttackTarget, Upgrades[Level].Attack.AttackSpeed, false, Upgrades[Level].Attack.AttackSpeed);
 		}
 		else SetTarget();
@@ -87,19 +85,22 @@ void ADefensiveBuildingActor::AttackTarget()
 
 void ADefensiveBuildingActor::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
-	if (Target && TurretStaticMeshComponent) {
-		FVector AimLocation = Target->GetActorLocation() + FVector(0, 0, 150);
-		FRotator Rot = UKismetMathLibrary::FindLookAtRotation(TurretStaticMeshComponent->GetComponentLocation(), AimLocation);
-		TurretRotation = UKismetMathLibrary::RInterpTo(TurretStaticMeshComponent->GetRelativeRotation(), Rot - GetActorRotation(), DeltaTime, 3);
-		TurretStaticMeshComponent->SetRelativeRotation(FRotator(0, TurretRotation.Yaw, 0));
-		ProjectileSpawn->SetRelativeRotation(TurretRotation);
-	}
-	else if (Target && BuildingDefender) {
-		FVector AimLocation = Target->GetActorLocation() + FVector(0, 0, 150);
-		FRotator Rot = UKismetMathLibrary::FindLookAtRotation(BuildingDefender->GetComponentLocation(), AimLocation);
-		TurretRotation = UKismetMathLibrary::RInterpTo(BuildingDefender->GetRelativeRotation(), Rot - GetActorRotation(), DeltaTime, 3);
-		BuildingDefender->SetRelativeRotation(FRotator(0,TurretRotation.Yaw, 0));
-		ProjectileSpawn->SetRelativeRotation(TurretRotation);
+	RecentlyRendered = WasRecentlyRendered(0.2);
+	if (RecentlyRendered) {
+		if (Target && TurretStaticMeshComponent) {
+			FVector AimLocation = Target->GetActorLocation() + FVector(0, 0, 150);
+			FRotator Rot = UKismetMathLibrary::FindLookAtRotation(TurretStaticMeshComponent->GetComponentLocation(), AimLocation);
+			TurretRotation = UKismetMathLibrary::RInterpTo(TurretStaticMeshComponent->GetRelativeRotation(), Rot - GetActorRotation(), DeltaTime, 3);
+			TurretStaticMeshComponent->SetRelativeRotation(FRotator(0, TurretRotation.Yaw, 0));
+			ProjectileSpawn->SetRelativeRotation(TurretRotation);
+		}
+		else if (Target && BuildingDefender) {
+			FVector AimLocation = Target->GetActorLocation() + FVector(0, 0, 150);
+			FRotator Rot = UKismetMathLibrary::FindLookAtRotation(BuildingDefender->GetComponentLocation(), AimLocation);
+			TurretRotation = UKismetMathLibrary::RInterpTo(BuildingDefender->GetRelativeRotation(), Rot - GetActorRotation(), DeltaTime, 3);
+			BuildingDefender->SetRelativeRotation(FRotator(0, TurretRotation.Yaw, 0));
+			ProjectileSpawn->SetRelativeRotation(TurretRotation);
+		}
 	}
 }
 

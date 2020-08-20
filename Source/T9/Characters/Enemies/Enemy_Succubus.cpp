@@ -38,7 +38,7 @@ AEnemy_Succubus::AEnemy_Succubus(const FObjectInitializer& ObjectInitializer) {
 	AIControllerClass = AEnemy_Succubus_Controller::StaticClass();
 	SetActorScale3D(FVector(2));
 	DropTable.Add(FLoot{ 1, AItem_Wooden_Pickaxe::StaticClass() });
-	//DropTable.Add(FLoot{ 3, nullptr });
+	DropTable.Add(FLoot{ 10, nullptr });
 }
 
 

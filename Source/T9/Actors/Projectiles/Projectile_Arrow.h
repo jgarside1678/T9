@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Projectile.h"
+#include "DirectionalProjectile.h"
 #include "Projectile_Arrow.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class T9_API AProjectile_Arrow : public AProjectile
+class T9_API AProjectile_Arrow : public ADirectionalProjectile
 {
 	GENERATED_BODY()
 public:

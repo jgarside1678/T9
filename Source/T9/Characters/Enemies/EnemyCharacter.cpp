@@ -12,6 +12,7 @@ AEnemyCharacter::AEnemyCharacter() {
 	if (widget.Succeeded()) {
 		WidgetClass = widget.Class;
 	}
+	TypeOfDamage = Enemy;
 }
 
 void AEnemyCharacter::BeginPlay() {

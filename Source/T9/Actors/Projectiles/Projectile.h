@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "T9/Interfaces/DamageInterface.h"
 #include "Projectile.generated.h"
+
+
 
 UCLASS()
 class T9_API AProjectile : public AActor
@@ -27,13 +30,30 @@ protected:
 
 	FTimerHandle ProjectileMovementDelayHandle;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+	FTimerHandle ProjectileLifeTimeHandle;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		TEnumAsByte<DamageType> DamageActorsOfType;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Particles", Meta = (AllowPrivateAccess = "true"))
+		class UNiagaraSystem* ParticleEffect;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Particles", Meta = (AllowPrivateAccess = "true"))
+		class UNiagaraSystem* ExplosionEffect;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Basics")
+		float ProjectileLifeTime = 10;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Basics")
 	    float ProjectileMovementDelay = 0;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Basics")
 		float ProjectileSpeed = 1;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Basics")
+		class UPrimitiveComponent* ProjectilePrimitive;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Basics")
 		class UProjectileMovementComponent* ProjectileMovement;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
@@ -42,26 +62,29 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
 		class UBoxComponent* BoxCollider;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Basics")
 		class AActor* Spawner;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Basics")
 		class ADefensiveBuildingActor* BuildingSpawn;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Basics")
 		class USceneComponent* ProjectileSpawn;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Basics")
 		bool Active = false;
 
 	UFUNCTION()
-		void ToggleActive(bool Input);
-
-
-private:
+		virtual void ToggleActive(bool Input);
 
 	UFUNCTION()
-		void BeginOverlap(UPrimitiveComponent* OverlappedComponent,	AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+		virtual void ProjectileExplode();
+
+	UFUNCTION()
+		virtual void ProjectileDestroy();
+
+	UFUNCTION()
+		virtual void BeginOverlap(UPrimitiveComponent* OverlappedComponent,	AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 
 public:	
@@ -69,7 +92,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-	    void ProjectileInnit(AActor* TargetActor, float AttackDamage, AActor* SpawnActor, float ProjectileDelay = 0);
+	    virtual void ProjectileInnit(AActor* TargetActor, float AttackDamage, AActor* SpawnActor, float ProjectileDelay = 0, DamageType DamageActors = Enemy);
 
 
 };

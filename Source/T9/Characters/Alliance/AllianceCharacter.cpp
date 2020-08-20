@@ -16,6 +16,7 @@ AAllianceCharacter::AAllianceCharacter() {
 	if (widget.Succeeded()) {
 		WidgetClass = widget.Class;
 	}
+    TypeOfDamage = Alliance;
 }
 
 void AAllianceCharacter::BeginPlay() {

@@ -70,6 +70,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* MainHandItemMesh;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		TEnumAsByte<DamageType> TypeOfDamage;
+
 	UPROPERTY(VisibleAnywhere, Category = "Leveling")
 		int Level = 1;
 
@@ -91,7 +94,7 @@ protected:
 	    UCharacterMovementComponent* MovementComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
-	    bool Invulnerable = false;
+	    bool Invulnerable = true;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
 		bool NeedsController = true;
@@ -161,10 +164,16 @@ public:
 		float GetDamage();
 
 	UFUNCTION()
-		virtual void TakeDamage(AActor* AttackingActor, float AmountOfDamage);
+		virtual void TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage);
 
 	UFUNCTION()
 		virtual void DamageEnemy(AActor* Actor, float AmountOfDamage);
+
+	UFUNCTION()
+	    virtual DamageType GetDamageType();
+
+	UFUNCTION()
+		virtual bool IsDamageable();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool IsDead = false;

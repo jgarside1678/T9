@@ -68,7 +68,7 @@ void ACharacterActor::BeginPlay()
 
 	if (MovementComponent) {
 		MovementComponent->SetAvoidanceEnabled(true);
-		MovementComponent->AvoidanceConsiderationRadius = CapsuleRadius * 3;
+		MovementComponent->AvoidanceConsiderationRadius = CapsuleRadius * 2.3;
 	}
 
 	SheathMainHand();
@@ -94,7 +94,6 @@ void ACharacterActor::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invu
 	Level = SpawnLevel;
 	ResetHealth();
 	NeedsController = SpawnController;
-	Invulnerable = Invuln;
 	if (!GetController() && NeedsController) {
 		FTimerHandle ControllerTimerHandle;
 		GetWorldTimerManager().SetTimer(ControllerTimerHandle, this, &ACharacterActor::SpawnDefaultController, 2, false, 2);
@@ -102,6 +101,7 @@ void ACharacterActor::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invu
 	else {
 		WidgetComponent->SetVisibility(false);
 	}
+	Invulnerable = Invuln;
 }
 
 AActor* ACharacterActor::GetSpawnBuilding() {
@@ -168,9 +168,9 @@ float ACharacterActor::GetDamage() {
 	return Damage;
 }
 
-void ACharacterActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage)
+void ACharacterActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage)
 {
-	if (!IsDead) {
+	if ((!IsDead && TypeDamage == All) || (!IsDead && TypeDamage == TypeOfDamage)) {
 		CurrentHealth -= AmountOfDamage;
 		if (Levels.Contains(Level)) {
 			if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Level].MaxHealth);
@@ -211,6 +211,17 @@ void ACharacterActor::DamageEnemy(AActor* Actor, float AmountOfDamage)
 {
 	IDamageInterface* Enemy = Cast<IDamageInterface>(Actor);
 	if (Enemy != nullptr) Enemy->TakeDamage(this, AmountOfDamage);
+}
+
+DamageType ACharacterActor::GetDamageType()
+{
+	return TypeOfDamage;
+}
+
+bool ACharacterActor::IsDamageable()
+{
+	if (Invulnerable || IsDead) return false;
+	else return true;
 }
 
 float ACharacterActor::GetAttackRange() {

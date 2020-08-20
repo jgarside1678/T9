@@ -9,10 +9,20 @@ void IDamageInterface::DamageEnemy(AActor* Actor, float AmountOfDamage)
 {
 }
 
-void IDamageInterface::TakeDamage(AActor* Actor, float AmountOfDamage)
+void IDamageInterface::TakeDamage(AActor* Actor, float AmountOfDamage, DamageType TypeOfDamage)
 {
 }
 
 bool IDamageInterface::CheckIfDead() {
 	return false;
+}
+
+bool IDamageInterface::IsDamageable()
+{
+	return true;
+}
+
+DamageType IDamageInterface::GetDamageType()
+{
+	return DamageType();
 }

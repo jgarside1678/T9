@@ -140,6 +140,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		int Level = 1;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		TEnumAsByte<DamageType> TypeOfDamage = Alliance;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		FString BuildingName = "Building";
 
@@ -194,11 +197,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		bool Disabled = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
+		bool RecentlyRendered = true;
 
 	//Building Inventory
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Inventory")
 		class  UInventoryComponent* InventoryComponent;
+
+
+
 
 public:
 	// Called every frame
@@ -235,10 +243,16 @@ public:
 		class UStaticMeshComponent* GetStaticMeshComp();
 
 	UFUNCTION()
-		virtual void TakeDamage(AActor* AttackingActor, float AmountOfDamage);
+		virtual void TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage = All);
 
 	UFUNCTION()
 		virtual void DamageEnemy(AActor* Actor, float AmountOfDamage);
+
+	UFUNCTION()
+		virtual DamageType GetDamageType();
+
+	UFUNCTION()
+		virtual bool IsDamageable();
 
 	UFUNCTION(BlueprintCallable)
 		void RemoveBuilding();

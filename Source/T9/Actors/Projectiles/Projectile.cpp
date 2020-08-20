@@ -4,6 +4,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "T9/Interfaces/DamageInterface.h"
+#include "NiagaraFunctionLibrary.h"
 #include "T9/Actors/Buildings/DefensiveBuildingActor.h"
 #include "T9/Characters/Alliance/AllianceCharacter.h"
 
@@ -29,12 +30,16 @@ AProjectile::AProjectile() :
 	ProjectileMovement->Velocity = FVector(0.f);
 	StaticMeshComp->SetCollisionProfileName("NoCollision");
 	BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::BeginOverlap);
+
+
+	ProjectilePrimitive = Cast<UPrimitiveComponent>(GetComponentByClass(USceneComponent::StaticClass()));
 }
 
 
-void AProjectile::ProjectileInnit(AActor* TargetActor, float AttackDamage, AActor* SpawnActor, float ProjectileDelay) {
+void AProjectile::ProjectileInnit(AActor* TargetActor, float AttackDamage, AActor* SpawnActor, float ProjectileDelay, DamageType DamageActors) {
 	Target = TargetActor;
 	Damage = AttackDamage;
+	DamageActorsOfType = DamageActors;
 	Spawner = SpawnActor;
 	ProjectileMovementDelay = ProjectileDelay;
 	BuildingSpawn = Cast<ADefensiveBuildingActor>(Spawner);
@@ -44,15 +49,18 @@ void AProjectile::ProjectileInnit(AActor* TargetActor, float AttackDamage, AActo
 		TickDelay.BindUFunction(this, FName("ToggleActive"), true);
 		GetWorldTimerManager().SetTimer(ProjectileMovementDelayHandle, TickDelay, ProjectileMovementDelay, false, ProjectileMovementDelay);
 	}
-	else Active = true;
+	else {
+		Active = true;
+		GetWorldTimerManager().SetTimer(ProjectileLifeTimeHandle, this, &AProjectile::ProjectileDestroy, ProjectileLifeTime, false, ProjectileLifeTime);
+	}
 }
 
 void AProjectile::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherActor == Target) {
 		IDamageInterface* Enemy = Cast<IDamageInterface>(Target);
-		if(Enemy != nullptr) Enemy->TakeDamage(this, Damage);
-		this->Destroy();
+		if(Enemy != nullptr) Enemy->TakeDamage(this, Damage, DamageActorsOfType);
+		ProjectileDestroy();
 	}
 }
 
@@ -60,28 +68,26 @@ void AProjectile::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if ((Target != nullptr) && (Target->IsValidLowLevel())&& (!Target->IsPendingKill())) {
-		if (Active) {
-			FVector Direction = (Target->GetActorLocation() - GetActorLocation() + FVector(0, 0, Target->GetSimpleCollisionHalfHeight())).GetSafeNormal();
-			ProjectileMovement->Velocity += Direction * 50000.f * DeltaTime;
-			ProjectileMovement->Velocity = ProjectileMovement->Velocity.GetSafeNormal() * ProjectileSpeed * 1000;
-		}
-		else if(BuildingSpawn) {
-			if (BuildingSpawn->Type == Turret) {
-				SetActorLocation(ProjectileSpawn->GetComponentLocation());
-				SetActorRelativeRotation(BuildingSpawn->TurretRotation);
-			}
-			else if (BuildingSpawn->Type == Character) {
-				if(USkeletalMeshComponent* SpawnCharacter = BuildingSpawn->BuildingDefender) SetActorLocation(SpawnCharacter->GetSocketLocation("hand_r"));
-			}
-		}
-	}
-	else this->Destroy();
-
 }
 
 void AProjectile::ToggleActive(bool Input) {
 	Active = Input;
+	if (Active) GetWorldTimerManager().SetTimer(ProjectileLifeTimeHandle, this, &AProjectile::ProjectileDestroy, ProjectileLifeTime, false, ProjectileLifeTime);
+	//else GetWorldTimerManager().PauseTimer(ProjectileLifeTimeHandle);
+}
+
+void AProjectile::ProjectileExplode()
+{
+	if (ProjectilePrimitive) {
+		if (ExplosionEffect) {
+			UNiagaraFunctionLibrary::SpawnSystemAttached(ExplosionEffect, Target->GetRootComponent(), FName(""), FVector(0, 0, 0), FRotator(0), EAttachLocation::SnapToTarget, false);
+		}
+	}
+}
+
+void AProjectile::ProjectileDestroy()
+{
+	this->Destroy();
 }
 
 // Called to bind functionality to input

@@ -182,18 +182,31 @@ UStaticMeshComponent* ABuildingActor::GetStaticMeshComp()
 	return StaticMeshComponent;
 }
 
-void ABuildingActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage)
+void ABuildingActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage)
 {
-	CurrentHealth -= AmountOfDamage;
-	if (CurrentHealth <= 0) {
-		SetDisabled(true);
-		CurrentHealth = 0;
+	if((!Disabled && TypeDamage == All) || (!Disabled && TypeDamage == TypeOfDamage)) {
+		CurrentHealth -= AmountOfDamage;
+		if (CurrentHealth <= 0) {
+			SetDisabled(true);
+			CurrentHealth = 0;
+		}
 	}
 }
 
 
 void ABuildingActor::DamageEnemy(AActor* Actor, float AmountOfDamage)
 {
+}
+
+DamageType ABuildingActor::GetDamageType()
+{
+	return TypeOfDamage;
+}
+
+bool ABuildingActor::IsDamageable()
+{
+	if (Disabled) return false;
+	else return true;
 }
 
 void ABuildingActor::RemoveBuilding()
@@ -249,7 +262,7 @@ void ABuildingActor::Upgrade() {
 		//}
 		Level++;
 
-		PS->AddPower(Upgrades[Level].PowerRating - Upgrades[Level - 1].PowerRating);
+		if(!Disabled) PS->AddPower(Upgrades[Level].PowerRating - Upgrades[Level - 1].PowerRating);
 
 		//Update Spawned Characters
 		UActorComponent* SpawnComp = GetComponentByClass(UBuildingSpawnComponent::StaticClass());
