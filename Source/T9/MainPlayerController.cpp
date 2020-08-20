@@ -130,7 +130,7 @@ void AMainPlayerController::SelectInteract() {
 					if ((PS->GetBuildingCount(Building->GetName()) < PS->GetMaxBuildingCount(Building->GetName())) && PS->ResourceCheck(Building->GetCost())) {
 						GameGrid->BuildBuildingOnTile(HUDPointer->SelectedBuildMenuObject);
 					}
-					else UE_LOG(LogTemp, Warning, TEXT("Conditions to build were not met."));
+					else CreateAlert("Error", "Conditions to build this building were not met.", 5);
 				}
 				else UE_LOG(LogTemp, Warning, TEXT("FUCK"));
 			}
@@ -141,4 +141,9 @@ void AMainPlayerController::SelectInteract() {
 
 AGameGridActor* AMainPlayerController::GetGrid() {
 	return GameGrid;
+}
+
+void AMainPlayerController::CreateAlert(FString Title, FString Message, float MessageTimeout)
+{
+	if (HUDPointer) HUDPointer->AddPlayerAlert(Title, Message, MessageTimeout);
 }

@@ -39,6 +39,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void HideInventory();
 
+	UFUNCTION(BlueprintCallable)
+		void ShowPlayerMessage();
+
+	UFUNCTION(BlueprintCallable)
+		void HidePlayerMessage();
+
+	UFUNCTION(BlueprintCallable)
+	    void AddPlayerAlert(FString Title, FString Message, float MessageTimeout = 0);
+
 	void SetGameObjectSelected(FHitResult Hit);
 
 	FBuildingMenuSlot SelectedBuildMenuObject;
@@ -52,6 +61,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Game Menus")
 		bool InventoryState = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Game Menus")
+		bool MessageState = false;
 
 	//UPROPERTY()
 	//	class UDataTable* BuildMenuBuildings;
@@ -85,6 +97,7 @@ protected:
 
 	FTimerHandle LevelUpTimerHandle;
 
+	FTimerHandle PlayerAlertHandle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class AMainPlayerController* PC;
@@ -114,6 +127,8 @@ protected:
 	UPROPERTY()
 		class ULevelUp* LevelUpWidget;
 
+	UPROPERTY()
+		class UPlayerAlert* PlayerMessage;
 
 
 };

@@ -34,6 +34,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		class AGameGridActor* GetGrid();
 
+	UFUNCTION(BlueprintCallable)
+	    void CreateAlert(FString Title, FString Message, float MessageTimeout = 0);
+
 
 protected:
 

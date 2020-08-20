@@ -14,6 +14,7 @@
 #include "SelectMenuWidget.h"
 #include "BuildMenu.h"
 #include "LevelUp.h"
+#include "PlayerAlert.h"
 #include "T9/Actors/GameGridActor.h"
 #include "T9/Actors/Items/ItemActor.h"
 #include "Inventory.h"
@@ -38,6 +39,10 @@ AGameHUD::AGameHUD() {
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> LevelUp(TEXT("WidgetBlueprint'/Game/UI/LevelUp_BP.LevelUp_BP_C'"));
 	if (LevelUp.Succeeded()) LevelUpWidget = CreateWidget<ULevelUp>(GetWorld(), LevelUp.Class);
+
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> Alert(TEXT("WidgetBlueprint'/Game/UI/PlayerAlert_BP.PlayerAlert_BP_C'"));
+	if (Alert.Succeeded()) PlayerMessage = CreateWidget<UPlayerAlert>(GetWorld(), Alert.Class);
 
 	UWorld* World = GetWorld();
 	if (World) {
@@ -107,6 +112,22 @@ void AGameHUD::HideInventory()
 	}
 }
 
+void AGameHUD::ShowPlayerMessage()
+{
+	if (PlayerMessage) {
+		PlayerMessage->AddToViewport();
+		MessageState = true;
+	}
+}
+
+void AGameHUD::HidePlayerMessage()
+{
+	if (PlayerMessage) {
+		PlayerMessage->RemoveFromViewport();
+		MessageState = false;
+	}
+}
+
 void AGameHUD::HideBuildMenu()
 {
 	//Reseting
@@ -121,6 +142,14 @@ void AGameHUD::HideBuildMenu()
 		BuildMenuState = false;
 		BuildMenuWidget->RemoveFromViewport();
 	}
+}
+
+
+void AGameHUD::AddPlayerAlert(FString Title, FString Message, float MessageTimeout)
+{
+	if(!PlayerMessage->IsInViewport()) ShowPlayerMessage();
+	PlayerMessage->SetAlertContent(Title, Message);
+	if(MessageTimeout > 0) GetWorldTimerManager().SetTimer(PlayerAlertHandle, this, &AGameHUD::HidePlayerMessage, MessageTimeout, false, MessageTimeout);
 }
 
 //Sets actual Objects in game selected
