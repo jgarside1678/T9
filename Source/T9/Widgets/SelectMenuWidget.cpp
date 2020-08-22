@@ -9,8 +9,8 @@
 #include "Components/Overlay.h"
 #include "Components/PanelWidget.h"
 #include "Components/WrapBox.h"
-#include "Select_Slot.h"
-#include "T9/Widgets/InventoryComponent.h"
+#include "InventorySlot.h"
+#include "T9/Actors/Components/InventoryComponent.h"
 #include "T9/Characters/Alliance/Alliance_ResourceGatherer.h"
 #include "T9/Actors/Components/BuildingSpawnComponent.h"
 #include "T9/Actors/Buildings/DefensiveBuildingActor.h"
@@ -233,8 +233,8 @@ void USelectMenuWidget::InitializeSelectedInventory()
 	if (SelectedInventory) {
 		TArray<FSlot> SelectedInventoryItems = SelectedInventory->GetItems();
 		for (int x = 0; x < SelectedInventoryItems.Num(); x++) {
-			USelect_Slot* NewSlot = Cast<USelect_Slot>(CreateWidget(InventoryBox, SelectSlot));
-			NewSlot->InitSlot(SelectedInventoryItems[x]);
+			UInventorySlot* NewSlot = Cast<UInventorySlot>(CreateWidget(InventoryBox, SelectSlot));
+			NewSlot->InventorySlotInit(SelectedInventoryItems[x], SelectedBuilding->GetInventory());
 			InventoryBox->AddChild(NewSlot);
 		}
 	}

@@ -46,6 +46,15 @@ public:
 		void HidePlayerMessage();
 
 	UFUNCTION(BlueprintCallable)
+		void ShowShowItems();
+
+	UFUNCTION(BlueprintCallable)
+		void HideShowItems();
+
+	UFUNCTION(BlueprintCallable)
+		void ShowItemsForSlot(class UInventorySlot* ClickedSlot);
+
+	UFUNCTION(BlueprintCallable)
 	    void AddPlayerAlert(FString Title, FString Message, float MessageTimeout = 0);
 
 	void SetGameObjectSelected(FHitResult Hit);
@@ -65,15 +74,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Game Menus")
 		bool MessageState = false;
 
-	//UPROPERTY()
-	//	class UDataTable* BuildMenuBuildings;
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Game Menus")
+		bool ShowItemsState = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Game Selection")
 		class AActor* HitActor;
 
 	UPROPERTY(VisibleAnywhere, Category = "Game Selection")
 		class AActor* SelectedObject;
+
+	UPROPERTY(VisibleAnywhere, Category = "Menu Selection")
+		class UInventorySlot* SelectedSlot;
 
 	UPROPERTY()
 		class AActor* PreviewBuilding;
@@ -129,6 +140,9 @@ protected:
 
 	UPROPERTY()
 		class UPlayerAlert* PlayerMessage;
+
+	UPROPERTY()
+		class UShowItems* ShowItems;
 
 
 };

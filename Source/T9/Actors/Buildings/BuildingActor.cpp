@@ -9,7 +9,7 @@
 #include "T9/Actors/Components/BuildingSpawnComponent.h"
 #include "T9/MainPlayerController.h"
 #include "T9/MainPlayerState.h"
-#include "T9/Widgets/InventoryComponent.h"
+#include "T9/Actors/Components/InventoryComponent.h"
 #include "T9/Characters/Enemies/EnemyCharacter.h"
 #include "T9/Characters/Alliance/AllianceCharacter.h"
 #include "Particles/ParticleSystemComponent.h"

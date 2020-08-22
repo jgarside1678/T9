@@ -13,7 +13,9 @@
 #include "HUDWidget.h"
 #include "SelectMenuWidget.h"
 #include "BuildMenu.h"
+#include "InventorySlot.h"
 #include "LevelUp.h"
+#include "ShowItems.h"
 #include "PlayerAlert.h"
 #include "T9/Actors/GameGridActor.h"
 #include "T9/Actors/Items/ItemActor.h"
@@ -24,14 +26,14 @@ AGameHUD::AGameHUD() {
 
 
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> Widget1(TEXT("WidgetBlueprint'/Game/UI/BuildMenu_BP.BuildMenu_BP_C'"));
-	if (Widget1.Succeeded()) BuildMenuWidget = CreateWidget<UBuildMenu>(GetWorld(), Widget1.Class);
+	static ConstructorHelpers::FClassFinder<UUserWidget> Build(TEXT("WidgetBlueprint'/Game/UI/BuildMenu_BP.BuildMenu_BP_C'"));
+	if (Build.Succeeded()) BuildMenuWidget = CreateWidget<UBuildMenu>(GetWorld(), Build.Class);
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> Widget2(TEXT("WidgetBlueprint'/Game/UI/HUDMenu.HUDMenu_C'"));
-	if(Widget2.Succeeded())	HUDMenuWidget = CreateWidget<UHUDWidget>(GetWorld(), Widget2.Class);
+	static ConstructorHelpers::FClassFinder<UUserWidget> MainHUD(TEXT("WidgetBlueprint'/Game/UI/HUDMenu.HUDMenu_C'"));
+	if(MainHUD.Succeeded())	HUDMenuWidget = CreateWidget<UHUDWidget>(GetWorld(), MainHUD.Class);
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> Widget3(TEXT("WidgetBlueprint'/Game/UI/SelectMenu1.SelectMenu1_C'"));
-	if (Widget3.Succeeded()) SelectMenuWidget = CreateWidget<USelectMenuWidget>(GetWorld(), Widget3.Class);
+	static ConstructorHelpers::FClassFinder<UUserWidget> Select(TEXT("WidgetBlueprint'/Game/UI/SelectMenu1.SelectMenu1_C'"));
+	if (Select.Succeeded()) SelectMenuWidget = CreateWidget<USelectMenuWidget>(GetWorld(), Select.Class);
 
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> Inventory(TEXT("WidgetBlueprint'/Game/UI/Inventory_BP.Inventory_BP_C'"));
@@ -43,6 +45,9 @@ AGameHUD::AGameHUD() {
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> Alert(TEXT("WidgetBlueprint'/Game/UI/PlayerAlert_BP.PlayerAlert_BP_C'"));
 	if (Alert.Succeeded()) PlayerMessage = CreateWidget<UPlayerAlert>(GetWorld(), Alert.Class);
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> FilterItems(TEXT("WidgetBlueprint'/Game/UI/ShowItems_BP.ShowItems_BP_C'"));
+	if (FilterItems.Succeeded()) ShowItems = CreateWidget<UShowItems>(GetWorld(), FilterItems.Class);
 
 	UWorld* World = GetWorld();
 	if (World) {
@@ -126,6 +131,30 @@ void AGameHUD::HidePlayerMessage()
 		PlayerMessage->RemoveFromViewport();
 		MessageState = false;
 	}
+}
+
+void AGameHUD::ShowShowItems()
+{
+	if (ShowItems) {
+		ShowItems->AddToViewport();
+		ShowItemsState = true;
+	}
+}
+
+void AGameHUD::HideShowItems()
+{
+	if (ShowItems) {
+		ShowItems->RemoveFromViewport();
+		ShowItemsState = false;
+	}
+}
+
+void AGameHUD::ShowItemsForSlot(class UInventorySlot* ClickedSlot)
+{
+	if (!ShowItemsState) ShowShowItems();
+	else HideShowItems();
+	SelectedSlot = ClickedSlot;
+	ShowItems->AddItems(SelectedSlot);
 }
 
 void AGameHUD::HideBuildMenu()

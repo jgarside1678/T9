@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "InventoryComponent.h"
+#include "T9/Actors/Components/InventoryComponent.h"
 #include "InventorySlot.generated.h"
 
 /**
@@ -23,6 +23,32 @@ public:
 	virtual void NativeOnInitialized() override;
 
 
+	UFUNCTION(BlueprintCallable)
+		void InventorySlotInit(struct FSlot InitSlot, class UInventoryComponent* CurrentComponent, class UInventoryComponent* TargetComponent = nullptr);
+
+	UFUNCTION(BlueprintCallable)
+		void Interact();
+
+	UFUNCTION()
+		class UInventoryComponent* GetCurrentComponent();
+
+	UFUNCTION()
+		class UInventoryComponent* GetTargetComponent();
+
+	UFUNCTION()
+		struct FSlot GetItemSlot();
+
+protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		struct FSlot ItemSlot;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		class UInventoryComponent* CurrentInventoryComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		class UInventoryComponent* TargetInventoryComponent;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		class AGameHUD* HUD;
 
@@ -30,9 +56,11 @@ public:
 		class AMainPlayerController* PC;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		class AMainPlayerState* PS;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		class UInventory* Inventory;
 
-	//UFUNCTION(BlueprintCallable)
-	//	void InventorySlotPressed(FSlot ItemSlot);
-
+	UPROPERTY(meta = (BindWidget))
+		class UImage* ItemImage;
 };

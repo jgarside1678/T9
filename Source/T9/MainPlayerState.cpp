@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "MainPlayerState.h"
-#include "Widgets/InventoryComponent.h"
+#include "T9/Actors/Components/InventoryComponent.h"
 #include "MainPlayerController.h"
 #include "T9/Widgets/GameHUD.h"
 #include "Kismet/GameplayStatics.h"

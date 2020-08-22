@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "InventoryComponent.h"
+#include "T9/Actors/Components/InventoryComponent.h"
 #include "InventorySelect.generated.h"
 
 /**

@@ -44,15 +44,35 @@ bool UInventoryComponent::AddItemToInventory(AItemActor* Item)
 					Inventory[x].Item = InventoryItem;
 					Inventory[x].SlotUsed = true;
 					Item->Destroy();
-					break;
+					OnInventoryUpdate.Broadcast();
+					return true;
 				}
-				else{}
 			}
 		}
 	}
 	//Inventory.Add(InventoryItem);
-	OnInventoryUpdate.Broadcast();
-	return true;
+	return false;
+}
+
+
+bool UInventoryComponent::AddItemToInventorySlot(FSlot ItemSlot, AItemActor* Item)
+{
+	TSubclassOf<AItemActor> item_class = Item->GetClass();
+	AItemActor* InventoryItem = NewObject<AItemActor>(this, item_class);
+	int Index = ItemSlot.SlotID;
+	if (Index < Inventory.Num() && !Inventory[Index].SlotUsed) {
+		if (Item->GetItemType() == AnyType || Inventory[Index].SlotType == AnyType || Item->GetItemType() == Inventory[Index].SlotType) {
+			if (Item->GetItemSubType() == AnySubType || Inventory[Index].SlotSubType == AnySubType || Item->GetItemSubType() == Inventory[Index].SlotSubType) {
+				Inventory[Index].Item = InventoryItem;
+				Inventory[Index].SlotUsed = true;
+				Item->Destroy();
+				OnInventoryUpdate.Broadcast();
+				return true;
+			}
+		}
+	}
+	//Inventory.Add(InventoryItem);
+	return false;
 }
 
 bool UInventoryComponent::RemoveItemFromInventory(int InventorySlot)
@@ -94,81 +114,16 @@ int UInventoryComponent::GetCapacity()
 
 void UInventoryComponent::AddInventorySlot(FSlot Slot)
 {
-	if(Inventory.Num() < Capacity)	Inventory.Add(Slot);
+	FSlot NewSlot = FSlot{ InventorySlotCounter, Slot.SlotType, Slot.SlotSubType, Slot.Item, Slot.SlotUsed };
+	if(Inventory.Num() < Capacity)	Inventory.Add(NewSlot);
+	InventorySlotCounter++;
 }
 
 void UInventoryComponent::FillInventorySlots(FSlot Slot)
 {
 	for (int x = Inventory.Num(); x < Capacity; x++) {
-		Inventory.Add(Slot);
+		FSlot NewSlot = FSlot{ InventorySlotCounter, Slot.SlotType, Slot.SlotSubType, Slot.Item, Slot.SlotUsed };
+		Inventory.Add(NewSlot);
+		InventorySlotCounter++;
 	}
 }
-
-
-
-//
-//#include "InventoryComponent.h"
-//
-//// Sets default values for this component's properties
-//UInventoryComponent::UInventoryComponent()
-//{
-//	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-//	// off to improve performance if you don't need them.
-//	PrimaryComponentTick.bCanEverTick = true;
-//
-//	// ...
-//}
-//
-//
-//// Called when the game starts
-//void UInventoryComponent::BeginPlay()
-//{
-//	Super::BeginPlay();
-//
-//	// ...
-//
-//}
-//
-//
-//// Called every frame
-////void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-////{
-////	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-////
-////	// ...
-////}
-//
-//
-//bool UInventoryComponent::AddItemToInventory(AItemActor* Item)
-//{
-//	TSubclassOf<AItemActor> item_class = Item->GetClass();
-//	AItemActor* InventoryItem = NewObject<AItemActor>(this, item_class);
-//	Inventory.Add(InventoryItem);
-//	Item->Destroy();
-//	OnInventoryUpdate.Broadcast();
-//	return true;
-//}
-//
-//bool UInventoryComponent::RemoveItemFromInventory(int InventorySlot)
-//{
-//	if (Inventory.Num() >= InventorySlot) {
-//		Inventory.RemoveAt(InventorySlot);
-//		OnInventoryUpdate.Broadcast();
-//		return true;
-//	}
-//	return false;
-//}
-//
-//bool UInventoryComponent::CheckForItemInInventory(AItemActor* Item, int& ItemIndex)
-//{
-//	if (Inventory.Contains(Item)) {
-//		ItemIndex = Inventory.IndexOfByKey(Item);
-//		return true;
-//	}
-//	return false;
-//}
-//
-//TArray<AItemActor*> UInventoryComponent::GetItems()
-//{
-//	return Inventory;
-//}

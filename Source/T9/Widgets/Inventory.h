@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "T9/Actors/Components/InventoryComponent.h"
 #include "Inventory.generated.h"
 
 /**
@@ -22,13 +23,31 @@ public:
 
 	virtual void NativeOnInitialized() override;
 
+
+	virtual void NativePreConstruct() override;
+
+	UFUNCTION(BlueprintCallable)
+		void InitializeInventory();
+
+	UFUNCTION(BlueprintCallable)
+		UInventoryComponent* GetComponent();
+
 protected:
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Basics")
+		TSubclassOf<UUserWidget> SlotClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		class UInventoryComponent* InventoryComponent;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		class AGameHUD* HUDPointer;
+		class AGameHUD* HUD;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class AMainPlayerController* PC;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class AMainPlayerState* PS;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		class UInventorySelect* InventorySelect;
@@ -39,4 +58,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		class UTexture2D* FilterImageOff;
+
+	UPROPERTY(meta = (BindWidget))
+		class UWrapBox* InventoryBox;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ShowItemsInit")
+		TArray<FSlot> Slots;
+
 };
