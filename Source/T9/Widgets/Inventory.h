@@ -30,9 +30,18 @@ public:
 		void InitializeInventory();
 
 	UFUNCTION(BlueprintCallable)
+		void NativeItemSelected(class UInventorySlot* ItemWidget);
+
+	UFUNCTION(BlueprintCallable)
 		UInventoryComponent* GetComponent();
 
 protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory Selection")
+		class UInventorySlot* SelectedWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory Selection")
+		struct FSlot SelectedSlot;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Basics")
 		TSubclassOf<UUserWidget> SlotClass;
@@ -64,5 +73,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ShowItemsInit")
 		TArray<FSlot> Slots;
+
+	UPROPERTY(meta = (BindWidget))
+		class UImage* ItemImage;
 
 };

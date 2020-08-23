@@ -14,6 +14,8 @@
 #include "SelectMenuWidget.h"
 #include "BuildMenu.h"
 #include "InventorySlot.h"
+#include "Components/CanvasPanelSlot.h"
+//#include "Blueprint/WidgetLayoutLibrary.h"
 #include "LevelUp.h"
 #include "ShowItems.h"
 #include "PlayerAlert.h"
@@ -151,6 +153,8 @@ void AGameHUD::HideShowItems()
 
 void AGameHUD::ShowItemsForSlot(class UInventorySlot* ClickedSlot)
 {
+	ShowItems->SetPositionInViewport(ClickedSlot->GetCachedGeometry().GetAbsolutePosition(), false);
+	//ShowItems->SetPositionInViewport(ClickedSlot->CanvasSlot->GetPosition());
 	if (!ShowItemsState) ShowShowItems();
 	else HideShowItems();
 	SelectedSlot = ClickedSlot;
@@ -205,11 +209,17 @@ void AGameHUD::SetGameObjectSelected(FHitResult Hit)
 		}
 		else SelectMenuWidget->RemoveFromViewport();
 	}
+	if (ShowItemsState) HideShowItems();
 }
 
 
 USelectMenuWidget* AGameHUD::GetSelectMenu() {
 	return SelectMenuWidget;
+}
+
+UInventory* AGameHUD::GetInventoryWidget()
+{
+	return InventoryWidget;
 }
 
 void AGameHUD::ShowLevelUp()

@@ -21,9 +21,14 @@ public:
 
 	virtual void NativePreConstruct() override;
 
-	void AddItems(class UInventorySlot* ClickedSlot);
+	UFUNCTION(BlueprintCallable)
+	    void AddItems(class UInventorySlot* ClickedSlot);
 
 protected:
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ShowItemsInit")
+		class UInventorySlot* SelectedSlot;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ShowItemsInit")
 	    TArray<struct FSlot> Slots;

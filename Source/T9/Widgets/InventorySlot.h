@@ -38,6 +38,9 @@ public:
 	UFUNCTION()
 		struct FSlot GetItemSlot();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		class UCanvasPanelSlot* CanvasSlot;
+
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")

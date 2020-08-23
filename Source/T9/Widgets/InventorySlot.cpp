@@ -9,10 +9,13 @@
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "InventorySelect.h"
 #include "Components/WidgetComponent.h"
+#include "Components/CanvasPanelSlot.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
 
 
 UInventorySlot::UInventorySlot(const FObjectInitializer& ObjectInit) :Super(ObjectInit)
 {
+	CanvasSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(this);
 }
 
 void UInventorySlot::NativeConstruct()
@@ -50,14 +53,17 @@ void UInventorySlot::InventorySlotInit(struct FSlot InitSlot, class UInventoryCo
 void UInventorySlot::Interact()
 {
 	if (CurrentInventoryComponent && TargetInventoryComponent) {
-		if (TargetInventoryComponent->AddItemToInventorySlot(HUD->SelectedSlot->ItemSlot, ItemSlot.Item)) {
+		AItemActor* ReplacedItem;
+		if (TargetInventoryComponent->AddItemToInventorySlot(HUD->SelectedSlot->ItemSlot, ItemSlot.Item, ReplacedItem)) {
 			int Index;
 			CurrentInventoryComponent->CheckForItemInInventory(ItemSlot.Item, Index);
 			CurrentInventoryComponent->RemoveItemFromInventory(Index);
+			if(ReplacedItem) CurrentInventoryComponent->AddItemToInventory(ReplacedItem);
 		}
+		if (HUD->ShowItemsState) HUD->HideShowItems();
 	}
 	else if (CurrentInventoryComponent == PS->GetInventory()) {
-		
+		HUD->GetInventoryWidget()->NativeItemSelected(this);
 	}
 	else {
 		HUD->ShowItemsForSlot(this);

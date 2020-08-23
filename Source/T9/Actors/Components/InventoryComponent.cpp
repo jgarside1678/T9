@@ -55,17 +55,18 @@ bool UInventoryComponent::AddItemToInventory(AItemActor* Item)
 }
 
 
-bool UInventoryComponent::AddItemToInventorySlot(FSlot ItemSlot, AItemActor* Item)
+bool UInventoryComponent::AddItemToInventorySlot(FSlot ItemSlot, AItemActor* NewItem, AItemActor*& ReplacedItem)
 {
-	TSubclassOf<AItemActor> item_class = Item->GetClass();
+	TSubclassOf<AItemActor> item_class = NewItem->GetClass();
 	AItemActor* InventoryItem = NewObject<AItemActor>(this, item_class);
 	int Index = ItemSlot.SlotID;
-	if (Index < Inventory.Num() && !Inventory[Index].SlotUsed) {
-		if (Item->GetItemType() == AnyType || Inventory[Index].SlotType == AnyType || Item->GetItemType() == Inventory[Index].SlotType) {
-			if (Item->GetItemSubType() == AnySubType || Inventory[Index].SlotSubType == AnySubType || Item->GetItemSubType() == Inventory[Index].SlotSubType) {
+	if (Inventory[Index].SlotUsed) ReplacedItem = Inventory[Index].Item;
+	if (Index < Inventory.Num()) {
+		if (NewItem->GetItemType() == AnyType || Inventory[Index].SlotType == AnyType || NewItem->GetItemType() == Inventory[Index].SlotType) {
+			if (NewItem->GetItemSubType() == AnySubType || Inventory[Index].SlotSubType == AnySubType || NewItem->GetItemSubType() == Inventory[Index].SlotSubType) {
 				Inventory[Index].Item = InventoryItem;
 				Inventory[Index].SlotUsed = true;
-				Item->Destroy();
+				NewItem->Destroy();
 				OnInventoryUpdate.Broadcast();
 				return true;
 			}

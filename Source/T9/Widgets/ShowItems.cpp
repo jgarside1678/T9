@@ -40,6 +40,7 @@ void UShowItems::NativePreConstruct() {
 
 void UShowItems::AddItems(class UInventorySlot* ClickedSlot)
 {
+	SelectedSlot = ClickedSlot;
 	ItemsBox->ClearChildren();
 	Slots = PlayerInventory->GetItems();
 	for (int x = 0; x < Slots.Num(); x++) {

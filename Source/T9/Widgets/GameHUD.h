@@ -92,6 +92,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Game Selection")
 		class USelectMenuWidget* GetSelectMenu();
 
+	UFUNCTION(BlueprintCallable, Category = "Game Selection")
+		class UInventory* GetInventoryWidget();
+
 	UFUNCTION(BlueprintCallable)
 		void ShowLevelUp();
 

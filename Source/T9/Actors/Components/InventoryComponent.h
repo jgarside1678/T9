@@ -84,7 +84,7 @@ public:
 		bool AddItemToInventory(AItemActor* Item);
 
 	UFUNCTION(BlueprintCallable)
-		bool AddItemToInventorySlot(FSlot ItemSlot, AItemActor* Item);
+		bool AddItemToInventorySlot(FSlot ItemSlot, AItemActor* NewItem, AItemActor*& ReplacedItem);
 
 	UFUNCTION(BlueprintCallable)
 		bool RemoveItemFromInventory(int InventorySlot);

@@ -5,9 +5,11 @@
 #include "GameHUD.h"
 #include "T9/MainPlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "T9/Actors/Components/InventoryComponent.h"
 #include "InventorySelect.h"
 #include "Components/WrapBox.h"
 #include "InventorySlot.h"
+#include "Components/Image.h"
 #include "T9/MainPlayerState.h"
 
 
@@ -44,6 +46,17 @@ void UInventory::InitializeInventory()
 		NewSlot->InventorySlotInit(Slots[x], InventoryComponent);
 		InventoryBox->AddChildToWrapBox(NewSlot);
 	}
+}
+
+void UInventory::NativeItemSelected(UInventorySlot* ItemWidget)
+{
+	SelectedWidget = ItemWidget;
+	SelectedSlot = ItemWidget->GetItemSlot();
+	if (SelectedSlot.Item) {
+		ItemImage->SetVisibility(ESlateVisibility::Visible);
+		ItemImage->SetBrushFromTexture(SelectedSlot.Item->GetItemImage());
+	}
+	else ItemImage->SetVisibility(ESlateVisibility::Hidden);
 }
 
 UInventoryComponent* UInventory::GetComponent()
