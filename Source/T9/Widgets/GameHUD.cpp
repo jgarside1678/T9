@@ -155,8 +155,8 @@ void AGameHUD::ShowItemsForSlot(class UInventorySlot* ClickedSlot)
 {
 	ShowItems->SetPositionInViewport(ClickedSlot->GetCachedGeometry().GetAbsolutePosition(), false);
 	//ShowItems->SetPositionInViewport(ClickedSlot->CanvasSlot->GetPosition());
-	if (!ShowItemsState) ShowShowItems();
-	else HideShowItems();
+	if (ClickedSlot == SelectedSlot && ShowItemsState) HideShowItems();
+	else if(!ShowItemsState) ShowShowItems();
 	SelectedSlot = ClickedSlot;
 	ShowItems->AddItems(SelectedSlot);
 }
