@@ -8,14 +8,14 @@
 ABuilding_Townhall::ABuilding_Townhall(const FObjectInitializer& ObjectInitializer) {
 
 	OutlineColour = 1;
-	GridLength = FVector2D(7);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
+	GridLength = FVector2D(9);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh(TEXT("StaticMesh'/Game/Assets/Fantasy_Village/meshes/buildings/SM_house_b.SM_house_b'"));
 	//static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1B.Tower_Base1B'"));
 	//static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1C.Tower_Base1C'"));
 	//static ConstructorHelpers::FObjectFinder<UAnimSequence> AnimationMont(TEXT("AnimSequence'/Game/AI/Alliance/StylizedHumanMale/Animations/Standing_1H_Magic_Attack_01_mixamo_com.Standing_1H_Magic_Attack_01_mixamo_com'"));
 	if (BaseMesh.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(BaseMesh.Object);
-		StaticMeshComponent->SetWorldScale3D(FVector(6,6,4));
+		//StaticMeshComponent->SetWorldScale3D(FVector(6,6,4));
 	}
 
 	//{Level, FBuildingUpgrades{XP, Maxhealth, FBuildingCosts{Gold, Wood, Stone, Food}, Damage, AttackSpeed, FBuildingProduction{Gold, Wood, Stone, Food}}
@@ -26,14 +26,10 @@ ABuilding_Townhall::ABuilding_Townhall(const FObjectInitializer& ObjectInitializ
 	BuildingName = "Town Hall";
 	SpawnComponent = CreateDefaultSubobject<UBuildingSpawnComponent>(TEXT("Spawn Component"));
     SpawnComponent->ActorToSpawn = AAlliance_Lumberjack::StaticClass();
+	SpawnComponent->SpawnMethod = PointSpawn;
+	SpawnComponent->SpawnLocation = FVector(440, 0, 200);
 	SpawnComponent->MaxSpawnRange = 500;
 }
-
-void ABuilding_Townhall::EndPlay(const EEndPlayReason::Type EndPlayReason) {
-	Super::EndPlay(EndPlayReason);
-	BuildingExtent = BuildingExtent * 2;
-}
-
 
 void ABuilding_Townhall::BeginPlay()
 {

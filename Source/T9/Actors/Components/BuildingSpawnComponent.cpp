@@ -79,7 +79,12 @@ void UBuildingSpawnComponent::Init()
 			RandomSpawnLocation();
 			SpawnLocation = FVector(Origin.X + XAxis, Origin.Y + YAxis, 10.0f);
 		}
-		else SpawnLocation += MyOwner->GetActorLocation();
+		else if (SpawnMethod == PointSpawn) {
+			SpawnLocation += MyOwner->GetActorLocation();
+		}
+		else {
+
+		}
 		AutoRespawn();
 	}
 }
@@ -116,6 +121,8 @@ void UBuildingSpawnComponent::KillAll() {
 	for (int x = 0; x < ActorsSpawned.Num(); x++) {
 		if (ActorsSpawned[x] != nullptr) ActorsSpawned[x]->Destroy();
 	}
+	CurrentSpawnCount = 0;
+	MyOwner->GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
 }
 
 void UBuildingSpawnComponent::AutoRespawn() {

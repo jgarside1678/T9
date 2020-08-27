@@ -34,6 +34,7 @@ struct FSlot {
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool SlotUsed = false;
 
+
 	inline bool operator==(const FSlot& Other) const
 	{
 		return Other.SlotID == SlotID;

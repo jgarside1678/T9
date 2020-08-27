@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "T9/Actors/Components/InventoryComponent.h"
+#include "T9/Actors/Items/ItemActor.h"
 #include "InventorySlot.generated.h"
 
 /**
@@ -66,4 +67,10 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 		class UImage* ItemImage;
+
+	UPROPERTY(meta = (BindWidget))
+		class UImage* TypeImage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
+		TMap<TEnumAsByte<Type>, class UTexture2D*> TypeImages;
 };

@@ -12,7 +12,6 @@
 #include "T9/Actors/Components/InventoryComponent.h"
 #include "T9/Characters/Enemies/EnemyCharacter.h"
 #include "T9/Characters/Alliance/AllianceCharacter.h"
-#include "Particles/ParticleSystemComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "T9/Actors/GameGridActor.h"
 #include "Components/AudioComponent.h"
@@ -24,8 +23,6 @@ ABuildingActor::ABuildingActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	SetActorTickInterval(0.025);
-	static ConstructorHelpers::FObjectFinder<UParticleSystem> Particle(TEXT("ParticleSystem'/Game/Particles/BuildingUpgradeParticle.BuildingUpgradeParticle'"));
-	if(Particle.Succeeded()) UpgradeParticle = Particle.Object;
 	BuildingRangeCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("DefenceRangeCollider"));
 	BuildingRangeCollider->SetCollisionProfileName("Trigger");
 	BuildingRangeCollider->SetCanEverAffectNavigation(false);
@@ -60,7 +57,12 @@ ABuildingActor::ABuildingActor()
 
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 	InventoryComponent->SetCapacity(6);
-	InventoryComponent->FillInventorySlots(FSlot{});
+	InventoryComponent->AddInventorySlot(FSlot{ 1, Weapon });
+	InventoryComponent->AddInventorySlot(FSlot{ 2, Armour });
+	InventoryComponent->AddInventorySlot(FSlot{ 3, Armour });
+	InventoryComponent->AddInventorySlot(FSlot{ 4, Artefact });
+	InventoryComponent->AddInventorySlot(FSlot{ 5, Tool });
+	InventoryComponent->AddInventorySlot(FSlot{ 6, Tool });
 
 }
 
@@ -71,7 +73,7 @@ void ABuildingActor::BeginPlay()
 	Super::BeginPlay();
 	if (Upgrades.Num() == 0) Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 100 ,100.0f, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{}, FBuildingProduction{0} });
 	if (StaticMeshComponent->GetStaticMesh()) {
-		BuildingExtent = StaticMeshComponent->GetStaticMesh()->GetBoundingBox().GetExtent();
+		BuildingExtent = StaticMeshComponent->GetStaticMesh()->GetBoundingBox().GetExtent() * StaticMeshComponent->GetRelativeScale3D();
 		BuildingRangeCollider->SetBoxExtent(BuildingExtent * Upgrades[Level].Attack.AttackRangeMultipler);
 		BuildingRangeCollider->OnComponentBeginOverlap.AddDynamic(this, &ABuildingActor::BeginOverlap);
 		BuildingRangeCollider->OnComponentEndOverlap.AddDynamic(this, &ABuildingActor::EndOverlap);
@@ -268,7 +270,6 @@ void ABuildingActor::Upgrade() {
 		UActorComponent* SpawnComp = GetComponentByClass(UBuildingSpawnComponent::StaticClass());
 		if (SpawnComp) ((UBuildingSpawnComponent*)SpawnComp)->UpdateSpawnedCharacters();
 
-		if(UpgradeParticle) UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), UpgradeParticle, GetActorLocation());
 		if (Upgrades[Level].BaseMesh != nullptr) StaticMeshComponent->SetStaticMesh(Upgrades[Level].BaseMesh);
 		PS->AddCurrentXP(Upgrades[Level].XP);
 		BuildingRangeCollider->SetBoxExtent(BuildingExtent * Upgrades[Level].Attack.AttackRangeMultipler);

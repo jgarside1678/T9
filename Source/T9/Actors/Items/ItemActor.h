@@ -13,6 +13,8 @@ enum Type
 	AnyType UMETA(DisplayName = "Any"),
 	Tool UMETA(DisplayName = "Tool"),
 	Weapon UMETA(DisplayName = "Weapon"),
+	Armour UMETA(DisplayName = "Armour"),
+	Artefact UMETA(DisplayName = "Artefact"),
 	Other UMETA(DisplayName = "Other")
 };
 

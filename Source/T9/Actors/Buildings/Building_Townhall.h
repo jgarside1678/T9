@@ -20,8 +20,6 @@ public:
 	ABuilding_Townhall(const FObjectInitializer& ObjectInitializer);
 
 
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
-
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		class UBuildingSpawnComponent* SpawnComponent;
 

@@ -134,9 +134,6 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		virtual void Upgrade();
 
-	UPROPERTY()
-		UParticleSystem* UpgradeParticle;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		int Level = 1;
 
@@ -211,7 +208,7 @@ protected:
 public:
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		FVector BuildingExtent;
 
 	UFUNCTION(Category = "Building Basics")

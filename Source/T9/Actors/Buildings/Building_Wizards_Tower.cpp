@@ -19,7 +19,7 @@ ABuilding_Wizards_Tower::ABuilding_Wizards_Tower(const FObjectInitializer& Objec
 	ProjectileDelay = 0.9f;
 	DefenderDisplacement = CreateDefaultSubobject<USceneComponent>(TEXT("Defender Displacement"));
 	DefenderDisplacement->SetupAttachment(StaticMeshComponent);
-	DefenderDisplacement->SetRelativeLocation(FVector(0, 0, 250));
+	DefenderDisplacement->SetRelativeLocation(FVector(0, 0, 255));
 	DefenderDisplacement->SetRelativeRotation(FRotator(0,0,0));
 	BuildingDefender = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Building Defender"));
 	BuildingDefender->SetupAttachment(DefenderDisplacement);

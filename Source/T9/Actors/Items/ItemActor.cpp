@@ -14,6 +14,7 @@ AItemActor::AItemActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	USceneComponent* Original = RootComponent;
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
 	BoxCollider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	BoxCollider->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
@@ -60,13 +61,12 @@ AItemActor::AItemActor()
 
 
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("Select"));
-	WidgetComponent->SetupAttachment(ItemAnchor);
 	static ConstructorHelpers::FClassFinder<UUserWidget> Widget(TEXT("WidgetBlueprint'/Game/UI/ItemPickUp.ItemPickUp_C'"));
 	if (Widget.Succeeded()) WidgetClass = Widget.Class;
 	if (WidgetComponent) {
-		WidgetComponent->SetupAttachment(RootComponent);
+		WidgetComponent->SetupAttachment(ItemAnchor);
 		WidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
-		WidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, -800.0f));
+		WidgetComponent->SetRelativeLocation(FVector(0,0, -800.0f));
 		if (WidgetClass != nullptr) {
 			WidgetComponent->SetWidgetClass(WidgetClass);
 		}
@@ -90,7 +90,6 @@ void AItemActor::BeginPlay()
 		}
 		ItemPickUp = Cast<UItemPickUpWidget>(WidgetComponent->GetUserWidgetObject());
 		if(ItemPickUp)ItemPickUp->ItemMenuInit(this);
-		FVector BoxExtent = BoxCollider->GetScaledBoxExtent();
 	}
 
 	GetWorldTimerManager().SetTimer(ItemDespawnHandle, this, &AItemActor::Despawn, 60, false, 60);

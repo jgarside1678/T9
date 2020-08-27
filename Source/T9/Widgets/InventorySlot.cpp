@@ -16,6 +16,18 @@
 UInventorySlot::UInventorySlot(const FObjectInitializer& ObjectInit) :Super(ObjectInit)
 {
 	CanvasSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(this);
+	static ConstructorHelpers::FObjectFinder<UTexture2D> AnyTypeImage(TEXT("Texture2D'/Game/Assets/TheStone/PNG/19_Function_Button/ButtonIcon/128x128/btn_icon_plus.btn_icon_plus'"));
+	TypeImages.Add(AnyType, AnyTypeImage.Object);
+	static ConstructorHelpers::FObjectFinder<UTexture2D> ToolTypeImage(TEXT("Texture2D'/Game/Assets/TheStone/PNG/19_Function_Button/ButtonIcon/128x128/btn_icon_hammer.btn_icon_hammer'"));
+	TypeImages.Add(Tool, ToolTypeImage.Object);
+	static ConstructorHelpers::FObjectFinder<UTexture2D> WeaponTypeImage(TEXT("Texture2D'/Game/Assets/TheStone/PNG/19_Function_Button/ButtonIcon/128x128/btn_icon_sword.btn_icon_sword'"));
+	TypeImages.Add(Weapon, WeaponTypeImage.Object);
+	static ConstructorHelpers::FObjectFinder<UTexture2D> ArmourTypeImage(TEXT("Texture2D'/Game/Assets/TheStone/PNG/19_Function_Button/ButtonIcon/128x128/btn_icon_helmet.btn_icon_helmet'"));
+	TypeImages.Add(Armour, ArmourTypeImage.Object);
+	static ConstructorHelpers::FObjectFinder<UTexture2D> ArtefactTypeImage(TEXT("Texture2D'/Game/Assets/TheStone/PNG/19_Function_Button/ButtonIcon/128x128/btn_icon_sparkle.btn_icon_sparkle'"));
+	TypeImages.Add(Artefact, ArtefactTypeImage.Object);
+	static ConstructorHelpers::FObjectFinder<UTexture2D> OtherTypeImage(TEXT("Texture2D'/Game/Assets/TheStone/PNG/19_Function_Button/ButtonIcon/128x128/btn_icon_compass.btn_icon_compass'"));
+	TypeImages.Add(Other, OtherTypeImage.Object);
 }
 
 void UInventorySlot::NativeConstruct()
@@ -47,7 +59,7 @@ void UInventorySlot::InventorySlotInit(struct FSlot InitSlot, class UInventoryCo
 		ItemImage->SetBrushFromTexture(ItemSlot.Item->GetItemImage());
 	}
 	else ItemImage->SetVisibility(ESlateVisibility::Hidden);
-
+	TypeImage->SetBrushFromTexture(TypeImages[ItemSlot.SlotType]);
 }
 
 void UInventorySlot::Interact()

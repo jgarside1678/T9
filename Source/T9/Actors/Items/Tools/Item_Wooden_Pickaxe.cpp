@@ -5,6 +5,7 @@
 
 AItem_Wooden_Pickaxe::AItem_Wooden_Pickaxe() {
 	ItemName = "Wooden Pickaxe";
+	ItemType = Tool;
 	ItemSubType = PickAxe;
 	ItemRarity = Common;
 	static ConstructorHelpers::FObjectFinder<UTexture2D> Sprite(TEXT("Texture2D'/Game/Assets/CraftResourcesIcons/Textures/Tex_tools_07.Tex_tools_07'"));
