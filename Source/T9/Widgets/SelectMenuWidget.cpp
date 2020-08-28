@@ -34,11 +34,16 @@ USelectMenuWidget::USelectMenuWidget(const FObjectInitializer& ObjectInit) : Sup
 
 void USelectMenuWidget::NativeConstruct()
 {
+	SpawnComp = nullptr;
 	if (GameHUD && GameHUD->HitActor) SelectedActor = GameHUD->HitActor;
 	if (SelectedActor) {
 		SelectedBuilding = Cast<ABuildingActor>(SelectedActor);
 		SelectedObjectInterface = TScriptInterface<ISelectInterface>(SelectedActor);
-		if (SelectedBuilding) SelectedInventory = SelectedBuilding->GetInventory();
+		if (SelectedBuilding) {
+			SelectedInventory = SelectedBuilding->GetInventory();
+			UActorComponent* ActorComp = SelectedBuilding->GetComponentByClass(UBuildingSpawnComponent::StaticClass());
+			if (ActorComp) SpawnComp = (UBuildingSpawnComponent*)ActorComp;
+		}
 		else SelectedInventory = nullptr;
 	}
 	Super::NativeConstruct();
@@ -122,9 +127,8 @@ void USelectMenuWidget::UpdateStatsTab()
 		}
 		else {
 			//Resource Buildings
-			UActorComponent* SpawnComp = SelectedBuilding->GetComponentByClass(UBuildingSpawnComponent::StaticClass());
-			if (SpawnComp) {
-				AAlliance_ResourceGatherer* ResourceCharacter = (AAlliance_ResourceGatherer*)((UBuildingSpawnComponent*)SpawnComp)->ActorsSpawned[0];
+			if (SpawnComp && SpawnComp->ActorsSpawned[0]) {
+				AAlliance_ResourceGatherer* ResourceCharacter = (AAlliance_ResourceGatherer*)SpawnComp->ActorsSpawned[0];
 				StatsName1->SetText(FText::FromString(ANSI_TO_TCHAR("Gather Amount")));
 				StatsName2->SetText(FText::FromString(ANSI_TO_TCHAR("Max Inventory")));
 				StatsName3->SetText(FText::FromString(ANSI_TO_TCHAR("Gatherer Damage")));
@@ -180,9 +184,8 @@ void USelectMenuWidget::UpdateUprgadesTab()
 		}
 		else {
 			//Resource Buildings
-			UActorComponent* SpawnComp = SelectedBuilding->GetComponentByClass(UBuildingSpawnComponent::StaticClass());
-			if (SpawnComp) {
-				AAlliance_ResourceGatherer* ResourceCharacter = (AAlliance_ResourceGatherer*)((UBuildingSpawnComponent*)SpawnComp)->ActorsSpawned[0];
+			if (SpawnComp && SpawnComp->ActorsSpawned[0]) {
+				AAlliance_ResourceGatherer* ResourceCharacter = (AAlliance_ResourceGatherer*)SpawnComp->ActorsSpawned[0];
 				UpgradesName1->SetText(FText::FromString(ANSI_TO_TCHAR("Gather Amount")));
 				UpgradesName2->SetText(FText::FromString(ANSI_TO_TCHAR("Max Inventory")));
 				UpgradesName3->SetText(FText::FromString(ANSI_TO_TCHAR("Gatherer Damage")));
@@ -236,6 +239,17 @@ void USelectMenuWidget::InitializeSelectedInventory()
 			UInventorySlot* NewSlot = Cast<UInventorySlot>(CreateWidget(InventoryBox, SelectSlot));
 			NewSlot->InventorySlotInit(SelectedInventoryItems[x], SelectedBuilding->GetInventory());
 			InventoryBox->AddChild(NewSlot);
+		}
+	}
+	if (SpawnComp) {
+		SpawnInventory = SpawnComp->GetInventoryComponent();
+		if (SpawnInventory) {
+			TArray<FSlot> SelectedInventoryItems = SpawnInventory->GetItems();
+			for (int x = 0; x < SelectedInventoryItems.Num(); x++) {
+				UInventorySlot* NewSlot = Cast<UInventorySlot>(CreateWidget(InventoryBox, SelectSlot));
+				NewSlot->InventorySlotInit(SelectedInventoryItems[x], SpawnInventory);
+				InventoryBox->AddChild(NewSlot);
+			}
 		}
 	}
 }

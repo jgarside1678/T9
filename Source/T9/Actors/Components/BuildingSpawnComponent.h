@@ -30,11 +30,18 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+	FTimerHandle SpawnTimerHandle;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
 		class AMainPlayerController* PC;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
 		class AMainPlayerState* PS;
+
+	//Spawning Character Inventory
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		class  UInventoryComponent* InventoryComponent;
 
 public:	
 
@@ -106,12 +113,14 @@ public:
 	UFUNCTION()
 		void UpdateSpawnedCharacters();
 
-	FTimerHandle SpawnTimerHandle;
 
 	UFUNCTION()
 		void RandomSpawnLocation();
 
 	UFUNCTION()
-		void KillAll();
+		void KillAll();	
+	
+	UFUNCTION()
+		class UInventoryComponent* GetInventoryComponent();
 		
 };

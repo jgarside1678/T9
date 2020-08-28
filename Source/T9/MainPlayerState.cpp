@@ -267,6 +267,12 @@ int AMainPlayerState::GetBuildingCount(FString Name) {
 	else return 0;
 }
 
+int AMainPlayerState::GetBuildingStorageCount(FString Name)
+{
+	if (BuildingCounts.Contains(Name)) 	return BuildingCounts[Name].BuildingStorageCount;
+	else return 0;
+}
+
 int AMainPlayerState::GetMaxBuildingCount(FString Name) {
 	if (BuildingCounts.Contains(Name)) 	return BuildingCounts[Name].BuildingMaxCount;
 	else return 1;
@@ -274,6 +280,11 @@ int AMainPlayerState::GetMaxBuildingCount(FString Name) {
 
 void AMainPlayerState::SetBuildingCount(FString Name, int Number) {
 	if (BuildingCounts.Contains(Name))  BuildingCounts[Name].BuildingCount = Number;
+}
+
+void AMainPlayerState::SetBuildingStorageCount(FString Name, int Number)
+{
+	if (BuildingCounts.Contains(Name))  BuildingCounts[Name].BuildingStorageCount = Number;
 }
 
 void AMainPlayerState::SetMaxBuildingCount(FString Name, int Number) {

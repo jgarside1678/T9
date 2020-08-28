@@ -56,13 +56,11 @@ ABuildingActor::ABuildingActor()
 	//if(UpgradeAudio) UpgradeAudio->SetActive(false);
 
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
-	InventoryComponent->SetCapacity(6);
-	InventoryComponent->AddInventorySlot(FSlot{ 1, Weapon });
-	InventoryComponent->AddInventorySlot(FSlot{ 2, Armour });
-	InventoryComponent->AddInventorySlot(FSlot{ 3, Armour });
-	InventoryComponent->AddInventorySlot(FSlot{ 4, Artefact });
-	InventoryComponent->AddInventorySlot(FSlot{ 5, Tool });
-	InventoryComponent->AddInventorySlot(FSlot{ 6, Tool });
+	InventoryComponent->SetCapacity(3);
+
+	InventoryComponent->AddInventorySlot(FSlot{});
+	InventoryComponent->AddInventorySlot(FSlot{});
+	InventoryComponent->AddInventorySlot(FSlot{});
 
 }
 
@@ -214,7 +212,10 @@ bool ABuildingActor::IsDamageable()
 void ABuildingActor::RemoveBuilding()
 {
 	UActorComponent* SpawnComp = GetComponentByClass(UBuildingSpawnComponent::StaticClass());
-	if (SpawnComp) ((UBuildingSpawnComponent*)SpawnComp)->KillAll();
+	if (SpawnComp) {
+		((UBuildingSpawnComponent*)SpawnComp)->KillAll();
+		((UBuildingSpawnComponent*)SpawnComp)->GetInventoryComponent()->SpawnAllItems();
+	}
 	if (Grid) Grid->SetTilesUnactive(BuildingCornerLocation, GridLength.X, GridLength.Y, GridRotation);
 	IsDead = true;
 	if (PS) {
@@ -223,9 +224,11 @@ void ABuildingActor::RemoveBuilding()
 			PS->AddPower(-Upgrades[Level].PowerRating);
 		}
 		PS->BuildingArrayClean();
+		PS->SetBuildingStorageCount(BuildingName, PS->GetBuildingStorageCount(BuildingName) + 1);
 		PS->SetBuildingCount(BuildingName, GetBuildingCount() - 1);
 	}
 	this->Destroy();
+	InventoryComponent->SpawnAllItems();
 }
 
 void ABuildingActor::BeginOverlap(UPrimitiveComponent* OverlappedComponent,

@@ -10,6 +10,7 @@
 #include "T9/Characters/CharacterActor.h"
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"
+#include "T9/Actors/Components/InventoryComponent.h"
 #include "T9/Actors/Buildings/BuildingActor.h"
 #include <Runtime\Engine\Classes\Engine\World.h>
 #include "T9/MainPlayerController.h"
@@ -22,6 +23,10 @@ UBuildingSpawnComponent::UBuildingSpawnComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
+
+
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+	InventoryComponent->SetCapacity(3);
 }
 
 
@@ -123,6 +128,11 @@ void UBuildingSpawnComponent::KillAll() {
 	}
 	CurrentSpawnCount = 0;
 	MyOwner->GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
+}
+
+UInventoryComponent* UBuildingSpawnComponent::GetInventoryComponent()
+{
+	return InventoryComponent;
 }
 
 void UBuildingSpawnComponent::AutoRespawn() {

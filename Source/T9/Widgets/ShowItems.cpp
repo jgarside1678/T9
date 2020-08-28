@@ -56,3 +56,13 @@ void UShowItems::AddItems(class UInventorySlot* ClickedSlot)
 		}
 	}
 }
+
+void UShowItems::RemoveItem()
+{
+	if (SelectedSlot->GetItemSlot().SlotUsed) {
+		if (PS->GetInventory()->AddItemToInventory(SelectedSlot->GetItemSlot().Item)) {
+			SelectedSlot->GetCurrentComponent()->RemoveItemFromInventory(SelectedSlot->GetItemSlot().SlotID);
+		}
+	}
+	if (GameHUD) GameHUD->HideShowItems();
+}

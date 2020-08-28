@@ -24,6 +24,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	    void AddItems(class UInventorySlot* ClickedSlot);
 
+	UFUNCTION(BlueprintCallable)
+		void RemoveItem();
+
 protected:
 
 

@@ -260,8 +260,13 @@ ABuildingActor* AGameGridActor::BuildBuildingOnTile(FBuildingMenuSlot ObjectToBu
 			SpawnedActorRef->BuildingInnit(this, SelectionGridPivotLocation, SelectedGridLocation, SelectionRotationY);
 			OnBuildingConstructed.Broadcast();
 			if (PS) {
-				PS->RemoveResources(SpawnedActorRef->GetCost());
-				PS->AddCurrentXP(SpawnedActorRef->GetBuildXP());
+				if (PS->GetBuildingStorageCount(SpawnedActorRef->GetName()) <= 0) {
+					PS->RemoveResources(SpawnedActorRef->GetCost());
+					PS->AddCurrentXP(SpawnedActorRef->GetBuildXP());
+				}
+				else {
+					PS->SetBuildingStorageCount(SpawnedActorRef->GetName(), PS->GetBuildingStorageCount(SpawnedActorRef->GetName()) - 1);
+				}
 			}
 			return SpawnedActorRef;
 		}

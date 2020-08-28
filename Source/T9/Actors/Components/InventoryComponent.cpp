@@ -23,6 +23,18 @@ void UInventoryComponent::BeginPlay()
 	
 }
 
+void UInventoryComponent::SpawnAllItems()
+{
+	for (int x = 0; x < Inventory.Num(); x++) {
+		if (Inventory[x].Item) {
+			FVector Location = GetOwner()->GetActorLocation();// FVector(FMath::FRandRange(-500, 500));
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+			AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(Inventory[x].Item->GetClass(), Location, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		}
+	}
+}
+
 
 // Called every frame
 //void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -35,19 +47,22 @@ void UInventoryComponent::BeginPlay()
 
 bool UInventoryComponent::AddItemToInventory(AItemActor* Item)
 {
-	TSubclassOf<AItemActor> item_class = Item->GetClass();
-	AItemActor* InventoryItem = NewObject<AItemActor>(this, item_class);
-	for (int x = 0; x < Inventory.Num(); x++) {
-		if (!Inventory[x].SlotUsed) {
-			if (Item->GetItemType() == AnyType || Inventory[x].SlotType == AnyType || Item->GetItemType() == Inventory[x].SlotType) {
-				if (Item->GetItemSubType() == AnySubType || Inventory[x].SlotSubType == AnySubType || Item->GetItemSubType() == Inventory[x].SlotSubType) {
-					Inventory[x].Item = InventoryItem;
-					Inventory[x].SlotUsed = true;
-					Item->Destroy();
-					OnInventoryUpdate.Broadcast();
-					return true;
+	if (Item->IsValidLowLevel()) {
+		TSubclassOf<AItemActor> ItemClass = Item->GetClass();
+		AItemActor* InventoryItem = NewObject<AItemActor>(this, ItemClass);
+		for (int x = 0; x < Inventory.Num(); x++) {
+			if (!Inventory[x].SlotUsed) {
+				if (Item->GetItemType() == AnyType || Inventory[x].SlotType == AnyType || Item->GetItemType() == Inventory[x].SlotType) {
+					if (Item->GetItemSubType() == AnySubType || Inventory[x].SlotSubType == AnySubType || Item->GetItemSubType() == Inventory[x].SlotSubType) {
+						Inventory[x].Item = InventoryItem;
+						Inventory[x].SlotUsed = true;
+						Item->Destroy();
+						OnInventoryUpdate.Broadcast();
+						return true;
+					}
 				}
 			}
+
 		}
 	}
 	//Inventory.Add(InventoryItem);

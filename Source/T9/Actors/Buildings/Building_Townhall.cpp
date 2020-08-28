@@ -3,6 +3,7 @@
 #include "T9/Actors/Components/BuildingSpawnComponent.h"
 #include "T9/Characters/Alliance/Alliance_Lumberjack.h"
 #include "TimerManager.h"
+#include "T9/Actors/Components/InventoryComponent.h"
 
 
 ABuilding_Townhall::ABuilding_Townhall(const FObjectInitializer& ObjectInitializer) {
@@ -29,6 +30,9 @@ ABuilding_Townhall::ABuilding_Townhall(const FObjectInitializer& ObjectInitializ
 	SpawnComponent->SpawnMethod = PointSpawn;
 	SpawnComponent->SpawnLocation = FVector(440, 0, 200);
 	SpawnComponent->MaxSpawnRange = 500;
+	SpawnComponent->GetInventoryComponent()->AddInventorySlot(FSlot{ 1, Tool });
+	SpawnComponent->GetInventoryComponent()->AddInventorySlot(FSlot{ 1, Armour });
+	SpawnComponent->GetInventoryComponent()->AddInventorySlot(FSlot{ 1, Armour });
 }
 
 void ABuilding_Townhall::BeginPlay()

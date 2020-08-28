@@ -41,6 +41,9 @@ struct FBuildingCounts {
 		int BuildingCount = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int BuildingStorageCount = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int BuildingMaxCount = 1;
 
 };
@@ -120,7 +123,7 @@ private:
 	    float RequiredXP = 100;
 
 	UPROPERTY()
-		TMap<FString, FBuildingCounts> BuildingCounts = { {"Town Hall", FBuildingCounts{0, 1}}, {"Arrow Tower", FBuildingCounts{0, 3}}, {"Wizards Tower", FBuildingCounts{0, 100}}};
+		TMap<FString, FBuildingCounts> BuildingCounts = { {"Town Hall", FBuildingCounts{0, 0, 1}}, {"Arrow Tower", FBuildingCounts{0, 0, 3}}, {"Wizards Tower", FBuildingCounts{0, 0, 100}}};
 
 	UPROPERTY()
 		class UDataTable* PlayerLevels;
@@ -273,10 +276,16 @@ public:
 		int GetBuildingCount(FString Name);
 
 	UFUNCTION(BlueprintCallable)
+		int GetBuildingStorageCount(FString Name);
+
+	UFUNCTION(BlueprintCallable)
 		int GetMaxBuildingCount(FString Name);
 
 	UFUNCTION(BlueprintCallable)
 		void SetBuildingCount(FString Name, int Number);
+
+	UFUNCTION(BlueprintCallable)
+		void SetBuildingStorageCount(FString Name, int Number);
 
 	UFUNCTION(BlueprintCallable)
 		void SetMaxBuildingCount(FString Name, int Number);

@@ -61,6 +61,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Selectwidget")
 		TScriptInterface<ISelectInterface> SelectedObjectInterface;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Selectwidget")
+		class UBuildingSpawnComponent* SpawnComp;
+
 	UFUNCTION(BlueprintCallable, Category = "WidgetFunctions")
 		void UpdateMenu(AActor* Object);
 
@@ -232,6 +235,9 @@ protected:
 	//Items// Inventory
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		class  UInventoryComponent* SelectedInventory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		class  UInventoryComponent* SpawnInventory;
 
 	UPROPERTY(meta = (BindWidget))
 		class UWrapBox* InventoryBox;

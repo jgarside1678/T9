@@ -64,6 +64,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+
 	UPROPERTY(VisibleAnywhere)
 		TArray<FSlot> Inventory;
 
@@ -108,6 +109,9 @@ public:
 	//Adds Inventory slots with given parameter untill inventory capacity is full.
 	UFUNCTION(BlueprintCallable)
 		void FillInventorySlots(FSlot Slot);
+
+	UFUNCTION(BlueprintCallable)
+	    void SpawnAllItems();
 
 		
 };
