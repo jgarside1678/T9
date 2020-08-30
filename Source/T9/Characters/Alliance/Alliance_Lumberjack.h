@@ -19,7 +19,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	virtual void SheathMainHand();
+	virtual void SheathMainHand() override;
 
-	virtual void EquipMainHand();
+	virtual void EquipMainHand() override;
 };

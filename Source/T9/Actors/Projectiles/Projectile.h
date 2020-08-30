@@ -66,9 +66,6 @@ protected:
 		class AActor* Spawner;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Basics")
-		class ABuildingActor* TargetBuilding;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Basics")
 		class ADefensiveBuildingActor* BuildingSpawn;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Basics")

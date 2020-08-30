@@ -63,10 +63,10 @@ public:
 		FVector SpawnLocation;
 
 	UPROPERTY(EditAnywhere, Category = "Spawning")
-		TSubclassOf<AActor> ActorToSpawn;
+		TSubclassOf<class ACharacterActor> ActorToSpawn;
 
 	UPROPERTY(EditAnywhere, Category = "Spawning")
-		TArray<AActor*> ActorsSpawned;
+		TArray<class ACharacterActor*> ActorsSpawned;
 
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 		float SpawnTime = 10.0f;
@@ -122,5 +122,8 @@ public:
 	
 	UFUNCTION()
 		class UInventoryComponent* GetInventoryComponent();
+
+	UFUNCTION()
+		void UpdateCharactersInventory();
 		
 };

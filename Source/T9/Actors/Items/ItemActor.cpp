@@ -147,6 +147,11 @@ SubType AItemActor::GetItemSubType()
 	return ItemSubType;
 }
 
+Socket AItemActor::GetItemSocket()
+{
+	return ItemSocket;
+}
+
 
 void AItemActor::Despawn() {
 	if (this) this->Destroy();
@@ -155,4 +160,28 @@ void AItemActor::Despawn() {
 Rarity AItemActor::GetItemRarity()
 {
 	return ItemRarity;
+}
+
+UStaticMesh* AItemActor::GetItemMesh()
+{
+	return ItemMesh->GetStaticMesh();
+}
+
+int AItemActor::GetItemGatherBase() {
+	return ItemGatherBase;
+}
+
+float AItemActor::GetItemGatherMultiplier() {
+	return ItemGatherMultiplier;
+}
+
+
+int AItemActor::GetItemDamageBase()
+{
+	return ItemDamageBase;
+}
+
+float AItemActor::GetItemDamageMultiplier()
+{
+	return ItemDamageMultiplier;
 }

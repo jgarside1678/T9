@@ -16,7 +16,7 @@ AAlliance_Lumberjack::AAlliance_Lumberjack() {
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> LowerBodyMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanMale/Meshes/ModularParts/SK_Pants.SK_Pants'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> UpperBodyMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanMale/Meshes/ModularParts/SK_Shirt.SK_Shirt'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> BeardMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanMale/Meshes/ModularParts/SK_Beard_02.SK_Beard_02'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> ItemMesh(TEXT("StaticMesh'/Game/Meshes/Weapons/Pickaxe.Pickaxe'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> DefaultMainHandItem(TEXT("StaticMesh'/Game/Meshes/Weapons/Pickaxe.Pickaxe'"));
 	if (BodyMesh.Succeeded())MeshPeices.Add(BodyMesh.Object);
 	if (BeltMesh.Succeeded())MeshPeices.Add(BeltMesh.Object);
 	if (BootsMesh.Succeeded())MeshPeices.Add(BootsMesh.Object);
@@ -27,11 +27,9 @@ AAlliance_Lumberjack::AAlliance_Lumberjack() {
 	if (BeardMesh.Succeeded())MeshPeices.Add(BeardMesh.Object);
 	//MeshInit();
 	GetMesh()->SetSkeletalMesh(MergeMeshes(FSkeletalMeshMergeParams(MeshPeices, MeshPeices[0]->Skeleton)));
-	if (ItemMesh.Succeeded()) {
-		MainHandItemMesh->SetStaticMesh(ItemMesh.Object);
-		MainHandItemMesh->SetRelativeScale3D(FVector(0.5));
-		MainHandItemMesh->SetRelativeLocation(FVector(22.000000, -59.000000, 31.000000));
-		MainHandItemMesh->SetRelativeRotation(FRotator(0, 309.599152f, 0));
+	if (DefaultMainHandItem.Succeeded()) {
+		//Equipment.DefaultMainHand = DefaultMainHandItem.Object;
+		ResetEquipment();
 	}
 	Upgrades.Add(1, FGathererUpgrades{ 50, 220, 200, 10 });
 	Upgrades.Add(2, FGathererUpgrades{ 50, 420, 200, 10 });
@@ -54,19 +52,19 @@ void AAlliance_Lumberjack::BeginPlay() {
 void AAlliance_Lumberjack::SheathMainHand()
 {
 	Super::SheathMainHand();
-	if (MainHandItemMesh) {
-		MainHandItemMesh->SetRelativeScale3D(FVector(0.4));
-		MainHandItemMesh->SetRelativeLocation(FVector(18.000000, 20.000000, -15.000000));
-		MainHandItemMesh->SetRelativeRotation(FRotator(349.199066, 32.399937, 262.799347));
+	if (MainHandItem) {
+		MainHandItem->SetRelativeScale3D(FVector(0.4));
+		MainHandItem->SetRelativeLocation(FVector(18.000000, 20.000000, -15.000000));
+		MainHandItem->SetRelativeRotation(FRotator(349.199066, 32.399937, 262.799347));
 	}
 }
 
 void AAlliance_Lumberjack::EquipMainHand()
 {
 	Super::EquipMainHand();
-	if (MainHandItemMesh) {
-		MainHandItemMesh->SetRelativeScale3D(FVector(0.5));
-		MainHandItemMesh->SetRelativeLocation(FVector(26.000000f, -62.000000f, 0.000000f));
-		MainHandItemMesh->SetRelativeRotation(FRotator(331.199005f, 313.199158f, 0));
+	if (MainHandItem) {
+		MainHandItem->SetRelativeScale3D(FVector(0.5));
+		MainHandItem->SetRelativeLocation(FVector(26.000000f, -62.000000f, 0.000000f));
+		MainHandItem->SetRelativeRotation(FRotator(331.199005f, 313.199158f, 0));
 	}
 }

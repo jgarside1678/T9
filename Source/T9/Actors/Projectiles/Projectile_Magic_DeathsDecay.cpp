@@ -22,31 +22,8 @@ AProjectile_Magic_DeathsDecay::AProjectile_Magic_DeathsDecay(const FObjectInitia
 
 void AProjectile_Magic_DeathsDecay::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UPrimitiveComponent* Test = OverlappedComponent;
-	if (TargetBuilding) {
-		if (UStaticMeshComponent* MeshComponent = Cast<UStaticMeshComponent>(OverlappedComponent)) {
-			if (Active) {
-				IDamageInterface* Enemy = Cast<IDamageInterface>(OtherActor);
-				if (Enemy != nullptr) Enemy->TakeDamage(this, Damage, DamageActorsOfType);
-				if (OtherActor == Target) {
-					this->SetActorScale3D(FVector(10));
-					ProjectileExplode();
-					ProjectileDestroy();
-				}
-			}
-		}
-	}
-	else {
-		if (Active) {
-			IDamageInterface* Enemy = Cast<IDamageInterface>(OtherActor);
-			if (Enemy != nullptr) Enemy->TakeDamage(this, Damage, DamageActorsOfType);
-			if (OtherActor == Target) {
-				this->SetActorScale3D(FVector(10));
-				ProjectileExplode();
-				ProjectileDestroy();
-			}
-		}
-	}
+	if (Active && ExplosionEffect) UNiagaraFunctionLibrary::SpawnSystemAttached(ExplosionEffect, Target->GetRootComponent(), FName("Explosion"), FVector(0, 0, 0), FRotator(0), EAttachLocation::SnapToTarget, true);
+	Super::BeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep,  SweepResult);
 }
 
 void AProjectile_Magic_DeathsDecay::BeginPlay() {

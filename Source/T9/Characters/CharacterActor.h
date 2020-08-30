@@ -28,6 +28,24 @@ struct T9_API FCharacterLevels {
 		float KillGold = 0;
 };
 
+USTRUCT()
+struct T9_API FCharacterEquipment {
+
+	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, Category = "Equipment")
+		AItemActor* MainHand = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Equipment")
+		UStaticMesh* DefaultMainHand = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Equipment")
+		AItemActor* OffHand = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Equipment")
+		UStaticMesh* DefaultOffHand = nullptr;
+};
+
 
 
 UCLASS()
@@ -46,8 +64,37 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(VisibleAnywhere, Category = "Leveling")
+		int Level = 1;
+
+	UPROPERTY(VisibleAnywhere, Category = "Attack")
+		float Damage;
+
+	UPROPERTY(VisibleAnywhere, Category = "Health")
+		float CurrentHealth;
+
+	UPROPERTY()
+		float HealthBarHeight = 140.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float DeathTime = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
+		bool Invulnerable = true;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
+		bool NeedsController = true;
+
+	FTimerHandle DeathTimerHandle;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
+		UCharacterMovementComponent* MovementComponent;
+
 	UPROPERTY(VisibleAnywhere, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
 		TMap<int32, FCharacterLevels> Levels;
+
+	UPROPERTY(VisibleAnywhere, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
+		FCharacterEquipment Equipment;
 
 	UPROPERTY(VisibleAnywhere, Category = "Spawn")
 		class AActor* SpawnBuilding = nullptr;
@@ -67,42 +114,35 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
 		class AMainPlayerState* PS;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* MainHandItemMesh;
+	//Character Items
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
-		TEnumAsByte<DamageType> TypeOfDamage;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Items", Meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* MainHandItem;
 
-	UPROPERTY(VisibleAnywhere, Category = "Leveling")
-		int Level = 1;
-
-	UPROPERTY(VisibleAnywhere, Category = "Attack")
-		float Damage;
-
-	UPROPERTY(VisibleAnywhere, Category = "Health")
-		float CurrentHealth;
-
-	UPROPERTY()
-		float HealthBarHeight = 140.0f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Items", Meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* OffHandItem;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float DeathTime = 1.0f;
+		float ItemBaseDamage = 0;
 
-	FTimerHandle DeathTimerHandle;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float ItemDamageMultiplier = 1;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
-	    UCharacterMovementComponent* MovementComponent;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int ItemBaseHealth = 0;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
-	    bool Invulnerable = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float ItemHealthMultiplier = 1;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
-		bool NeedsController = true;
+
 
 	//Combat
 
 	UPROPERTY()
 		TSubclassOf<class AProjectile> Projectile = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
+		TEnumAsByte<DamageType> TypeOfDamage;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
 		int AttackStreak = 0;
@@ -180,6 +220,9 @@ public:
 		void SetCurrentHealth(float Number);
 
 	UFUNCTION()
+		void Heal(float Number);
+
+	UFUNCTION()
 		float GetMaxHealth();
 
 	UFUNCTION()
@@ -218,6 +261,12 @@ public:
 
 	UFUNCTION()
 		virtual void EquipMainHand();
+
+	UFUNCTION()
+		virtual void AddMainHand(class AItemActor* NewMainHand = nullptr);
+
+	UFUNCTION()
+		virtual void ResetEquipment();
 
 	UFUNCTION()
 		bool CheckInvulnerable();

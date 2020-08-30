@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ItemTool.h"
+#include "T9/Actors/Items/ItemActor.h"
 #include "Item_Wooden_Pickaxe.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class T9_API AItem_Wooden_Pickaxe : public AItemTool
+class T9_API AItem_Wooden_Pickaxe : public AItemActor
 {
 	GENERATED_BODY()
 public:

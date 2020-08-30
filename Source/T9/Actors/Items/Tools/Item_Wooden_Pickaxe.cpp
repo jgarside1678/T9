@@ -4,6 +4,7 @@
 #include "Item_Wooden_Pickaxe.h"
 
 AItem_Wooden_Pickaxe::AItem_Wooden_Pickaxe() {
+	ItemSocket = MainHand;
 	ItemName = "Wooden Pickaxe";
 	ItemType = Tool;
 	ItemSubType = PickAxe;

@@ -43,7 +43,6 @@ void AProjectile::ProjectileInnit(AActor* TargetActor, float AttackDamage, AActo
 	Spawner = SpawnActor;
 	ProjectileMovementDelay = ProjectileDelay;
 	BuildingSpawn = Cast<ADefensiveBuildingActor>(Spawner);
-	TargetBuilding = Cast<ABuildingActor>(Spawner);
 	if (BuildingSpawn) ProjectileSpawn = BuildingSpawn->ProjectileSpawn;
 	if (ProjectileMovementDelay > 0) {
 		FTimerDelegate TickDelay;
@@ -81,7 +80,7 @@ void AProjectile::ProjectileExplode()
 {
 	if (ProjectilePrimitive) {
 		if (ExplosionEffect) {
-			UNiagaraFunctionLibrary::SpawnSystemAttached(ExplosionEffect, Target->GetRootComponent(), FName(""), FVector(0, 0, 0), FRotator(0), EAttachLocation::SnapToTarget, false);
+			UNiagaraFunctionLibrary::SpawnSystemAttached(ExplosionEffect, Target->GetRootComponent(), FName(""), FVector(0, 0, 0), FRotator(0), EAttachLocation::SnapToTarget, true);
 		}
 	}
 }

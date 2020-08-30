@@ -10,6 +10,7 @@
 #include "T9/Characters/CharacterActor.h"
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"
+#include "T9/Actors/Items/ItemActor.h"
 #include "T9/Actors/Components/InventoryComponent.h"
 #include "T9/Actors/Buildings/BuildingActor.h"
 #include <Runtime\Engine\Classes\Engine\World.h>
@@ -17,16 +18,13 @@
 #include "T9/MainPlayerState.h"
 
 
-// Sets default values for this component's properties
 UBuildingSpawnComponent::UBuildingSpawnComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-
 
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 	InventoryComponent->SetCapacity(3);
+	InventoryComponent->OnInventoryUpdate.AddDynamic(this, &UBuildingSpawnComponent::UpdateCharactersInventory);
 }
 
 
@@ -57,14 +55,13 @@ AActor* UBuildingSpawnComponent::Spawn() {
 	if (CurrentSpawnCount < MaxSpawnCount) {
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = SpawnParamCollision;
-		AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(ActorToSpawn, SpawnLocation, FRotator(0.0f,0.0f,0.0f), SpawnParams);
-		ACharacterActor* SpawnedCharacter = (ACharacterActor*)SpawnedActorRef;
+		ACharacterActor* SpawnedActorRef = GetWorld()->SpawnActor<ACharacterActor>(ActorToSpawn, SpawnLocation, FRotator(0.0f,0.0f,0.0f), SpawnParams);
 		ActorsSpawned.Add(SpawnedActorRef);
-		if (SpawnedCharacter) {
+		if (SpawnedActorRef) {
 			CurrentSpawnCount++;
-			if(OwningBuilding)	SpawnedCharacter->SpawnInit(MyOwner, OwningBuilding->GetLevel());
-			else if(PS) SpawnedCharacter->SpawnInit(MyOwner, PS->GetLevel());
-			else SpawnedCharacter->SpawnInit(MyOwner);
+			if(OwningBuilding)	SpawnedActorRef->SpawnInit(MyOwner, OwningBuilding->GetLevel());
+			else if(PS) SpawnedActorRef->SpawnInit(MyOwner, PS->GetLevel());
+			else SpawnedActorRef->SpawnInit(MyOwner);
 		}
 		if (SpawnedActorRef) return SpawnedActorRef;
 	}
@@ -135,6 +132,25 @@ UInventoryComponent* UBuildingSpawnComponent::GetInventoryComponent()
 	return InventoryComponent;
 }
 
+void UBuildingSpawnComponent::UpdateCharactersInventory()
+{
+	TArray<FSlot> Slots = InventoryComponent->GetItems();
+	for (int z = 0; z < ActorsSpawned.Num(); z++) {
+		ActorsSpawned[z]->ResetEquipment();
+		for (int x = 0; x < Slots.Num(); x++) {
+			if (Slots[x].Item) {
+				switch (Slots[x].Item->GetItemSocket()) {
+				case MainHand:
+					ActorsSpawned[z]->AddMainHand(Slots[x].Item);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+}
+
 void UBuildingSpawnComponent::AutoRespawn() {
 	if (CurrentSpawnCount < MaxSpawnCount) {
 		AutoSpawning = true;
@@ -146,20 +162,16 @@ void UBuildingSpawnComponent::AutoRespawn() {
 
 void UBuildingSpawnComponent::Respawn() {
 	if (!AutoSpawning) {
-		UE_LOG(LogTemp, Warning, TEXT("2 2"));
 		MyOwner->GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &UBuildingSpawnComponent::AutoRespawn, SpawnTime, false, SpawnTime);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("1 1"));
 }
 
 
 void UBuildingSpawnComponent::UpdateSpawnedCharacters() {
 	if (OwningBuilding) {
-		ACharacterActor* Character;
 		for (int x = 0; x < ActorsSpawned.Num(); x++) {
 			if (ActorsSpawned[x] != nullptr) {
-				Character = Cast<ACharacterActor>(ActorsSpawned[x]);
-				Character->SetLevel(OwningBuilding->GetLevel());
+				ActorsSpawned[x]->SetLevel(OwningBuilding->GetLevel());
 			}
 		}
 	}

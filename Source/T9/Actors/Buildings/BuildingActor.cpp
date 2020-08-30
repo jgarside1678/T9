@@ -228,8 +228,8 @@ void ABuildingActor::RemoveBuilding()
 		PS->SetBuildingStorageCount(BuildingName, PS->GetBuildingStorageCount(BuildingName) + 1);
 		PS->SetBuildingCount(BuildingName, GetBuildingCount() - 1);
 	}
-	this->Destroy();
 	InventoryComponent->SpawnAllItems();
+	this->Destroy();
 }
 
 void ABuildingActor::BeginOverlap(UPrimitiveComponent* OverlappedComponent,

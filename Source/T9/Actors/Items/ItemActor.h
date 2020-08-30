@@ -28,6 +28,17 @@ enum SubType
 	Spear UMETA(DisplayName = "Spear")
 };
 
+UENUM(BlueprintType)
+enum Socket
+{
+	NotEquipable UMETA(DisplayName = "NotEquipable"),
+	MainHand UMETA(DisplayName = "MainHand"),
+	OffHand UMETA(DisplayName = "OffHand"),
+	Helmet UMETA(DisplayName = "Helmet"),
+	Chest UMETA(DisplayName = "Chest"),
+	Legs UMETA(DisplayName = "Legs"),
+	Back UMETA(DisplayName = "Back")
+};
 
 UENUM(BlueprintType)
 enum Rarity
@@ -78,6 +89,9 @@ protected:
 		TEnumAsByte<SubType> ItemSubType = AnySubType;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		TEnumAsByte<Socket> ItemSocket = NotEquipable;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		class UTexture2D* ItemImage;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
@@ -100,6 +114,18 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		int GoldValue = 0;
+
+	UPROPERTY()
+		int ItemDamageBase = 0;
+
+	UPROPERTY()
+		float ItemDamageMultiplier = 1;
+
+	UPROPERTY()
+		int ItemGatherBase = 0;
+
+	UPROPERTY()
+		float ItemGatherMultiplier = 1;
 
 
 public:	
@@ -130,5 +156,23 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		SubType GetItemSubType();
+
+	UFUNCTION(BlueprintCallable)
+		Socket GetItemSocket();
+
+	UFUNCTION(BlueprintCallable)
+		UStaticMesh* GetItemMesh();
+
+	UFUNCTION()
+		int GetItemGatherBase();
+
+	UFUNCTION()
+		float GetItemGatherMultiplier();
+
+	UFUNCTION()
+		int GetItemDamageBase();
+
+	UFUNCTION()
+		float GetItemDamageMultiplier();
 
 };

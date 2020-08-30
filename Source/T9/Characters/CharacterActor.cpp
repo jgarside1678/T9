@@ -7,6 +7,7 @@
 #include "T9/Widgets/HealthBarWidget.h"
 #include "T9/Actors/Projectiles/Projectile.h"
 #include "T9/MainPlayerState.h"
+#include "T9/Actors/Items/ItemActor.h"
 #include "T9/Actors/Components/BuildingSpawnComponent.h"
 #include "T9/MainPlayerController.h"
 #include "UObject/ConstructorHelpers.h"
@@ -27,10 +28,14 @@ ACharacterActor::ACharacterActor() :
 			WidgetComponent->SetWidgetClass(WidgetClass);
 		}
 	}
-	MainHandItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MainHandItemMesh"));
-	MainHandItemMesh->SetupAttachment(GetMesh());
-	MainHandItemMesh->SetSimulatePhysics(false);
-	MainHandItemMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	MainHandItem = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MainHandItemMesh"));
+	MainHandItem->SetupAttachment(GetMesh());
+	MainHandItem->SetSimulatePhysics(false);
+	MainHandItem->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	OffHandItem = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OffHandItemMesh"));
+	OffHandItem->SetupAttachment(GetMesh());
+	OffHandItem->SetSimulatePhysics(false);
+	OffHandItem->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 	//MainHandItemMesh->SetupAttachment(GetMesh());
 	MovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
 }
@@ -131,6 +136,21 @@ void ACharacterActor::SetCurrentHealth(float Number)
 	}
 }
 
+void ACharacterActor::Heal(float Number)
+{
+	if (Number < 1 && Number > 0) CurrentHealth += Number * GetMaxHealth();
+	else CurrentHealth += Number;
+
+	if (Levels.Contains(Level)) {
+		if (CurrentHealth > Levels[Level].MaxHealth) CurrentHealth = Levels[Level].MaxHealth;
+		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Level].MaxHealth);
+	}
+	else if (Levels.Contains(Levels.Num())) {
+		if (CurrentHealth > Levels[Levels.Num()].MaxHealth) CurrentHealth = Levels[Levels.Num()].MaxHealth;
+		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Levels.Num()].MaxHealth);
+	}
+}
+
 float ACharacterActor::GetMaxHealth()
 {
 	if (Levels.Contains(Level)) return  Levels[Level].MaxHealth;
@@ -190,6 +210,8 @@ void ACharacterActor::CalculateDamage(int BaseAdditionalDamage)
 	}
 	else if (Levels.Contains(Levels.Num())) Damage = Levels[Levels.Num()].BaseDamage;
 	Damage += BaseAdditionalDamage;
+	Damage += ItemBaseDamage;
+	Damage *= ItemDamageMultiplier;
 }
 
 void ACharacterActor::DeathInit() {
@@ -242,16 +264,16 @@ void ACharacterActor::Attack(AActor* Target)
 {
 	if (AttackStreak >= AttackStreakForSpecial) SpecialAttack(Target);
 	else {
+		CalculateDamage(0);
 		if (Target != CurrentTarget) AttackStreak = 0;
 		CurrentTarget = Target;
-		CalculateDamage(0);
 		if (Projectile) {
 			FActorSpawnParameters SpawnParams;
 			AProjectile* SpawnedActorRef = GetWorld()->SpawnActor<AProjectile>(Projectile, GetActorLocation(), FRotator(0), SpawnParams);
 			DamageType ProjectileDamage = All;
 			if (TypeOfDamage == Alliance) ProjectileDamage = Enemy;
 			else if (TypeOfDamage == Enemy) ProjectileDamage = Alliance;
-			SpawnedActorRef->ProjectileInnit(Target, GetDamage(), this, 0, ProjectileDamage);
+			SpawnedActorRef->ProjectileInnit(Target, Damage, this, 0, ProjectileDamage);
 		}
 		else DamageEnemy(Target, Damage);
 		if(AttackMontage) PlayAnimMontage(AttackMontage);
@@ -278,17 +300,56 @@ bool ACharacterActor::CheckIfDead() {
 
 void ACharacterActor::SheathMainHand()
 {
-	if (MainHandItemMesh) {
-		MainHandItemMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("spine_03"));
+	if (MainHandItem) {
+		MainHandItem->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("spine_03"));
 	}
 }
 
 void ACharacterActor::EquipMainHand()
 {
-	if (MainHandItemMesh) {
-		MainHandItemMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("weaponShield_R"));
+	if (MainHandItem) {
+		MainHandItem->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("weaponShield_R"));
 	}
 }
+
+void ACharacterActor::AddMainHand(AItemActor* NewMainHand)
+{
+	if (NewMainHand) {
+		Equipment.MainHand = NewMainHand;
+		if (Equipment.MainHand->GetItemType() == Weapon) {
+			ItemBaseDamage += Equipment.MainHand->GetItemDamageBase();
+			ItemDamageMultiplier *= Equipment.MainHand->GetItemDamageMultiplier();
+		}
+		MainHandItem->SetStaticMesh(Equipment.MainHand->GetItemMesh());
+	}
+}
+
+void ACharacterActor::ResetEquipment()
+{
+	ItemBaseDamage = 0;
+	ItemDamageMultiplier = 1;
+	ItemBaseHealth = 0;
+	ItemHealthMultiplier = 1;
+	if (Equipment.DefaultMainHand) {
+		Equipment.MainHand = nullptr;
+		MainHandItem->SetStaticMesh(Equipment.DefaultMainHand);
+	}
+	else {
+		MainHandItem->SetStaticMesh(NULL);
+	}
+	if (Equipment.DefaultOffHand) {
+		Equipment.OffHand = nullptr;
+		OffHandItem->SetStaticMesh(Equipment.DefaultOffHand);
+	}
+	else {
+		OffHandItem->SetStaticMesh(NULL);
+	}
+
+	EquipMainHand();
+}
+
+
+//Character Invulnerability
 
 bool ACharacterActor::CheckInvulnerable()
 {
