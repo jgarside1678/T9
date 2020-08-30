@@ -25,7 +25,7 @@ EBTNodeResult::Type UAI_AttackTarget::ExecuteTask(UBehaviorTreeComponent& OwnerC
 				return EBTNodeResult::Succeeded;
 			}
 		}
-		if(LastAttackHasFinnished(NPC)) NPC->Attack(TargetActor, AttackNumber);
+		if(LastAttackHasFinnished(NPC)) NPC->Attack(TargetActor);
 	}
 
 
@@ -35,5 +35,5 @@ EBTNodeResult::Type UAI_AttackTarget::ExecuteTask(UBehaviorTreeComponent& OwnerC
 }
 
 bool UAI_AttackTarget::LastAttackHasFinnished(ACharacterActor* NPC) {
-	return !NPC->GetMesh()->GetAnimInstance()->Montage_IsPlaying(NPC->CurrentMontage);
+	return !NPC->GetMesh()->GetAnimInstance()->Montage_IsPlaying(NPC->AttackMontage);
 }

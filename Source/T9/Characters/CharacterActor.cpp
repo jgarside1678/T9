@@ -5,6 +5,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/WidgetComponent.h"
 #include "T9/Widgets/HealthBarWidget.h"
+#include "T9/Actors/Projectiles/Projectile.h"
 #include "T9/MainPlayerState.h"
 #include "T9/Actors/Components/BuildingSpawnComponent.h"
 #include "T9/MainPlayerController.h"
@@ -55,16 +56,14 @@ void ACharacterActor::BeginPlay()
 		Damage = Levels[Level].BaseDamage;
 		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Level].MaxHealth);
 	}
-
-	float Height = 0;
 	//Used to for Spacing between characters and other objects
 	if (GetCapsuleComponent()) {
 		CapsuleRadius = GetCapsuleComponent()->GetScaledCapsuleRadius();
-		Height = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();// *GetActorScale3D().Z;
-		GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -Height));
+		CapsuleHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();// *GetActorScale3D().Z;
+		GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -CapsuleHeight));
 		GetMesh()->AddLocalRotation(FRotator(0, -90, 0));
 	}
-	if (GetActorScale3D().Z > 1) SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, Height));
+	if (GetActorScale3D().Z > 1) SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, CapsuleHeight));
 
 	if (MovementComponent) {
 		MovementComponent->SetAvoidanceEnabled(true);
@@ -184,6 +183,15 @@ void ACharacterActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, D
 	}
 }
 
+void ACharacterActor::CalculateDamage(int BaseAdditionalDamage)
+{
+	if (Levels.Contains(Level)) {
+		Damage = Levels[Level].BaseDamage;
+	}
+	else if (Levels.Contains(Levels.Num())) Damage = Levels[Levels.Num()].BaseDamage;
+	Damage += BaseAdditionalDamage;
+}
+
 void ACharacterActor::DeathInit() {
 	IsDead = true;
 	if (Levels.Contains(Level)) {
@@ -230,17 +238,38 @@ float ACharacterActor::GetAttackRange() {
 	return 0;
 }
 
-void ACharacterActor::Attack(AActor* Target, int Number)
+void ACharacterActor::Attack(AActor* Target)
 {
-	CurrentTarget = Target;
-	DamageEnemy(Target, Damage);
-	AttackStreak++;
+	if (AttackStreak >= AttackStreakForSpecial) SpecialAttack(Target);
+	else {
+		if (Target != CurrentTarget) AttackStreak = 0;
+		CurrentTarget = Target;
+		CalculateDamage(0);
+		if (Projectile) {
+			FActorSpawnParameters SpawnParams;
+			AProjectile* SpawnedActorRef = GetWorld()->SpawnActor<AProjectile>(Projectile, GetActorLocation(), FRotator(0), SpawnParams);
+			DamageType ProjectileDamage = All;
+			if (TypeOfDamage == Alliance) ProjectileDamage = Enemy;
+			else if (TypeOfDamage == Enemy) ProjectileDamage = Alliance;
+			SpawnedActorRef->ProjectileInnit(Target, GetDamage(), this, 0, ProjectileDamage);
+		}
+		else DamageEnemy(Target, Damage);
+		if(AttackMontage) PlayAnimMontage(AttackMontage);
+		AttackStreak++;
+	}
 }
 
-void ACharacterActor::SpecialAttack(AActor* Target, int Number)
+void ACharacterActor::SpecialAttack(AActor* Target)
 {
 	CurrentTarget = Target;
 	DamageEnemy(Target, Damage);
+	if(SpecialAttackMontage) PlayAnimMontage(SpecialAttackMontage);
+	AttackStreak = 0;
+}
+
+void ACharacterActor::ChangePhase(int NewPhase)
+{
+	//Needs to be overrided in characters which phases
 }
 
 bool ACharacterActor::CheckIfDead() {

@@ -28,7 +28,7 @@ void ATrackingProjectile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if ((Target != nullptr) && (Target->IsValidLowLevel()) && (!Target->IsPendingKill())) {
 		if (Active) {
-			FVector Direction = (Target->GetActorLocation() - GetActorLocation() + FVector(0, 0, Target->GetSimpleCollisionHalfHeight())).GetSafeNormal();
+			FVector Direction = (Target->GetActorLocation() - GetActorLocation());// +FVector(0, 0, Target->GetSimpleCollisionHalfHeight())).GetSafeNormal();
 			ProjectileMovement->Velocity += Direction * 50000.f * DeltaTime;
 			ProjectileMovement->Velocity = ProjectileMovement->Velocity.GetSafeNormal() * ProjectileSpeed * 1000;
 		}

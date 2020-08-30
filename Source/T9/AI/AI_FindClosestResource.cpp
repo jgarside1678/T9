@@ -29,7 +29,7 @@ EBTNodeResult::Type UAI_FindClosestResource::ExecuteTask(UBehaviorTreeComponent&
 	auto const NPC = Cast<AAlliance_ResourceGatherer>(Cont->GetPawn());
 
 	//Clear Last Target incase animations still playing
-	NPC->CurrentTarget = nullptr;
+	//NPC->CurrentTarget = nullptr;
 	if (!NPC->IsDead) {
 		AResourceActor* Target = Cast<AResourceActor>(Cont->GetBlackboard()->GetValueAsObject(bb_keys::target_actor));
 		FVector const Origin = NPC->GetActorLocation();

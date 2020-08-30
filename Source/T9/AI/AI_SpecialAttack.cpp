@@ -20,7 +20,7 @@ EBTNodeResult::Type UAI_SpecialAttack::ExecuteTask(UBehaviorTreeComponent& Owner
 
 	if (Target != nullptr && Target->IsValidLowLevel()) {
 		AActor* TargetActor = (AActor*)Target;
-		NPC->SpecialAttack(TargetActor, AttackNumber);
+		NPC->SpecialAttack(TargetActor);
 	}
 
 

@@ -36,6 +36,7 @@ ABuildingActor::ABuildingActor()
 	if (StaticMeshComponent) {
 		StaticMeshComponent->SetCustomDepthStencilValue(OutlineColour);
 		StaticMeshComponent->SetRenderCustomDepth(false);
+		StaticMeshComponent->SetGenerateOverlapEvents(true);
 	}
 
 	GridSpace = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GridSpace"));

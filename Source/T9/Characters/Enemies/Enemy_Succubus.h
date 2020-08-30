@@ -31,11 +31,11 @@ public :
 
 protected:
 
-	void Attack(AActor* Target, int Number = 1);
+	virtual void Attack(AActor* Target) override;
 
-	void SpecialAttack(AActor* Target, int Number = 1);
+	virtual void SpecialAttack(AActor* Target) override;
 
-	void CalculateDamage();
+	virtual void CalculateDamage(int BaseAdditionalDamage) override;
 
 	void FlyingHeal();
 

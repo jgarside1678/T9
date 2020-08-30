@@ -42,55 +42,18 @@ AEnemy_Succubus::AEnemy_Succubus(const FObjectInitializer& ObjectInitializer) {
 }
 
 
-void AEnemy_Succubus::Attack(AActor* Target, int Number) {
-	if (Target != CurrentTarget) {
-		AttackStreak = 0;
-		CurrentPhase = Normal;
-		CalculateDamage();
-	}
-	if (AttackStreak < 2) {
-		if (CurrentPhase != Channelling) {
-			CurrentMontage = AttackMontage;
-			PlayAnimMontage(CurrentMontage);
-		}
-		Super::Attack(Target);
-	}
-	else {
-		AttackStreak = 0;
-		SpecialAttack(Target, Number);
-	}
+void AEnemy_Succubus::Attack(AActor* Target) {
+	Super::Attack(Target);
 }
 
 
-void AEnemy_Succubus::SpecialAttack(AActor* Target, int Number) {
-	if (Number == 0) Number = UKismetMathLibrary::RandomInteger64InRange(1, 2);
-	switch (Number) {
-	case 1:
-		if (CurrentPhase == Flying) CurrentPhase = Normal;
-		else {
-			CurrentPhase = Flying;
-			FlyingHeal();
-		}
-		break;
-	case 2:
-		if (CurrentPhase == Flying)	PlayAnimMontage(CurrentMontage);
-		else if (CurrentPhase == Channelling) CurrentPhase = Normal;
-		else CurrentPhase = Channelling;
-		break;
-	default:
-		break;
-
-	}
-	CalculateDamage();
-	DamageEnemy(Target, Damage);
+void AEnemy_Succubus::SpecialAttack(AActor* Target) {
+	CalculateDamage(50);
+	Super::SpecialAttack(Target);
 }
 
-void AEnemy_Succubus::CalculateDamage() {
-	if (Levels.Contains(Level)) {
-		Damage = Levels[Level].BaseDamage;
-	}
-	else if (Levels.Contains(Levels.Num())) Damage = Levels[Levels.Num()].BaseDamage;
-	else UE_LOG(LogTemp, Warning, TEXT("Damage Error Enemey_Succubus.Cpp"));
+void AEnemy_Succubus::CalculateDamage(int BaseAdditionalDamage) {
+	Super::CalculateDamage(BaseAdditionalDamage);
 	if (CurrentPhase == Flying) Damage *= 2;
 	else if (CurrentPhase == Channelling) Damage *= 3;
 }
@@ -102,3 +65,47 @@ void AEnemy_Succubus::FlyingHeal()
 		GetWorldTimerManager().SetTimer(FlyingHealHandle, this, &AEnemy_Succubus::FlyingHeal, 0.5, false);
 	}
 }
+
+
+//void AEnemy_Succubus::Attack(AActor* Target, int Number) {
+//	if (Target != CurrentTarget) {
+//		AttackStreak = 0;
+//		CurrentPhase = Normal;
+//		CalculateDamage();
+//	}
+//	if (AttackStreak < 2) {
+//		if (CurrentPhase != Channelling) {
+//			CurrentMontage = AttackMontage;
+//			PlayAnimMontage(CurrentMontage);
+//		}
+//		Super::Attack(Target);
+//	}
+//	else {
+//		AttackStreak = 0;
+//		SpecialAttack(Target, Number);
+//	}
+//}
+//
+//
+//void AEnemy_Succubus::SpecialAttack(AActor* Target, int Number) {
+//	if (Number == 0) Number = UKismetMathLibrary::RandomInteger64InRange(1, 2);
+//	switch (Number) {
+//	case 1:
+//		if (CurrentPhase == Flying) CurrentPhase = Normal;
+//		else {
+//			CurrentPhase = Flying;
+//			FlyingHeal();
+//		}
+//		break;
+//	case 2:
+//		if (CurrentPhase == Flying)	PlayAnimMontage(CurrentMontage);
+//		else if (CurrentPhase == Channelling) CurrentPhase = Normal;
+//		else CurrentPhase = Channelling;
+//		break;
+//	default:
+//		break;
+//
+//	}
+//	CalculateDamage();
+//	DamageEnemy(Target, Damage);
+//}

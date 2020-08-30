@@ -29,8 +29,11 @@ EBTNodeResult::Type UAI_IsTargetInRange::ExecuteTask(UBehaviorTreeComponent& Own
 			TargetOrigin = Building->GetActorLocation();
 		}
 		else TargetActor->GetActorBounds(false, TargetOrigin, TargetBounds, false);
-		//DrawDebugBox(GetWorld(), TargetOrigin, TargetBounds + NPC->GetAttackRange() + NPC->CapsuleRadius*2, FQuat(0, 0, 0, 0), FColor::Red, true, -1, 0, 10);
-		if (UKismetMathLibrary::IsPointInBox(Origin, TargetOrigin, TargetBounds + NPC->GetAttackRange() + NPC->CapsuleRadius*2)) {
+		TargetBounds.X += NPC->GetAttackRange() + NPC->CapsuleRadius * 2 + 50;
+		TargetBounds.Y += NPC->GetAttackRange() + NPC->CapsuleRadius * 2 + 50;
+		TargetBounds.Z += NPC->GetAttackRange() + NPC->CapsuleHeight * 2 + 500;
+		DrawDebugBox(GetWorld(), TargetOrigin, TargetBounds, FQuat(0, 0, 0, 0), FColor::Red, true, -1, 0, 10);
+		if (UKismetMathLibrary::IsPointInBox(Origin, TargetOrigin, TargetBounds)) {
 			Cont->GetBlackboard()->SetValueAsBool(bb_keys::target_is_in_range, true);
 			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 			return EBTNodeResult::Succeeded;

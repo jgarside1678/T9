@@ -43,6 +43,7 @@ void AProjectile::ProjectileInnit(AActor* TargetActor, float AttackDamage, AActo
 	Spawner = SpawnActor;
 	ProjectileMovementDelay = ProjectileDelay;
 	BuildingSpawn = Cast<ADefensiveBuildingActor>(Spawner);
+	TargetBuilding = Cast<ABuildingActor>(Spawner);
 	if (BuildingSpawn) ProjectileSpawn = BuildingSpawn->ProjectileSpawn;
 	if (ProjectileMovementDelay > 0) {
 		FTimerDelegate TickDelay;
@@ -57,7 +58,7 @@ void AProjectile::ProjectileInnit(AActor* TargetActor, float AttackDamage, AActo
 
 void AProjectile::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor == Target) {
+	if (Active && OtherActor == Target) {
 		IDamageInterface* Enemy = Cast<IDamageInterface>(Target);
 		if(Enemy != nullptr) Enemy->TakeDamage(this, Damage, DamageActorsOfType);
 		ProjectileDestroy();

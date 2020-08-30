@@ -57,9 +57,13 @@ void UInventorySlot::InventorySlotInit(struct FSlot InitSlot, class UInventoryCo
 	if (ItemSlot.Item) {
 		ItemImage->SetVisibility(ESlateVisibility::Visible);
 		ItemImage->SetBrushFromTexture(ItemSlot.Item->GetItemImage());
+		TypeImage->SetVisibility(ESlateVisibility::Hidden);
 	}
-	else ItemImage->SetVisibility(ESlateVisibility::Hidden);
-	TypeImage->SetBrushFromTexture(TypeImages[ItemSlot.SlotType]);
+	else {
+		ItemImage->SetVisibility(ESlateVisibility::Hidden);
+		TypeImage->SetVisibility(ESlateVisibility::Visible);
+		TypeImage->SetBrushFromTexture(TypeImages[ItemSlot.SlotType]);
+	}
 }
 
 void UInventorySlot::Interact()

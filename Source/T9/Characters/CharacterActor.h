@@ -99,7 +99,21 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Basics", Meta = (AllowPrivateAccess = "true"))
 		bool NeedsController = true;
 
-	UFUNCTION()
+	//Combat
+
+	UPROPERTY()
+		TSubclassOf<class AProjectile> Projectile = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
+		int AttackStreak = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
+		int AttackStreakForSpecial = 4;
+
+	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
+	    virtual void CalculateDamage(int BaseAdditionalDamage);
+
+	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
 	    virtual void DeathInit();
 
 
@@ -110,21 +124,32 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(Category = "Character Combat")
+		virtual void Attack(AActor* Target);
+
+	UFUNCTION(Category = "Character Combat")
+		virtual void SpecialAttack(AActor* Target);
+
+	UFUNCTION(Category = "Character Combat")
+		virtual void ChangePhase(int NewPhase = -1);
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AActor* CurrentTarget;
+
+	UPROPERTY()
+		class UAnimMontage* AttackMontage;
+
+	UPROPERTY()
+		class UAnimMontage* SpecialAttackMontage;
+
+
 	UPROPERTY()
 		bool TargetBuildings = false;
 
 	UPROPERTY()
 		bool TargetCharacters = true;
 
-	UPROPERTY()
-		class UAnimMontage* AttackMontage;
-
-	UPROPERTY()
-		class UAnimMontage* CurrentMontage;
-
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		AActor* CurrentTarget;
 
 	UFUNCTION()
 		void SpawnInit(AActor* BuildingSpawn, int SpawnLevel = 1, bool Invuln = false, bool SpawnController = true);
@@ -141,6 +166,9 @@ public:
 
 	UPROPERTY()
 		float CapsuleRadius;
+
+	UPROPERTY()
+		float CapsuleHeight;
 
 	UFUNCTION()
 		void SetLevel(int NewLevel);
@@ -181,14 +209,6 @@ public:
 	UFUNCTION()
 		float GetAttackRange();
 
-	UPROPERTY()
-		int AttackStreak = 0;
-
-	UFUNCTION()
-		virtual void Attack(AActor* Target, int Number = 1);
-
-	UFUNCTION()
-		virtual void SpecialAttack(AActor* Target, int Number);
 
 	UFUNCTION()
 		virtual bool CheckIfDead();
