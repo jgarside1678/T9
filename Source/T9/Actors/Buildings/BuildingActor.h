@@ -7,6 +7,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "T9/Interfaces/DamageInterface.h"
+#include "T9/Actors/Items/ItemActor.h"
 #include "T9/Interfaces/SelectInterface.h"
 #include "BuildingActor.generated.h"
 
@@ -137,6 +138,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		int Level = 1;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
+		float Damage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+		float CurrentHealth;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+		float MaxHealth;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		TEnumAsByte<DamageType> TypeOfDamage = Alliance;
 
@@ -162,9 +172,6 @@ protected:
 		class UBoxComponent* BuildingRangeCollider;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
-		float CurrentHealth;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
 		class AMainPlayerController* PC;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
@@ -187,6 +194,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		int BuildingDetectionRange = 3;
 
+	UPROPERTY()
+		int OutlineColour = 2;
+
 	//Audio
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		class UAudioComponent* UpgradeAudio;
@@ -197,12 +207,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		bool RecentlyRendered = true;
 
-	//Building Inventory
+	//Building Inventory and Items
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Inventory")
 		class  UInventoryComponent* InventoryComponent;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		struct FItemModifiers ItemModifiers;
 
 
 public:
@@ -266,8 +277,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void ResetHealth();
 
-	UPROPERTY()
-		int OutlineColour = 2;
 
 	UFUNCTION()
 		virtual void SetSelected();
@@ -316,19 +325,28 @@ public:
 	UFUNCTION()
 		bool GetDisabled();
 
+	UFUNCTION()
+		void CalculateDamage();
+
+	UFUNCTION()
+		void CalculateMaxHealth();
+
 
 	//Functions used for Menus
 
 	UFUNCTION(BlueprintCallable)
-		FBuildingUpgrades GetCurrentStats();
+		FBuildingUpgrades GetCurrentBaseStats();
 
 	UFUNCTION(BlueprintCallable)
-		FBuildingUpgrades GetUpgradeStats();
+		FBuildingUpgrades GetUpgradeBaseStats();
 
 	//Inventory Functions
 
 	UFUNCTION(BlueprintCallable)
 		class UInventoryComponent* GetInventory();
+
+	UFUNCTION(BlueprintCallable)
+		void UpdateBuildingModifiers();
 
 };
 

@@ -113,7 +113,7 @@ EBTNodeResult::Type UAI_FindTarget::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 				FVector Min = FVector(ClosestBuildingOrigin.X - ClosestBuildingBounds.X - 50 - NPC->GetAttackRange(), ClosestBuildingOrigin.Y - ClosestBuildingBounds.Y- 50 - NPC->GetAttackRange(), 1);
 				FVector Max = FVector(ClosestBuildingOrigin.X + ClosestBuildingBounds.X + 50 + NPC->GetAttackRange(), ClosestBuildingOrigin.Y + ClosestBuildingBounds.Y + 50 + NPC->GetAttackRange(), 1);
 				FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(Origin, Min, Max);
-				DrawDebugLine(GetWorld(), ClampedVector, FVector(ClampedVector.X, ClampedVector.Y, 3000), FColor::Red, false, 20, 0, 10);
+				//DrawDebugLine(GetWorld(), ClampedVector, FVector(ClampedVector.X, ClampedVector.Y, 3000), FColor::Red, false, 20, 0, 10);
 				Cont->GetBlackboard()->SetValueAsObject(bb_keys::target_actor, (UObject*)ClosestBuilding);
 				Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
 			}

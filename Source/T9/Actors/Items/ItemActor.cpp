@@ -167,21 +167,7 @@ UStaticMesh* AItemActor::GetItemMesh()
 	return ItemMesh->GetStaticMesh();
 }
 
-int AItemActor::GetItemGatherBase() {
-	return ItemGatherBase;
-}
-
-float AItemActor::GetItemGatherMultiplier() {
-	return ItemGatherMultiplier;
-}
-
-
-int AItemActor::GetItemDamageBase()
+FItemModifiers AItemActor::GetItemModifiers()
 {
-	return ItemDamageBase;
-}
-
-float AItemActor::GetItemDamageMultiplier()
-{
-	return ItemDamageMultiplier;
+	return Modifiers;
 }

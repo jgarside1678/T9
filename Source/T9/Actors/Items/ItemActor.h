@@ -51,6 +51,39 @@ enum Rarity
 	Mythical UMETA(DisplayName = "Mythical")
 };
 
+USTRUCT(BlueprintType)
+struct T9_API FItemModifiers {
+
+	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		int ItemDamageBase = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		float ItemDamageMultiplier = 1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		int ItemHealthBase = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		float ItemHealthMultiplier = 1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		int ItemGatherBase = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		float ItemGatherMultiplier = 1;
+
+	inline FItemModifiers& operator+=(const FItemModifiers& Right) {
+		this->ItemDamageBase += Right.ItemDamageBase;
+		this->ItemDamageMultiplier *= Right.ItemDamageMultiplier;
+		this->ItemHealthBase += Right.ItemHealthBase;
+		this->ItemHealthMultiplier *= Right.ItemHealthMultiplier;
+		this->ItemGatherBase += Right.ItemGatherBase;
+		this->ItemGatherMultiplier *= Right.ItemGatherMultiplier;
+			return *this;
+	}
+};
 
 UCLASS()
 class T9_API AItemActor : public AActor
@@ -115,17 +148,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		int GoldValue = 0;
 
-	UPROPERTY()
-		int ItemDamageBase = 0;
-
-	UPROPERTY()
-		float ItemDamageMultiplier = 1;
-
-	UPROPERTY()
-		int ItemGatherBase = 0;
-
-	UPROPERTY()
-		float ItemGatherMultiplier = 1;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		struct FItemModifiers Modifiers;
 
 
 public:	
@@ -164,15 +188,6 @@ public:
 		UStaticMesh* GetItemMesh();
 
 	UFUNCTION()
-		int GetItemGatherBase();
-
-	UFUNCTION()
-		float GetItemGatherMultiplier();
-
-	UFUNCTION()
-		int GetItemDamageBase();
-
-	UFUNCTION()
-		float GetItemDamageMultiplier();
+		FItemModifiers GetItemModifiers();
 
 };

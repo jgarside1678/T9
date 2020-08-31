@@ -7,7 +7,6 @@
 #include "T9/Widgets/HealthBarWidget.h"
 #include "T9/Actors/Projectiles/Projectile.h"
 #include "T9/MainPlayerState.h"
-#include "T9/Actors/Items/ItemActor.h"
 #include "T9/Actors/Components/BuildingSpawnComponent.h"
 #include "T9/MainPlayerController.h"
 #include "UObject/ConstructorHelpers.h"
@@ -38,6 +37,7 @@ ACharacterActor::ACharacterActor() :
 	OffHandItem->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 	//MainHandItemMesh->SetupAttachment(GetMesh());
 	MovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
+
 }
 
 
@@ -57,10 +57,12 @@ void ACharacterActor::BeginPlay()
 		}
 		HealthBar = Cast<UHealthBarWidget>(WidgetComponent->GetUserWidgetObject());
 	}
+	//Required for Enemies that arnt spawned during runtime.
 	if (Levels.Contains(Level)) {
+		MaxHealth = Levels[Level].MaxHealth;
 		Damage = Levels[Level].BaseDamage;
-		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Level].MaxHealth);
 	}
+	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 	//Used to for Spacing between characters and other objects
 	if (GetCapsuleComponent()) {
 		CapsuleRadius = GetCapsuleComponent()->GetScaledCapsuleRadius();
@@ -96,6 +98,8 @@ void ACharacterActor::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invu
 {
 	SpawnBuilding = BuildingSpawn;
 	Level = SpawnLevel;
+	CalculateDamage();
+	CalculateMaxHealth();
 	ResetHealth();
 	NeedsController = SpawnController;
 	if (!GetController() && NeedsController) {
@@ -126,60 +130,32 @@ void ACharacterActor::SetLevel(int NewLevel)
 void ACharacterActor::SetCurrentHealth(float Number)
 {
 	CurrentHealth = Number;
-	if (Levels.Contains(Level)) {
-		if (CurrentHealth > Levels[Level].MaxHealth) CurrentHealth = Levels[Level].MaxHealth;
-		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Level].MaxHealth);
-	}
-	else if (Levels.Contains(Levels.Num())) {
-		if (CurrentHealth > Levels[Levels.Num()].MaxHealth) CurrentHealth = Levels[Levels.Num()].MaxHealth;
-		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Levels.Num()].MaxHealth);
-	}
+	if (CurrentHealth > MaxHealth) CurrentHealth = MaxHealth;
+	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 }
 
 void ACharacterActor::Heal(float Number)
 {
 	if (Number < 1 && Number > 0) CurrentHealth += Number * GetMaxHealth();
 	else CurrentHealth += Number;
-
-	if (Levels.Contains(Level)) {
-		if (CurrentHealth > Levels[Level].MaxHealth) CurrentHealth = Levels[Level].MaxHealth;
-		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Level].MaxHealth);
-	}
-	else if (Levels.Contains(Levels.Num())) {
-		if (CurrentHealth > Levels[Levels.Num()].MaxHealth) CurrentHealth = Levels[Levels.Num()].MaxHealth;
-		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Levels.Num()].MaxHealth);
-	}
+	if (CurrentHealth > MaxHealth) CurrentHealth = MaxHealth;
+	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 }
 
 float ACharacterActor::GetMaxHealth()
 {
-	if (Levels.Contains(Level)) return  Levels[Level].MaxHealth;
-	else if (Levels.Contains(Levels.Num())) return Levels[Levels.Num()].MaxHealth;
-	return 0;
+	return MaxHealth;
 }
 
 void ACharacterActor::SetMaxHealth(float Number)
 {
-	if (Levels.Contains(Level)) {
-		Levels[Level].MaxHealth = Number;
-		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Level].MaxHealth);
-	}
-	else if (Levels.Contains(Levels.Num())) {
-		Levels[Levels.Num()].MaxHealth = Number;
-		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Levels.Num()].MaxHealth);
-	}
+	MaxHealth = Number;
 }
 
 void ACharacterActor::ResetHealth()
 {
-	if (Levels.Contains(Level)) {
-		CurrentHealth = Levels[Level].MaxHealth;
-		HealthBar->SetHealthPercent(CurrentHealth, Levels[Level].MaxHealth);
-	}
-	else if (Levels.Contains(Levels.Num())) {
-		CurrentHealth = Levels[Levels.Num()].MaxHealth;
-		HealthBar->SetHealthPercent(CurrentHealth, Levels[Levels.Num()].MaxHealth);
-	}
+	CurrentHealth = MaxHealth;
+	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 }
 
 
@@ -210,8 +186,18 @@ void ACharacterActor::CalculateDamage(int BaseAdditionalDamage)
 	}
 	else if (Levels.Contains(Levels.Num())) Damage = Levels[Levels.Num()].BaseDamage;
 	Damage += BaseAdditionalDamage;
-	Damage += ItemBaseDamage;
-	Damage *= ItemDamageMultiplier;
+	Damage += ItemModifiers.ItemDamageBase;
+	Damage *= ItemModifiers.ItemDamageMultiplier;
+}
+
+void ACharacterActor::CalculateMaxHealth(int BaseAdditionalHealth)
+{
+	MaxHealth = 0;
+	if (Levels.Contains(Level)) MaxHealth +=  Levels[Level].MaxHealth;
+	else if (Levels.Contains(Levels.Num())) MaxHealth += Levels[Levels.Num()].MaxHealth;
+	MaxHealth += ItemModifiers.ItemHealthBase;
+	MaxHealth *= ItemModifiers.ItemHealthMultiplier;
+	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 }
 
 void ACharacterActor::DeathInit() {
@@ -316,20 +302,16 @@ void ACharacterActor::AddMainHand(AItemActor* NewMainHand)
 {
 	if (NewMainHand) {
 		Equipment.MainHand = NewMainHand;
-		if (Equipment.MainHand->GetItemType() == Weapon) {
-			ItemBaseDamage += Equipment.MainHand->GetItemDamageBase();
-			ItemDamageMultiplier *= Equipment.MainHand->GetItemDamageMultiplier();
-		}
 		MainHandItem->SetStaticMesh(Equipment.MainHand->GetItemMesh());
+		ItemModifiers += Equipment.MainHand->GetItemModifiers();
+		CalculateDamage();
+		CalculateMaxHealth();
 	}
 }
 
 void ACharacterActor::ResetEquipment()
 {
-	ItemBaseDamage = 0;
-	ItemDamageMultiplier = 1;
-	ItemBaseHealth = 0;
-	ItemHealthMultiplier = 1;
+	ItemModifiers = FItemModifiers{};
 	if (Equipment.DefaultMainHand) {
 		Equipment.MainHand = nullptr;
 		MainHandItem->SetStaticMesh(Equipment.DefaultMainHand);

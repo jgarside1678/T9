@@ -62,6 +62,7 @@ AActor* UBuildingSpawnComponent::Spawn() {
 			if(OwningBuilding)	SpawnedActorRef->SpawnInit(MyOwner, OwningBuilding->GetLevel());
 			else if(PS) SpawnedActorRef->SpawnInit(MyOwner, PS->GetLevel());
 			else SpawnedActorRef->SpawnInit(MyOwner);
+			UpdateCharactersInventory();
 		}
 		if (SpawnedActorRef) return SpawnedActorRef;
 	}
@@ -134,17 +135,21 @@ UInventoryComponent* UBuildingSpawnComponent::GetInventoryComponent()
 
 void UBuildingSpawnComponent::UpdateCharactersInventory()
 {
-	TArray<FSlot> Slots = InventoryComponent->GetItems();
-	for (int z = 0; z < ActorsSpawned.Num(); z++) {
-		ActorsSpawned[z]->ResetEquipment();
-		for (int x = 0; x < Slots.Num(); x++) {
-			if (Slots[x].Item) {
-				switch (Slots[x].Item->GetItemSocket()) {
-				case MainHand:
-					ActorsSpawned[z]->AddMainHand(Slots[x].Item);
-					break;
-				default:
-					break;
+	if (InventoryComponent) {
+		TArray<FSlot> Slots = InventoryComponent->GetItems();
+		for (int z = 0; z < ActorsSpawned.Num(); z++) {
+			if (ActorsSpawned[z]) {
+				ActorsSpawned[z]->ResetEquipment();
+				for (int x = 0; x < Slots.Num(); x++) {
+					if (Slots[x].Item) {
+						switch (Slots[x].Item->GetItemSocket()) {
+						case MainHand:
+							ActorsSpawned[z]->AddMainHand(Slots[x].Item);
+							break;
+						default:
+							break;
+						}
+					}
 				}
 			}
 		}

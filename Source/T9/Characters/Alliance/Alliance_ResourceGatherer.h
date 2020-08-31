@@ -61,10 +61,10 @@ public:
 
 
 	UFUNCTION(BlueprintCallable, Category = "Gathering", Meta = (AllowPrivateAccess = "true"))
-		FGathererUpgrades GetCurrentStats();
+		FGathererUpgrades GetCurrentBaseStats();
 
 	UFUNCTION(BlueprintCallable, Category = "Gathering", Meta = (AllowPrivateAccess = "true"))
-		FGathererUpgrades GetUpgradeStats();
+		FGathererUpgrades GetUpgradeBaseStats();
 
 protected:
 

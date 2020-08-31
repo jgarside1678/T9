@@ -9,6 +9,7 @@
 #include "T9/Actors/Components/BuildingSpawnComponent.h"
 #include "T9/MainPlayerController.h"
 #include "T9/MainPlayerState.h"
+#include "T9/Actors/Items/ItemActor.h"
 #include "T9/Actors/Components/InventoryComponent.h"
 #include "T9/Characters/Enemies/EnemyCharacter.h"
 #include "T9/Characters/Alliance/AllianceCharacter.h"
@@ -62,6 +63,7 @@ ABuildingActor::ABuildingActor()
 	InventoryComponent->AddInventorySlot(FSlot{});
 	InventoryComponent->AddInventorySlot(FSlot{});
 	InventoryComponent->AddInventorySlot(FSlot{});
+	InventoryComponent->OnInventoryUpdate.AddDynamic(this, &ABuildingActor::UpdateBuildingModifiers);
 
 }
 
@@ -84,6 +86,9 @@ void ABuildingActor::BeginPlay()
 	PC = (AMainPlayerController*)GetWorld()->GetFirstPlayerController();
 	PS = (AMainPlayerState*)PC->PlayerState;
 	PS->AddPower(Upgrades[Level].PowerRating);
+
+	CalculateDamage();
+	CalculateMaxHealth();
 	ResetHealth();
 	TArray<AActor*> CollidingActors;
 	GetOverlappingActors(CollidingActors, AEnemyCharacter::StaticClass());
@@ -99,7 +104,7 @@ void ABuildingActor::SetTarget()
 
 void ABuildingActor::SetMaxHealth(float Number)
 {
-	if (Upgrades.Contains(Level)) Upgrades[Level].MaxHealth += Number;
+	MaxHealth = Number;
 }
 
 void ABuildingActor::SetCurrentHealth(float Number)
@@ -109,7 +114,7 @@ void ABuildingActor::SetCurrentHealth(float Number)
 
 void ABuildingActor::IncreaseMaxHealth(float Number)
 {
-	if (Upgrades.Contains(Level))	Upgrades[Level].Attack.Damage += Number;
+	MaxHealth += Number;
 }
 
 float ABuildingActor::GetCurrentHealth()
@@ -119,8 +124,7 @@ float ABuildingActor::GetCurrentHealth()
 
 float ABuildingActor::GetMaxHealth()
 {
-	if (Upgrades.Contains(Level)) return Upgrades[Level].MaxHealth;
-	else return 0;
+	return MaxHealth;
 }
 
 FString ABuildingActor::GetName()
@@ -150,7 +154,7 @@ void ABuildingActor::SetUnSelected() {
 
 void ABuildingActor::ResetHealth()
 {
-	if (Upgrades.Contains(Level)) CurrentHealth = Upgrades[Level].MaxHealth;
+	CurrentHealth = MaxHealth;
 }
 
 // Called every frame
@@ -268,6 +272,9 @@ void ABuildingActor::Upgrade() {
 		//}
 		Level++;
 
+		CalculateDamage();
+		CalculateMaxHealth();
+
 		if(!Disabled) PS->AddPower(Upgrades[Level].PowerRating - Upgrades[Level - 1].PowerRating);
 
 		//Update Spawned Characters
@@ -295,8 +302,7 @@ float ABuildingActor::GetBuildXP() {
 }
 
 float ABuildingActor::GetDamage() {
-	if (Upgrades.Contains(Level))	return Upgrades[Level].Attack.Damage;
-	else return 0;
+	return Damage;
 }
 
 void ABuildingActor::RestoreBuilding()
@@ -335,6 +341,22 @@ bool ABuildingActor::GetDisabled()
 	return Disabled;
 }
 
+void ABuildingActor::CalculateDamage()
+{
+	Damage = 0;
+	if(Upgrades.Contains(Level)) Damage += Upgrades[Level].Attack.Damage;
+	Damage += ItemModifiers.ItemDamageBase;
+	Damage *= ItemModifiers.ItemDamageMultiplier;
+}
+
+void ABuildingActor::CalculateMaxHealth()
+{
+	MaxHealth = 0;
+	if (Upgrades.Contains(Level)) MaxHealth += Upgrades[Level].MaxHealth;
+	MaxHealth += ItemModifiers.ItemHealthBase;
+	MaxHealth *= ItemModifiers.ItemHealthMultiplier;
+}
+
 int ABuildingActor::GetBuildingCount()
 {
 	if(PS->GetBuildingCount(BuildingName)) return PS->GetBuildingCount(BuildingName);
@@ -347,11 +369,11 @@ int ABuildingActor::GetMaxBuildingCount() {
 }
 
 
-FBuildingUpgrades ABuildingActor::GetCurrentStats() {
+FBuildingUpgrades ABuildingActor::GetCurrentBaseStats() {
 	return Upgrades[Level];
 }
 
-FBuildingUpgrades ABuildingActor::GetUpgradeStats() {
+FBuildingUpgrades ABuildingActor::GetUpgradeBaseStats() {
 	if(Upgrades.Contains(Level+1))	return Upgrades[Level + 1];
 	return FBuildingUpgrades();
 }
@@ -359,4 +381,19 @@ FBuildingUpgrades ABuildingActor::GetUpgradeStats() {
 UInventoryComponent* ABuildingActor::GetInventory()
 {
 	return InventoryComponent;
+}
+
+void ABuildingActor::UpdateBuildingModifiers()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Updated"));
+	ItemModifiers = FItemModifiers();
+	TArray<FSlot> Slots = InventoryComponent->GetItems();
+	for (int x = 0; x < Slots.Num(); x++) {
+		if (Slots[x].Item) {
+			ItemModifiers += Slots[x].Item->GetItemModifiers();
+			UE_LOG(LogTemp, Warning, TEXT("item stats"));
+		}
+	}
+	CalculateDamage();
+	CalculateMaxHealth();
 }

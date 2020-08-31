@@ -30,19 +30,28 @@ USelectMenuWidget::USelectMenuWidget(const FObjectInitializer& ObjectInit) : Sup
 	if (SlotBP.Succeeded()) {
 		SelectSlot = SlotBP.Class;
 	}
+
 }
 
 void USelectMenuWidget::NativeConstruct()
 {
 	SpawnComp = nullptr;
+	SpawnInventory = nullptr;
 	if (GameHUD && GameHUD->HitActor) SelectedActor = GameHUD->HitActor;
 	if (SelectedActor) {
 		SelectedBuilding = Cast<ABuildingActor>(SelectedActor);
 		SelectedObjectInterface = TScriptInterface<ISelectInterface>(SelectedActor);
 		if (SelectedBuilding) {
 			SelectedInventory = SelectedBuilding->GetInventory();
+			SelectedInventory->OnInventoryUpdate.AddUniqueDynamic(this, &USelectMenuWidget::InitializeSelectedInventory);
 			UActorComponent* ActorComp = SelectedBuilding->GetComponentByClass(UBuildingSpawnComponent::StaticClass());
-			if (ActorComp) SpawnComp = (UBuildingSpawnComponent*)ActorComp;
+			if (ActorComp) {
+				SpawnComp = (UBuildingSpawnComponent*)ActorComp;
+				if (SpawnComp) {
+					SpawnInventory = SpawnComp->GetInventoryComponent();
+					SpawnInventory->OnInventoryUpdate.AddUniqueDynamic(this, &USelectMenuWidget::InitializeSelectedInventory);
+				}
+			}
 		}
 		else SelectedInventory = nullptr;
 	}
@@ -120,9 +129,9 @@ void USelectMenuWidget::UpdateStatsTab()
 			StatsName2->SetText(FText::FromString(ANSI_TO_TCHAR("Speed")));
 			StatsName3->SetText(FText::FromString(ANSI_TO_TCHAR("Range")));
 			StatsName4->SetText(FText::FromString(ANSI_TO_TCHAR("")));
-			StatsBase1->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentStats().Attack.Damage)));
-			StatsBase2->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentStats().Attack.AttackSpeed)));
-			StatsBase3->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentStats().Attack.AttackRangeMultipler)));
+			StatsBase1->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Attack.Damage)));
+			StatsBase2->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Attack.AttackSpeed)));
+			StatsBase3->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Attack.AttackRangeMultipler)));
 			StatsBase4->SetText(FText::FromString(ANSI_TO_TCHAR("")));
 		}
 		else {
@@ -134,10 +143,10 @@ void USelectMenuWidget::UpdateStatsTab()
 				StatsName3->SetText(FText::FromString(ANSI_TO_TCHAR("Gatherer Damage")));
 				StatsName4->SetText(FText::FromString(ANSI_TO_TCHAR("Gatherer Health")));
 				if (ResourceCharacter) {
-					StatsBase1->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().GatherAmount)));
-					StatsBase2->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().MaxResourceInventory)));
-					StatsBase3->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().Damage)));
-					StatsBase4->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().MaxHealth)));
+					StatsBase1->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentBaseStats().GatherAmount)));
+					StatsBase2->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentBaseStats().MaxResourceInventory)));
+					StatsBase3->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentBaseStats().Damage)));
+					StatsBase4->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentBaseStats().MaxHealth)));
 				}
 			}
 		}
@@ -162,24 +171,24 @@ void USelectMenuWidget::UpdateStatsTab()
 void USelectMenuWidget::UpdateUprgadesTab()
 {
 	if (SelectedBuilding) {
-		HealthOld->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentStats().MaxHealth)));
-		HealthNew->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetUpgradeStats().MaxHealth)));
-		GoldAmount->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentStats().Cost.Gold)));
-		WoodAmount->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentStats().Cost.Wood)));
-		StoneAmount->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentStats().Cost.Stone)));
-		FoodAmount->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentStats().Cost.Food)));
+		HealthOld->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().MaxHealth)));
+		HealthNew->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetUpgradeBaseStats().MaxHealth)));
+		GoldAmount->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Cost.Gold)));
+		WoodAmount->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Cost.Wood)));
+		StoneAmount->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Cost.Stone)));
+		FoodAmount->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Cost.Food)));
 		if (ADefensiveBuildingActor* Defensive = Cast<ADefensiveBuildingActor>(SelectedBuilding)) {
 			UpgradesName1->SetText(FText::FromString(ANSI_TO_TCHAR("Damage")));
 			UpgradesName2->SetText(FText::FromString(ANSI_TO_TCHAR("Speed")));
 			UpgradesName3->SetText(FText::FromString(ANSI_TO_TCHAR("Range")));
 			UpgradesName4->SetText(FText::FromString(ANSI_TO_TCHAR("")));
-			UpgradesOld1->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentStats().Attack.Damage)));
-			UpgradesOld2->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentStats().Attack.AttackSpeed)));
-			UpgradesOld3->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentStats().Attack.AttackRangeMultipler)));
+			UpgradesOld1->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Attack.Damage)));
+			UpgradesOld2->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Attack.AttackSpeed)));
+			UpgradesOld3->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Attack.AttackRangeMultipler)));
 			UpgradesOld4->SetText(FText::FromString(ANSI_TO_TCHAR("")));
-			UpgradesNew1->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetUpgradeStats().Attack.Damage)));
-			UpgradesNew2->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetUpgradeStats().Attack.AttackSpeed)));
-			UpgradesNew3->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetUpgradeStats().Attack.AttackRangeMultipler)));
+			UpgradesNew1->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetUpgradeBaseStats().Attack.Damage)));
+			UpgradesNew2->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetUpgradeBaseStats().Attack.AttackSpeed)));
+			UpgradesNew3->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetUpgradeBaseStats().Attack.AttackRangeMultipler)));
 			UpgradesNew4->SetText(FText::FromString(ANSI_TO_TCHAR("")));
 		}
 		else {
@@ -191,14 +200,14 @@ void USelectMenuWidget::UpdateUprgadesTab()
 				UpgradesName3->SetText(FText::FromString(ANSI_TO_TCHAR("Gatherer Damage")));
 				UpgradesName4->SetText(FText::FromString(ANSI_TO_TCHAR("Gatherer Health")));
 				if (ResourceCharacter) {
-					UpgradesOld1->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().GatherAmount)));
-					UpgradesOld2->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().MaxResourceInventory)));
-					UpgradesOld3->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().Damage)));
-					UpgradesOld4->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentStats().MaxHealth)));
-					UpgradesNew1->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeStats().GatherAmount)));
-					UpgradesNew2->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeStats().MaxResourceInventory)));
-					UpgradesNew3->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeStats().Damage)));
-					UpgradesNew4->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeStats().MaxHealth)));
+					UpgradesOld1->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentBaseStats().GatherAmount)));
+					UpgradesOld2->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentBaseStats().MaxResourceInventory)));
+					UpgradesOld3->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentBaseStats().Damage)));
+					UpgradesOld4->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetCurrentBaseStats().MaxHealth)));
+					UpgradesNew1->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeBaseStats().GatherAmount)));
+					UpgradesNew2->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeBaseStats().MaxResourceInventory)));
+					UpgradesNew3->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeBaseStats().Damage)));
+					UpgradesNew4->SetText(FText::FromString(FString::FromInt(ResourceCharacter->GetUpgradeBaseStats().MaxHealth)));
 				}
 			}
 		}
@@ -241,15 +250,12 @@ void USelectMenuWidget::InitializeSelectedInventory()
 			InventoryBox->AddChild(NewSlot);
 		}
 	}
-	if (SpawnComp) {
-		SpawnInventory = SpawnComp->GetInventoryComponent();
-		if (SpawnInventory) {
-			TArray<FSlot> SelectedInventoryItems = SpawnInventory->GetItems();
-			for (int x = 0; x < SelectedInventoryItems.Num(); x++) {
-				UInventorySlot* NewSlot = Cast<UInventorySlot>(CreateWidget(InventoryBox, SelectSlot));
-				NewSlot->InventorySlotInit(SelectedInventoryItems[x], SpawnInventory);
-				InventoryBox->AddChild(NewSlot);
-			}
+	if (SpawnInventory) {
+		TArray<FSlot> SelectedInventoryItems = SpawnInventory->GetItems();
+		for (int x = 0; x < SelectedInventoryItems.Num(); x++) {
+			UInventorySlot* NewSlot = Cast<UInventorySlot>(CreateWidget(InventoryBox, SelectSlot));
+			NewSlot->InventorySlotInit(SelectedInventoryItems[x], SpawnInventory);
+			InventoryBox->AddChild(NewSlot);
 		}
 	}
 }

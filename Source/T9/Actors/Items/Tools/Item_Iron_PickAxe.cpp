@@ -4,6 +4,7 @@
 #include "Item_Iron_PickAxe.h"
 
 AItem_Iron_PickAxe::AItem_Iron_PickAxe() {
+	Modifiers = {30, 1, 50, 1, 50, 1};
 	ItemSocket = MainHand;
 	ItemName = "Iron Pickaxe";
 	ItemType = Tool;

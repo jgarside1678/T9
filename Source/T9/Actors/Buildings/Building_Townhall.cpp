@@ -9,8 +9,8 @@
 ABuilding_Townhall::ABuilding_Townhall(const FObjectInitializer& ObjectInitializer) {
 
 	OutlineColour = 1;
-	GridLength = FVector2D(9);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh(TEXT("StaticMesh'/Game/Assets/Fantasy_Village/meshes/buildings/SM_house_b.SM_house_b'"));
+	GridLength = FVector2D(10);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh(TEXT("StaticMesh'/Game/Assets/beffio/Medieval_Kingdom/Content/Models/Buildings/Building_15/SM_Building_15.SM_Building_15'"));
 	//static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1B.Tower_Base1B'"));
 	//static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1C.Tower_Base1C'"));
 	//static ConstructorHelpers::FObjectFinder<UAnimSequence> AnimationMont(TEXT("AnimSequence'/Game/AI/Alliance/StylizedHumanMale/Animations/Standing_1H_Magic_Attack_01_mixamo_com.Standing_1H_Magic_Attack_01_mixamo_com'"));
@@ -23,6 +23,7 @@ ABuilding_Townhall::ABuilding_Townhall(const FObjectInitializer& ObjectInitializ
 	Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 100, 1000.0f, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{0,0, 2}, FBuildingProduction{100} });
 	Upgrades.Add(2, FBuildingUpgrades{ 250.0f, 250, 5000.0f, FBuildingCosts{250, 20, 20, 20}, FBuildingAttack{0,0, 5}, FBuildingProduction{200} });
 	Upgrades.Add(3, FBuildingUpgrades{ 500.0f, 500, 10000.0f, FBuildingCosts{500, 50, 50, 50}, FBuildingAttack{0,0, 6}, FBuildingProduction{300} });
+	MeshDisplacement->SetRelativeRotation(FRotator(0, 0,0));
 	BuildingDetectionRange = Upgrades[Level].Attack.AttackRangeMultipler;
 	BuildingName = "Town Hall";
 	SpawnComponent = CreateDefaultSubobject<UBuildingSpawnComponent>(TEXT("Spawn Component"));

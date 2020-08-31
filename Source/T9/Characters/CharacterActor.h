@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "T9/Interfaces/DamageInterface.h"
+#include "T9/Actors/Items/ItemActor.h"
 #include "CharacterActor.generated.h"
 
 USTRUCT()
@@ -73,6 +74,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Health")
 		float CurrentHealth;
 
+	UPROPERTY(VisibleAnywhere, Category = "Health")
+		float MaxHealth;
+
 	UPROPERTY()
 		float HealthBarHeight = 140.0f;
 
@@ -123,16 +127,7 @@ protected:
 		class UStaticMeshComponent* OffHandItem;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float ItemBaseDamage = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float ItemDamageMultiplier = 1;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int ItemBaseHealth = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float ItemHealthMultiplier = 1;
+		struct FItemModifiers ItemModifiers;
 
 
 
@@ -151,7 +146,10 @@ protected:
 		int AttackStreakForSpecial = 4;
 
 	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
-	    virtual void CalculateDamage(int BaseAdditionalDamage);
+	    virtual void CalculateDamage(int BaseAdditionalDamage = 0);
+
+	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
+		virtual void CalculateMaxHealth(int BaseAdditionalHealth = 0);
 
 	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
 	    virtual void DeathInit();
