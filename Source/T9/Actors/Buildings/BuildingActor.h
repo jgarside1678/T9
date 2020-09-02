@@ -314,6 +314,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	    float GetDamage();
 
+	UFUNCTION(BlueprintCallable)
+		float GetDefence();
+
 	UPROPERTY()
 		bool IsDead = false;
 

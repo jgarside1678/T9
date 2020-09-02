@@ -42,15 +42,15 @@ void UAI_UpdateTargetLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		ClosestBuildingOrigin = TargetBuilding->GetActorLocation();
 		FVector Direction = (NPC->GetActorLocation() - ClosestBuildingOrigin).GetSafeNormal();
 		FVector TargetLocation = ClosestBuildingOrigin;
-		FVector Min = FVector(ClosestBuildingOrigin.X - ClosestBuildingBounds.X - 50 - NPC->GetAttackRange(), ClosestBuildingOrigin.Y - ClosestBuildingBounds.Y - 50 - NPC->GetAttackRange(), 1);
-		FVector Max = FVector(ClosestBuildingOrigin.X + ClosestBuildingBounds.X + 50 + NPC->GetAttackRange(), ClosestBuildingOrigin.Y + ClosestBuildingBounds.Y + 50 + NPC->GetAttackRange(), 1);
+		FVector Min = FVector(ClosestBuildingOrigin.X - ClosestBuildingBounds.X - 20 - NPC->GetAttackRange(), ClosestBuildingOrigin.Y - ClosestBuildingBounds.Y - 20 - NPC->GetAttackRange(), 1);
+		FVector Max = FVector(ClosestBuildingOrigin.X + ClosestBuildingBounds.X + 20 + NPC->GetAttackRange(), ClosestBuildingOrigin.Y + ClosestBuildingBounds.Y + 20 + NPC->GetAttackRange(), 1);
 		FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(NPC->GetActorLocation(), Min, Max);
 		DrawDebugLine(GetWorld(), ClampedVector, FVector(ClampedVector.X, ClampedVector.Y, 2000), FColor::Green, false, 10, 0, 10);
 		Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
 	}
 	else if (TargetCharacter) {
-		FVector Min = FVector(TargetCharacter->GetActorLocation() - TargetCharacter->CapsuleRadius - 50);
-		FVector Max = FVector(TargetCharacter->GetActorLocation() + TargetCharacter->CapsuleRadius + 50);
+		FVector Min = FVector(TargetCharacter->GetActorLocation() - TargetCharacter->CapsuleRadius - 10);
+		FVector Max = FVector(TargetCharacter->GetActorLocation() + TargetCharacter->CapsuleRadius + 10);
 		FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(NPC->GetActorLocation(), Min - NPC->GetAttackRange(), Max + NPC->GetAttackRange());
 		Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
 	}

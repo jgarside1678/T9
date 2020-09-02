@@ -10,16 +10,16 @@
 AAlliance_ResourceGatherer::AAlliance_ResourceGatherer() {
 
 	AIControllerClass = AAlliance_Gatherer_Controller::StaticClass();
-	if(Upgrades.Num() == 0) Upgrades.Add(1, FGathererUpgrades{ 50, 100, 200, 10 });
+	if(GatheringLevels.Num() == 0) GatheringLevels.Add(1, FGathererLevels{ 50, 100 });
 }
 
 void AAlliance_ResourceGatherer::GatherResources()
 {
 	IsGathering = true;
 	EquipMainHand();
-	if (Upgrades.Contains(Level)) {
-		GatheredResource += Upgrades[Level].GatherAmount;
-		if (GatheredResource > Upgrades[Level].MaxResourceInventory) GatheredResource = Upgrades[Level].MaxResourceInventory;
+	if (GatheringLevels.Contains(Level)) {
+		GatheredResource += GatheringLevels[Level].GatherAmount;
+		if (GatheredResource > GatheringLevels[Level].MaxResourceInventory) GatheredResource = GatheringLevels[Level].MaxResourceInventory;
 	}
 }
 
@@ -45,7 +45,7 @@ void AAlliance_ResourceGatherer::DepositResources()
 
 bool AAlliance_ResourceGatherer::CheckFullInventory()
 {
-	if (GatheredResource == Upgrades[Level].MaxResourceInventory) {
+	if (GatheredResource == GatheringLevels[Level].MaxResourceInventory) {
 		IsGathering = false;
 		SheathMainHand();
 		return true;
@@ -53,16 +53,26 @@ bool AAlliance_ResourceGatherer::CheckFullInventory()
 	return false;
 }
 
-FGathererUpgrades AAlliance_ResourceGatherer::GetCurrentBaseStats()
+int AAlliance_ResourceGatherer::GetGatherAmount()
 {
-	if (Upgrades.Contains(Level)) return Upgrades[Level];
-	else return FGathererUpgrades();
+	return GatherAmount;
 }
 
-FGathererUpgrades AAlliance_ResourceGatherer::GetUpgradeBaseStats()
+int AAlliance_ResourceGatherer::GetMaxResourceInventory()
 {
-	if (Upgrades.Contains(Level+1)) return Upgrades[Level+1];
-	else if(Upgrades.Contains(Level)) return Upgrades[Level];
-	else return FGathererUpgrades();
+	return MaxResourceInventory;
+}
+
+FGathererLevels AAlliance_ResourceGatherer::GetGathererBaseStats()
+{
+	if (GatheringLevels.Contains(Level)) return GatheringLevels[Level];
+	else return FGathererLevels();
+}
+
+FGathererLevels AAlliance_ResourceGatherer::GetGathererUpgradeStats()
+{
+	if (GatheringLevels.Contains(Level+1)) return GatheringLevels[Level+1];
+	else if(GatheringLevels.Contains(Level)) return GatheringLevels[Level];
+	else return FGathererLevels();
 }
 

@@ -270,14 +270,15 @@ void ABuildingActor::EndOverlap(UPrimitiveComponent* OverlappedComponent,
 }
 
 void ABuildingActor::Upgrade() {
-	if (Upgrades.Contains(Level+1) && PS->RemoveResources(Upgrades[Level].Cost)) {
+	if (Upgrades.Contains(Level+1)) {
+		Level++;
+		if (PS )PS->RemoveResources(Upgrades[Level].Cost);
 		TotalCosts += Upgrades[Level].Cost;
 
 		//if (UpgradeAudio) {
 		//	UpgradeAudio->SetActive(false);
 		//	UpgradeAudio->SetActive(true);
 		//}
-		Level++;
 
 		CalculateDamage();
 		CalculateMaxHealth();
@@ -311,6 +312,11 @@ float ABuildingActor::GetBuildXP() {
 
 float ABuildingActor::GetDamage() {
 	return Damage;
+}
+
+float ABuildingActor::GetDefence()
+{
+	return Defence;
 }
 
 void ABuildingActor::RestoreBuilding()

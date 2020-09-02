@@ -40,11 +40,7 @@ EBTNodeResult::Type UAI_FindClosestResource::ExecuteTask(UBehaviorTreeComponent&
 			if (SpawnedResources[x]->ResourceType == NPC->ResourceGatherType) {
 				if ((SpawnedResources[x] != nullptr) && (!SpawnedResources[x]->IsPendingKill())) {
 					DistanceToActor = (Origin - SpawnedResources[x]->GetActorLocation()).Size();
-					if (ClosestResource == nullptr) {
-						ClosestResource = SpawnedResources[x];
-						CRDistanceToActor = DistanceToActor;
-					}
-					else if (DistanceToActor < CRDistanceToActor) {
+					if (ClosestResource == nullptr || DistanceToActor < CRDistanceToActor) {
 						ClosestResource = SpawnedResources[x];
 						CRDistanceToActor = DistanceToActor;
 					}

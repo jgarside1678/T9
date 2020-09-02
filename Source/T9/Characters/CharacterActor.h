@@ -8,7 +8,7 @@
 #include "T9/Actors/Items/ItemActor.h"
 #include "CharacterActor.generated.h"
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct T9_API FCharacterLevels {
 
 	GENERATED_BODY()
@@ -245,6 +245,9 @@ public:
 		float GetDamage();
 
 	UFUNCTION()
+		float GetArmour();
+
+	UFUNCTION()
 		virtual void TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage);
 
 	UFUNCTION()
@@ -284,7 +287,11 @@ public:
 	UFUNCTION()
 		void ToggleInvulnerable(bool Input);
 
-	//UFUNCTION()
-	//	float GetDamage();
+
+	UFUNCTION(BlueprintCallable)
+		FCharacterLevels GetCurrentBaseStats();
+
+	UFUNCTION(BlueprintCallable)
+		FCharacterLevels GetUpgradeBaseStats();
 
 };

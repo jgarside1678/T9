@@ -31,9 +31,13 @@ AAlliance_Lumberjack::AAlliance_Lumberjack() {
 		//Equipment.DefaultMainHand = DefaultMainHandItem.Object;
 		ResetEquipment();
 	}
-	Upgrades.Add(1, FGathererUpgrades{ 50, 220, 200, 10 });
-	Upgrades.Add(2, FGathererUpgrades{ 50, 420, 200, 10 });
-	Upgrades.Add(3, FGathererUpgrades{ 50, 620, 200, 10 });
+	GatheringLevels.Add(1, FGathererLevels{ 50, 220 });
+	GatheringLevels.Add(2, FGathererLevels{ 50, 420});
+	GatheringLevels.Add(3, FGathererLevels{ 50, 620});
+
+	Levels.Add(1, FCharacterLevels{ 10, 0, 100, 20 });
+	Levels.Add(2, FCharacterLevels{ 20, 0, 300, 50 });
+	Levels.Add(3, FCharacterLevels{ 30, 0, 500, 100 });
 
 	
 

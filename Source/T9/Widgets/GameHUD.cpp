@@ -28,13 +28,13 @@ AGameHUD::AGameHUD() {
 
 
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> Build(TEXT("WidgetBlueprint'/Game/UI/BuildMenu_BP.BuildMenu_BP_C'"));
+	static ConstructorHelpers::FClassFinder<UUserWidget> Build(TEXT("WidgetBlueprint'/Game/UI/BuildMenu_BP1.BuildMenu_BP1_C'"));
 	if (Build.Succeeded()) BuildMenuWidget = CreateWidget<UBuildMenu>(GetWorld(), Build.Class);
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> MainHUD(TEXT("WidgetBlueprint'/Game/UI/HUDMenu.HUDMenu_C'"));
 	if(MainHUD.Succeeded())	HUDMenuWidget = CreateWidget<UHUDWidget>(GetWorld(), MainHUD.Class);
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> Select(TEXT("WidgetBlueprint'/Game/UI/SelectMenu1.SelectMenu1_C'"));
+	static ConstructorHelpers::FClassFinder<UUserWidget> Select(TEXT("WidgetBlueprint'/Game/UI/SelectMenu.SelectMenu_C'"));
 	if (Select.Succeeded()) SelectMenuWidget = CreateWidget<USelectMenuWidget>(GetWorld(), Select.Class);
 
 
@@ -101,6 +101,12 @@ void AGameHUD::ShowBuildMenu()
 		//	PC->SetInputMode(FInputModeGameOnly());
 		//}
 	}
+}
+
+void AGameHUD::HideSelectMenu()
+{
+	FHitResult EmptyHit;
+	SetGameObjectSelected(EmptyHit);
 }
 
 void AGameHUD::ShowInventory()

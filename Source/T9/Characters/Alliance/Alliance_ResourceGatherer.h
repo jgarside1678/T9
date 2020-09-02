@@ -13,7 +13,7 @@
 
 
 USTRUCT(BlueprintType)
-struct FGathererUpgrades {
+struct FGathererLevels {
 
 	GENERATED_BODY()
 
@@ -21,13 +21,7 @@ struct FGathererUpgrades {
 		int GatherAmount = 50;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MaxResourceInventory = 50;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MaxHealth = 100;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float Damage = 10;
+		int MaxResourceInventory = 50;
 
 };
 
@@ -37,6 +31,7 @@ UCLASS()
 class T9_API AAlliance_ResourceGatherer : public AAllianceCharacter
 {
 	GENERATED_BODY()
+
 public:
 
 	AAlliance_ResourceGatherer();
@@ -59,15 +54,27 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Gathering", Meta = (AllowPrivateAccess = "true"))
 		virtual bool CheckFullInventory();
 
+	UFUNCTION(BlueprintCallable, Category = "Gathering", Meta = (AllowPrivateAccess = "true"))
+		int GetGatherAmount();
 
 	UFUNCTION(BlueprintCallable, Category = "Gathering", Meta = (AllowPrivateAccess = "true"))
-		FGathererUpgrades GetCurrentBaseStats();
+		int GetMaxResourceInventory();
+
 
 	UFUNCTION(BlueprintCallable, Category = "Gathering", Meta = (AllowPrivateAccess = "true"))
-		FGathererUpgrades GetUpgradeBaseStats();
+		FGathererLevels GetGathererBaseStats();
+
+	UFUNCTION(BlueprintCallable, Category = "Gathering", Meta = (AllowPrivateAccess = "true"))
+		FGathererLevels GetGathererUpgradeStats();
 
 protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Gathering", Meta = (AllowPrivateAccess = "true"))
-		TMap<int32, FGathererUpgrades> Upgrades;
+		TMap<int32, FGathererLevels> GatheringLevels;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gathering")
+		int GatherAmount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gathering")
+		int MaxResourceInventory;
 };

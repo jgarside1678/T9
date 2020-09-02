@@ -34,6 +34,9 @@ public:
 	void HideBuildMenu();
 
 	UFUNCTION(BlueprintCallable)
+		void HideSelectMenu();
+
+	UFUNCTION(BlueprintCallable)
 	void ShowInventory();
 
 	UFUNCTION(BlueprintCallable)

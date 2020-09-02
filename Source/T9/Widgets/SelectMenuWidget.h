@@ -146,6 +146,9 @@ protected:
 		class UTextBlock* StatsName4;
 
 	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsName5;
+
+	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* StatsBase1;
 
 	UPROPERTY(meta = (BindWidget))
@@ -158,6 +161,9 @@ protected:
 		class UTextBlock* StatsBase4;
 
 	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsBase5;
+
+	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* StatsModified1;
 
 	UPROPERTY(meta = (BindWidget))
@@ -168,6 +174,56 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* StatsModified4;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsModified5;
+
+	//Character Stats
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsName1_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsName2_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsName3_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsName4_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsName5_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsBase1_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsBase2_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsBase3_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsBase4_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsBase5_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsModified1_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsModified2_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsModified3_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsModified4_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* StatsModified5_Character;
 
 	//Upgrade
 
@@ -182,6 +238,15 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* HealthOld;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* Armour;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* ArmourNew;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* ArmourOld;
 
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* UpgradesName1;
@@ -241,6 +306,9 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 		class UWrapBox* InventoryBox;
+
+	UPROPERTY(meta = (BindWidget))
+		class UWrapBox* InventoryBox_Character;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		TSubclassOf<UUserWidget> SelectSlot;

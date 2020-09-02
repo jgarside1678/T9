@@ -60,6 +60,7 @@ AActor* UBuildingSpawnComponent::Spawn() {
 		if (SpawnedActorRef) {
 			CurrentSpawnCount++;
 			UpdateCharactersInventory();
+			SpawnedActorRef->InitalLocation = SpawnLocation;
 			if(OwningBuilding)	SpawnedActorRef->SpawnInit(MyOwner, OwningBuilding->GetLevel());
 			else if(PS) SpawnedActorRef->SpawnInit(MyOwner, PS->GetLevel());
 			else SpawnedActorRef->SpawnInit(MyOwner);

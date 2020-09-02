@@ -166,6 +166,11 @@ float ACharacterActor::GetDamage() {
 	return Damage;
 }
 
+float ACharacterActor::GetArmour()
+{
+	return Armour;
+}
+
 void ACharacterActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage)
 {
 	int ScaledDamage = UKismetMathLibrary::FCeil(AmountOfDamage * ArmourDamageTakenMultiplier);
@@ -335,8 +340,10 @@ void ACharacterActor::ResetEquipment()
 	else {
 		OffHandItem->SetStaticMesh(NULL);
 	}
-
-	EquipMainHand();
+	CalculateDamage();
+	CalculateMaxHealth();
+	CalculateArmour();
+	SheathMainHand();
 }
 
 
@@ -350,4 +357,16 @@ bool ACharacterActor::CheckInvulnerable()
 void ACharacterActor::ToggleInvulnerable(bool Input)
 {
 	Invulnerable = Input;
+}
+
+FCharacterLevels ACharacterActor::GetCurrentBaseStats()
+{
+	if (Levels.Contains(Level)) return Levels[Level];
+	return FCharacterLevels();
+}
+
+FCharacterLevels ACharacterActor::GetUpgradeBaseStats()
+{
+	if (Levels.Contains(Level+1)) return Levels[Level+1];
+	return FCharacterLevels();
 }

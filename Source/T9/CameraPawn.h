@@ -70,6 +70,6 @@ public:
 		float MoveDirectionY;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
-		float ScrollAmount;
+		float ScrollAmount = 1500;
 
 };
