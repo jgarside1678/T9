@@ -30,6 +30,7 @@ AProjectile::AProjectile() :
 	ProjectileMovement->ProjectileGravityScale = 0.f;
 	ProjectileMovement->Velocity = FVector(0.f);
 	StaticMeshComp->SetCollisionProfileName("NoCollision");
+	BoxCollider->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel1);
 	BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::BeginOverlap);
 
 
@@ -44,7 +45,6 @@ void AProjectile::ProjectileInnit(AActor* TargetActor, float AttackDamage, AActo
 	Spawner = SpawnActor;
 	ProjectileMovementDelay = ProjectileDelay;
 	BuildingSpawn = Cast<ADefensiveBuildingActor>(Spawner);
-	TargetBuilding = Cast<ABuildingActor>(Target);
 	if (BuildingSpawn) ProjectileSpawn = BuildingSpawn->ProjectileSpawn;
 	if (ProjectileMovementDelay > 0) {
 		FTimerDelegate TickDelay;
@@ -59,8 +59,6 @@ void AProjectile::ProjectileInnit(AActor* TargetActor, float AttackDamage, AActo
 
 void AProjectile::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UStaticMeshComponent* StaticMesh = Cast<UStaticMeshComponent>(OtherComp);
-	if((TargetBuilding && StaticMesh) || !TargetBuilding)
 	if (Active && OtherActor == Target) {
 		IDamageInterface* Enemy = Cast<IDamageInterface>(Target);
 		if(Enemy != nullptr) Enemy->TakeDamage(this, Damage, DamageActorsOfType);

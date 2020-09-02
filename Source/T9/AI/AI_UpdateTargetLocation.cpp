@@ -37,7 +37,6 @@ void UAI_UpdateTargetLocation::OnBecomeRelevant(UBehaviorTreeComponent& OwnerCom
 
 void UAI_UpdateTargetLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) {
 	if (TargetBuilding) {
-		UE_LOG(LogTemp, Warning, TEXT("BuIlding"));
 		FVector ClosestBuildingBounds, ClosestBuildingOrigin;
 		ClosestBuildingBounds = TargetBuilding->BuildingExtent;
 		ClosestBuildingOrigin = TargetBuilding->GetActorLocation();
@@ -50,13 +49,10 @@ void UAI_UpdateTargetLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
 	}
 	else if (TargetCharacter) {
-		UE_LOG(LogTemp, Warning, TEXT("Charcter"));
 		FVector Min = FVector(TargetCharacter->GetActorLocation() - TargetCharacter->CapsuleRadius - 50);
 		FVector Max = FVector(TargetCharacter->GetActorLocation() + TargetCharacter->CapsuleRadius + 50);
 		FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(NPC->GetActorLocation(), Min - NPC->GetAttackRange(), Max + NPC->GetAttackRange());
 		Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
-		//FVector MoveVector = TargetCharacter->GetActorLocation() + TargetCharacter->CapsuleRadius;
-		//Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, MoveVector);
 	}
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 }

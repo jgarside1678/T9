@@ -13,19 +13,22 @@ struct T9_API FCharacterLevels {
 
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere, Category = "Attack")
+	UPROPERTY(VisibleAnywhere, Category = "CharacterLevelStats")
 		float BaseDamage = 5;
 
-	UPROPERTY(VisibleAnywhere, Category = "Attack")
+	UPROPERTY(VisibleAnywhere, Category = "CharacterLevelStats")
 		float AttackRange = 0;
 
-	UPROPERTY(VisibleAnywhere, Category = "Health")
+	UPROPERTY(VisibleAnywhere, Category = "CharacterLevelStats")
 		float MaxHealth = 100;
 
-	UPROPERTY(VisibleAnywhere, Category = "XP")
+	UPROPERTY(VisibleAnywhere, Category = "CharacterLevelStats")
+		float Armour = 0;
+
+	UPROPERTY(VisibleAnywhere, Category = "CharacterLevelStats")
 		float KillXP = 0;
 
-	UPROPERTY(VisibleAnywhere, Category = "XP")
+	UPROPERTY(VisibleAnywhere, Category = "CharacterLevelStats")
 		float KillGold = 0;
 };
 
@@ -65,17 +68,23 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, Category = "Leveling")
+	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
 		int Level = 1;
 
-	UPROPERTY(VisibleAnywhere, Category = "Attack")
+	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
 		float Damage;
 
-	UPROPERTY(VisibleAnywhere, Category = "Health")
+	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
 		float CurrentHealth;
 
-	UPROPERTY(VisibleAnywhere, Category = "Health")
+	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
 		float MaxHealth;
+
+	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
+		float Armour;
+
+	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
+		float ArmourDamageTakenMultiplier = 1;
 
 	UPROPERTY()
 		float HealthBarHeight = 140.0f;
@@ -150,6 +159,9 @@ protected:
 
 	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
 		virtual void CalculateMaxHealth(int BaseAdditionalHealth = 0);
+
+	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
+		virtual void CalculateArmour(int BaseAdditionalHealth = 0);
 
 	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
 	    virtual void DeathInit();

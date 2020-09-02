@@ -23,9 +23,6 @@ protected:
 	UPROPERTY()
 	   class AActor* Target;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Basics")
-		class ABuildingActor* TargetBuilding;
-
 	UPROPERTY()
 	   float Damage;
 	// Called when the game starts or when spawned

@@ -59,10 +59,10 @@ AActor* UBuildingSpawnComponent::Spawn() {
 		ActorsSpawned.Add(SpawnedActorRef);
 		if (SpawnedActorRef) {
 			CurrentSpawnCount++;
+			UpdateCharactersInventory();
 			if(OwningBuilding)	SpawnedActorRef->SpawnInit(MyOwner, OwningBuilding->GetLevel());
 			else if(PS) SpawnedActorRef->SpawnInit(MyOwner, PS->GetLevel());
 			else SpawnedActorRef->SpawnInit(MyOwner);
-			UpdateCharactersInventory();
 		}
 		if (SpawnedActorRef) return SpawnedActorRef;
 	}

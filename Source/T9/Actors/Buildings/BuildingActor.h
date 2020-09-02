@@ -95,6 +95,9 @@ struct FBuildingUpgrades {
 		float MaxHealth;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float Defence;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FBuildingCosts Cost;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -146,6 +149,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
 		float MaxHealth;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+		float Defence;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+		float DefenceDamageTakenMultiplier = 1;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		TEnumAsByte<DamageType> TypeOfDamage = Alliance;
@@ -330,6 +339,9 @@ public:
 
 	UFUNCTION()
 		void CalculateMaxHealth();
+
+	UFUNCTION()
+		void CalculateDefence();
 
 
 	//Functions used for Menus

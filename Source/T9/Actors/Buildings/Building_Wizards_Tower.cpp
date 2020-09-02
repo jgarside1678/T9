@@ -31,10 +31,10 @@ ABuilding_Wizards_Tower::ABuilding_Wizards_Tower(const FObjectInitializer& Objec
 	if (BaseMesh.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(BaseMesh.Object);
 	}
-	//{Level, FBuildingUpgrades{XP, FBuildingCosts{Gold, Wood, Stone, Food}, Maxhealth, FBuildingAttack{Damage, AttackSpeed, AttackRange}, FBuildingProduction{Gold, Wood, Stone, Food}}
-	Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 50, 1000.0f, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{40, 3, 10}, FBuildingProduction{} });
-	Upgrades.Add(2, FBuildingUpgrades{ 250.0f, 100, 5000.0f, FBuildingCosts{250, 20, 20, 20}, FBuildingAttack{60, 3, 10}, FBuildingProduction{}, BaseMesh1.Object});
-	Upgrades.Add(3, FBuildingUpgrades{ 500.0f, 150, 10000.0f, FBuildingCosts{500, 50, 50, 50}, FBuildingAttack{200, 3, 10}, FBuildingProduction{}, BaseMesh2.Object });
+	//{Level, FBuildingUpgrades{XP, PowerRating, Maxhealth, Defence, FBuildingCosts{Gold, Wood, Stone, Food}, FBuildingAttack{Damage, AttackSpeed, AttackRange}, FBuildingProduction{Gold, Wood, Stone, Food}}
+	Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 50, 1000.0f, 10.0f, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{40, 3, 10}, FBuildingProduction{} });
+	Upgrades.Add(2, FBuildingUpgrades{ 250.0f, 100, 5000.0f, 10.0f,FBuildingCosts{250, 20, 20, 20}, FBuildingAttack{60, 3, 10}, FBuildingProduction{}, BaseMesh1.Object});
+	Upgrades.Add(3, FBuildingUpgrades{ 500.0f, 150, 10000.0f, 10.0f, FBuildingCosts{500, 50, 50, 50}, FBuildingAttack{200, 3, 10}, FBuildingProduction{}, BaseMesh2.Object });
 	BuildingDetectionRange = Upgrades[Level].Attack.AttackRangeMultipler;
 	ResetHealth();
 	BuildingName = "Wizards Tower";

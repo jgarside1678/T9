@@ -14,6 +14,7 @@
 #include "T9/Characters/Enemies/EnemyCharacter.h"
 #include "T9/Characters/Alliance/AllianceCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "T9/Actors/GameGridActor.h"
 #include "Components/AudioComponent.h"
 #include "T9/T9GameModeBase.h"
@@ -34,13 +35,16 @@ ABuildingActor::ABuildingActor()
 	MeshDisplacement->SetRelativeRotation(FRotator(0, -90, 0));
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	StaticMeshComponent->SetupAttachment(MeshDisplacement);
+	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
+	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 	if (StaticMeshComponent) {
 		StaticMeshComponent->SetCustomDepthStencilValue(OutlineColour);
 		StaticMeshComponent->SetRenderCustomDepth(false);
 		StaticMeshComponent->SetGenerateOverlapEvents(true);
 	}
-
 	GridSpace = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GridSpace"));
+	GridSpace->SetCanEverAffectNavigation(false);
+	GridSpace->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GridSpace->SetupAttachment(RootComponent);
 	if (GridSpace) {
 		GridSpace->SetCustomDepthStencilValue(OutlineColour);
@@ -72,10 +76,11 @@ ABuildingActor::ABuildingActor()
 void ABuildingActor::BeginPlay()
 {
 	Super::BeginPlay();
-	if (Upgrades.Num() == 0) Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 100 ,100.0f, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{}, FBuildingProduction{0} });
+	if (Upgrades.Num() == 0) Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 100 ,100.0f, 0.0f, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{}, FBuildingProduction{0} });
 	if (StaticMeshComponent->GetStaticMesh()) {
+		BuildingDetectionRange = Upgrades[Level].Attack.AttackRangeMultipler;
 		BuildingExtent = StaticMeshComponent->GetStaticMesh()->GetBoundingBox().GetExtent() * StaticMeshComponent->GetRelativeScale3D();
-		BuildingRangeCollider->SetBoxExtent(BuildingExtent * Upgrades[Level].Attack.AttackRangeMultipler);
+		BuildingRangeCollider->SetBoxExtent(BuildingExtent * BuildingDetectionRange);
 		BuildingRangeCollider->OnComponentBeginOverlap.AddDynamic(this, &ABuildingActor::BeginOverlap);
 		BuildingRangeCollider->OnComponentEndOverlap.AddDynamic(this, &ABuildingActor::EndOverlap);
 		BuildingRangeCollider->ShapeColor = FColor::White;
@@ -89,6 +94,7 @@ void ABuildingActor::BeginPlay()
 
 	CalculateDamage();
 	CalculateMaxHealth();
+	CalculateDefence();
 	ResetHealth();
 	TArray<AActor*> CollidingActors;
 	GetOverlappingActors(CollidingActors, AEnemyCharacter::StaticClass());
@@ -189,8 +195,9 @@ UStaticMeshComponent* ABuildingActor::GetStaticMeshComp()
 
 void ABuildingActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage)
 {
+	int ScaledDamage = UKismetMathLibrary::FCeil(AmountOfDamage * DefenceDamageTakenMultiplier);
 	if((!Disabled && TypeDamage == All) || (!Disabled && TypeDamage == TypeOfDamage)) {
-		CurrentHealth -= AmountOfDamage;
+		CurrentHealth -= ScaledDamage;
 		if (CurrentHealth <= 0) {
 			SetDisabled(true);
 			CurrentHealth = 0;
@@ -274,6 +281,7 @@ void ABuildingActor::Upgrade() {
 
 		CalculateDamage();
 		CalculateMaxHealth();
+		CalculateDefence();
 
 		if(!Disabled) PS->AddPower(Upgrades[Level].PowerRating - Upgrades[Level - 1].PowerRating);
 
@@ -357,6 +365,15 @@ void ABuildingActor::CalculateMaxHealth()
 	MaxHealth *= ItemModifiers.ItemHealthMultiplier;
 }
 
+void ABuildingActor::CalculateDefence()
+{
+	Defence = 0;
+	if (Upgrades.Contains(Level)) Defence += Upgrades[Level].Defence;
+	Defence += ItemModifiers.ItemDefenceBase;
+	Defence *= ItemModifiers.ItemDefenceMultiplier;
+	DefenceDamageTakenMultiplier = UKismetMathLibrary::Exp(-Defence / 1000);
+}
+
 int ABuildingActor::GetBuildingCount()
 {
 	if(PS->GetBuildingCount(BuildingName)) return PS->GetBuildingCount(BuildingName);
@@ -396,4 +413,5 @@ void ABuildingActor::UpdateBuildingModifiers()
 	}
 	CalculateDamage();
 	CalculateMaxHealth();
+	CalculateDefence();
 }

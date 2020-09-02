@@ -9,6 +9,7 @@
 #include "T9/MainPlayerState.h"
 #include "T9/Actors/Components/BuildingSpawnComponent.h"
 #include "T9/MainPlayerController.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "UObject/ConstructorHelpers.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -27,6 +28,7 @@ ACharacterActor::ACharacterActor() :
 			WidgetComponent->SetWidgetClass(WidgetClass);
 		}
 	}
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
 	MainHandItem = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MainHandItemMesh"));
 	MainHandItem->SetupAttachment(GetMesh());
 	MainHandItem->SetSimulatePhysics(false);
@@ -100,6 +102,7 @@ void ACharacterActor::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invu
 	Level = SpawnLevel;
 	CalculateDamage();
 	CalculateMaxHealth();
+	CalculateArmour();
 	ResetHealth();
 	NeedsController = SpawnController;
 	if (!GetController() && NeedsController) {
@@ -165,14 +168,10 @@ float ACharacterActor::GetDamage() {
 
 void ACharacterActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage)
 {
+	int ScaledDamage = UKismetMathLibrary::FCeil(AmountOfDamage * ArmourDamageTakenMultiplier);
 	if ((!IsDead && TypeDamage == All) || (!IsDead && TypeDamage == TypeOfDamage)) {
-		CurrentHealth -= AmountOfDamage;
-		if (Levels.Contains(Level)) {
-			if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Level].MaxHealth);
-		}
-		else if (Levels.Contains(Levels.Num())) {
-			if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, Levels[Levels.Num()].MaxHealth);
-		}
+		CurrentHealth -= ScaledDamage;
+		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 		if (CurrentHealth <= 0) {
 			DeathInit();
 		}
@@ -198,6 +197,15 @@ void ACharacterActor::CalculateMaxHealth(int BaseAdditionalHealth)
 	MaxHealth += ItemModifiers.ItemHealthBase;
 	MaxHealth *= ItemModifiers.ItemHealthMultiplier;
 	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
+}
+
+void ACharacterActor::CalculateArmour(int BaseAdditionalHealth)
+{
+	Armour = 0;
+	if (Levels.Contains(Level)) Armour += Levels[Level].Armour;
+	Armour += ItemModifiers.ItemDefenceBase;
+	Armour *= ItemModifiers.ItemDefenceMultiplier;
+	ArmourDamageTakenMultiplier = UKismetMathLibrary::Exp(-Armour / 1000);
 }
 
 void ACharacterActor::DeathInit() {
@@ -250,7 +258,7 @@ void ACharacterActor::Attack(AActor* Target)
 {
 	if (AttackStreak >= AttackStreakForSpecial) SpecialAttack(Target);
 	else {
-		CalculateDamage(0);
+		CalculateDamage();
 		if (Target != CurrentTarget) AttackStreak = 0;
 		CurrentTarget = Target;
 		if (Projectile) {
@@ -306,6 +314,7 @@ void ACharacterActor::AddMainHand(AItemActor* NewMainHand)
 		ItemModifiers += Equipment.MainHand->GetItemModifiers();
 		CalculateDamage();
 		CalculateMaxHealth();
+		CalculateArmour();
 	}
 }
 

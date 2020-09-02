@@ -69,6 +69,12 @@ struct T9_API FItemModifiers {
 		float ItemHealthMultiplier = 1;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		int ItemDefenceBase = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		float ItemDefenceMultiplier = 1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		int ItemGatherBase = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
@@ -79,6 +85,8 @@ struct T9_API FItemModifiers {
 		this->ItemDamageMultiplier *= Right.ItemDamageMultiplier;
 		this->ItemHealthBase += Right.ItemHealthBase;
 		this->ItemHealthMultiplier *= Right.ItemHealthMultiplier;
+		this->ItemDefenceBase += Right.ItemDefenceBase;
+		this->ItemDefenceMultiplier *= Right.ItemDefenceMultiplier;
 		this->ItemGatherBase += Right.ItemGatherBase;
 		this->ItemGatherMultiplier *= Right.ItemGatherMultiplier;
 			return *this;
