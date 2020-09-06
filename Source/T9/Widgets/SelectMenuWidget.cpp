@@ -122,8 +122,10 @@ void USelectMenuWidget::ChangeTab() {
 
 void USelectMenuWidget::UpdateStatsTab()
 {
-	SelectedLevel->SetText(FText::FromString(FString::FromInt(SelectedObjectInterface->GetLevel())));
-	SelectedName->SetText(FText::FromString(SelectedObjectInterface->GetName()));
+	if (SelectedObjectInterface) {
+		SelectedLevel->SetText(FText::FromString(FString::FromInt(SelectedObjectInterface->GetLevel())));
+		SelectedName->SetText(FText::FromString(SelectedObjectInterface->GetName()));
+	}
 	if (SelectedBuilding) {
 		StatsName1->SetText(FText::FromString(ANSI_TO_TCHAR("Health")));
 		StatsName2->SetText(FText::FromString(ANSI_TO_TCHAR("Damage")));

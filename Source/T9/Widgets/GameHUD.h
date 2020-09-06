@@ -34,6 +34,9 @@ public:
 	void HideBuildMenu();
 
 	UFUNCTION(BlueprintCallable)
+		void ShowSelectMenu();
+
+	UFUNCTION(BlueprintCallable)
 		void HideSelectMenu();
 
 	UFUNCTION(BlueprintCallable)
@@ -134,6 +137,9 @@ protected:
 
 	UPROPERTY()
 		class USelectMenuWidget* SelectMenuWidget;
+
+	UPROPERTY()
+		class UQuickSelectMenu* QuickSelectMenu;
 
 	UPROPERTY()
 		class UHUDWidget* HUDMenuWidget;

@@ -28,7 +28,7 @@ AAlliance_Lumberjack::AAlliance_Lumberjack() {
 	//MeshInit();
 	GetMesh()->SetSkeletalMesh(MergeMeshes(FSkeletalMeshMergeParams(MeshPeices, MeshPeices[0]->Skeleton)));
 	if (DefaultMainHandItem.Succeeded()) {
-		//Equipment.DefaultMainHand = DefaultMainHandItem.Object;
+		Equipment.DefaultMainHand = DefaultMainHandItem.Object;
 		ResetEquipment();
 	}
 	GatheringLevels.Add(1, FGathererLevels{ 50, 220 });
@@ -39,7 +39,8 @@ AAlliance_Lumberjack::AAlliance_Lumberjack() {
 	Levels.Add(2, FCharacterLevels{ 20, 0, 300, 50 });
 	Levels.Add(3, FCharacterLevels{ 30, 0, 500, 100 });
 
-	
+	Equipment.DefaultMainHandTransformSheathed = FTransform(FRotator(349.199066, 32.399937, 262.799347), FVector(18.000000, 20.000000, -15.000000), FVector(0.4));
+	Equipment.DefaultMainHandTransformEquiped = FTransform(FRotator(-20, -30, 7), FVector(32, -40, 7), FVector(0.5));
 
 	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Alliance/StylizedHumanMale/Animations/Alliance_LumberJack_AnimBP.Alliance_LumberJack_AnimBP_C'"));
 	if (AnimationAsset.Succeeded()) {
@@ -56,19 +57,19 @@ void AAlliance_Lumberjack::BeginPlay() {
 void AAlliance_Lumberjack::SheathMainHand()
 {
 	Super::SheathMainHand();
-	if (MainHandItem) {
-		MainHandItem->SetRelativeScale3D(FVector(0.4));
-		MainHandItem->SetRelativeLocation(FVector(18.000000, 20.000000, -15.000000));
-		MainHandItem->SetRelativeRotation(FRotator(349.199066, 32.399937, 262.799347));
-	}
+	//if (MainHandItem) {
+	//	MainHandItem->SetRelativeScale3D(FVector(0.4));
+	//	MainHandItem->SetRelativeLocation(FVector(18.000000, 20.000000, -15.000000));
+	//	MainHandItem->SetRelativeRotation(FRotator(349.199066, 32.399937, 262.799347));
+	//}
 }
 
 void AAlliance_Lumberjack::EquipMainHand()
 {
 	Super::EquipMainHand();
-	if (MainHandItem) {
-		MainHandItem->SetRelativeScale3D(FVector(0.5));
-		MainHandItem->SetRelativeLocation(FVector(26.000000f, -62.000000f, 0.000000f));
-		MainHandItem->SetRelativeRotation(FRotator(331.199005f, 313.199158f, 0));
-	}
+	//if (MainHandItem) {
+	//	MainHandItem->SetRelativeScale3D(FVector(0.5));
+	//	MainHandItem->SetRelativeLocation(FVector(26.000000f, -62.000000f, 0.000000f));
+	//	MainHandItem->SetRelativeRotation(FRotator(331.199005f, 313.199158f, 0));
+	//}
 }

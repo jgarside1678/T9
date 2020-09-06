@@ -301,6 +301,8 @@ void ACharacterActor::SheathMainHand()
 {
 	if (MainHandItem) {
 		MainHandItem->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("spine_03"));
+		if (Equipment.MainHand) MainHandItem->SetRelativeTransform(Equipment.MainHand->GetItemSheathedTransform());
+		else if (Equipment.DefaultMainHand) MainHandItem->SetRelativeTransform(Equipment.DefaultMainHandTransformSheathed);
 	}
 }
 
@@ -308,6 +310,8 @@ void ACharacterActor::EquipMainHand()
 {
 	if (MainHandItem) {
 		MainHandItem->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("weaponShield_R"));
+		if (Equipment.MainHand) MainHandItem->SetRelativeTransform(Equipment.MainHand->GetItemEquipedTransform());
+		else if (Equipment.DefaultMainHand) MainHandItem->SetRelativeTransform(Equipment.DefaultMainHandTransformEquiped);
 	}
 }
 
@@ -320,6 +324,7 @@ void ACharacterActor::AddMainHand(AItemActor* NewMainHand)
 		CalculateDamage();
 		CalculateMaxHealth();
 		CalculateArmour();
+		SheathMainHand();
 	}
 }
 
@@ -343,7 +348,6 @@ void ACharacterActor::ResetEquipment()
 	CalculateDamage();
 	CalculateMaxHealth();
 	CalculateArmour();
-	SheathMainHand();
 }
 
 

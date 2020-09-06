@@ -4,7 +4,6 @@
 #include "Item_Wooden_Pickaxe.h"
 
 AItem_Wooden_Pickaxe::AItem_Wooden_Pickaxe() {
-	Modifiers = { 10, 1, 0, 1, 300, 1, 10, 1 };
 	ItemSocket = MainHand;
 	ItemName = "Wooden Pickaxe";
 	ItemType = Tool;

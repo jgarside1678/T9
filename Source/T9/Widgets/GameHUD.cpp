@@ -19,6 +19,7 @@
 #include "LevelUp.h"
 #include "ShowItems.h"
 #include "PlayerAlert.h"
+#include "QuickSelectMenu.h"
 #include "T9/Actors/GameGridActor.h"
 #include "T9/Actors/Items/ItemActor.h"
 #include "Inventory.h"
@@ -37,6 +38,8 @@ AGameHUD::AGameHUD() {
 	static ConstructorHelpers::FClassFinder<UUserWidget> Select(TEXT("WidgetBlueprint'/Game/UI/SelectMenu.SelectMenu_C'"));
 	if (Select.Succeeded()) SelectMenuWidget = CreateWidget<USelectMenuWidget>(GetWorld(), Select.Class);
 
+	static ConstructorHelpers::FClassFinder<UUserWidget> QuickSelect(TEXT("WidgetBlueprint'/Game/UI/QuickSelectMenu_BP.QuickSelectMenu_BP_C'"));
+	if (QuickSelect.Succeeded()) QuickSelectMenu = CreateWidget<UQuickSelectMenu>(GetWorld(), QuickSelect.Class);
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> Inventory(TEXT("WidgetBlueprint'/Game/UI/Inventory_BP.Inventory_BP_C'"));
 	if (Inventory.Succeeded()) InventoryWidget = CreateWidget<UInventory>(GetWorld(), Inventory.Class);
@@ -107,6 +110,11 @@ void AGameHUD::HideSelectMenu()
 {
 	FHitResult EmptyHit;
 	SetGameObjectSelected(EmptyHit);
+}
+
+void AGameHUD::ShowSelectMenu()
+{
+	if (SelectMenuWidget) SelectMenuWidget->AddToViewport();
 }
 
 void AGameHUD::ShowInventory()
@@ -184,6 +192,7 @@ void AGameHUD::HideBuildMenu()
 }
 
 
+
 void AGameHUD::AddPlayerAlert(FString Title, FString Message, float MessageTimeout)
 {
 	if(!PlayerMessage->IsInViewport()) ShowPlayerMessage();
@@ -205,15 +214,28 @@ void AGameHUD::SetGameObjectSelected(FHitResult Hit)
 	HitActor = Hit.Actor.Get();
 	if (HitActor)
 	{
+		float LocationX, LocationY;
+		PC->GetMousePosition(LocationX, LocationY);
 		SelectedObject = HitActor;
 		if (ISelectInterface* Select = Cast<ISelectInterface>(HitActor)) {
+			if (!QuickSelectMenu->IsInViewport()) QuickSelectMenu->AddToViewport();
+			QuickSelectMenu->SetPositionInViewport(FVector2D(LocationX, LocationY) - FVector2D(120, 30));
+			QuickSelectMenu->Init(SelectedObject);
 			Select->SetSelected();
-			SelectMenuWidget->AddToViewport();
 		}
 		else if (AItemActor* Item = Cast<AItemActor>(SelectedObject)) {
-			if (Item->WidgetComponent) Item->WidgetComponent->SetVisibility(true);
+			if (Item->WidgetComponent) {
+				Item->WidgetComponent->SetVisibility(true);
+			}
 		}
-		else SelectMenuWidget->RemoveFromViewport();
+		else {
+			if (SelectMenuWidget->IsInViewport()) SelectMenuWidget->RemoveFromViewport();
+			if (QuickSelectMenu->IsInViewport()) QuickSelectMenu->RemoveFromViewport();
+		}
+	}
+	else {
+		if (SelectMenuWidget->IsInViewport()) SelectMenuWidget->RemoveFromViewport();
+		if (QuickSelectMenu->IsInViewport()) QuickSelectMenu->RemoveFromViewport();
 	}
 	if (ShowItemsState) HideShowItems();
 }

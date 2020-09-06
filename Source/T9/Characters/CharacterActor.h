@@ -41,13 +41,22 @@ struct T9_API FCharacterEquipment {
 		AItemActor* MainHand = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = "Equipment")
-		UStaticMesh* DefaultMainHand = nullptr;
+		class UStaticMesh* DefaultMainHand = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Equipment")
+		FTransform DefaultMainHandTransformEquiped;
+
+	UPROPERTY(VisibleAnywhere, Category = "Equipment")
+		FTransform DefaultMainHandTransformSheathed;
 
 	UPROPERTY(VisibleAnywhere, Category = "Equipment")
 		AItemActor* OffHand = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = "Equipment")
-		UStaticMesh* DefaultOffHand = nullptr;
+		class UStaticMesh* DefaultOffHand = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Equipment")
+		FTransform DefaultOffHandTransform;
 };
 
 

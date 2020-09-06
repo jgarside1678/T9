@@ -135,9 +135,6 @@ protected:
 	UPROPERTY()
 		class AActor* Target;
 
-	UFUNCTION(BlueprintCallable)
-		virtual void Upgrade();
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		int Level = 1;
 
@@ -236,6 +233,9 @@ public:
 
 	UFUNCTION(Category = "Building Basics")
 		int GetMaxBuildingCount();
+
+	UFUNCTION(BlueprintCallable)
+		virtual void Upgrade();
 
 	//For initalising spawn arguments
 	UFUNCTION()

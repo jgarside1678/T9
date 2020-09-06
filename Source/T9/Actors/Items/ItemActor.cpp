@@ -64,9 +64,10 @@ AItemActor::AItemActor()
 	static ConstructorHelpers::FClassFinder<UUserWidget> Widget(TEXT("WidgetBlueprint'/Game/UI/ItemPickUp.ItemPickUp_C'"));
 	if (Widget.Succeeded()) WidgetClass = Widget.Class;
 	if (WidgetComponent) {
-		WidgetComponent->SetupAttachment(ItemAnchor);
+		WidgetComponent->SetupAttachment(RootComponent);
 		WidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
-		WidgetComponent->SetRelativeLocation(FVector(0,0, -800.0f));
+		//WidgetComponent->SetRelativeLocation(FVector(0,0, -800.0f));
+		WidgetComponent->SetRelativeLocation(FVector(0,-220, -400));
 		if (WidgetClass != nullptr) {
 			WidgetComponent->SetWidgetClass(WidgetClass);
 		}
@@ -79,7 +80,7 @@ AItemActor::AItemActor()
 void AItemActor::BeginPlay()
 {
 	Super::BeginPlay();
-	BoxCollider->SetBoxExtent(ItemMesh->GetStaticMesh()->GetBounds().BoxExtent);
+	BoxCollider->SetBoxExtent(FVector(70));
 	if (Effects.Contains(ItemRarity)) {
 		UNiagaraFunctionLibrary::SpawnSystemAttached(Effects[ItemRarity], BoxCollider, FName(""), FVector(0, 0, -100), FRotator(0), EAttachLocation::SnapToTarget,false);
 	}
@@ -170,4 +171,14 @@ UStaticMesh* AItemActor::GetItemMesh()
 FItemModifiers AItemActor::GetItemModifiers()
 {
 	return Modifiers;
+}
+
+FTransform AItemActor::GetItemEquipedTransform()
+{
+	return ItemEquipedTransform;
+}
+
+FTransform AItemActor::GetItemSheathedTransform()
+{
+	return ItemSheathedTransform;
 }

@@ -23,6 +23,7 @@ enum SubType
 {
 	AnySubType UMETA(DisplayName = "Any"),
 	PickAxe UMETA(DisplayName = "PickAxe"),
+	Hatchet UMETA(DisplayName = "Hatchet"),
 	Axe UMETA(DisplayName = "Axe"),
 	Bow UMETA(DisplayName = "Bow"),
 	Spear UMETA(DisplayName = "Spear")
@@ -112,6 +113,12 @@ protected:
 		void Despawn();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		FTransform ItemEquipedTransform;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		FTransform ItemSheathedTransform;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		class UBoxComponent* BoxCollider;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
@@ -197,5 +204,13 @@ public:
 
 	UFUNCTION()
 		FItemModifiers GetItemModifiers();
+
+
+	UFUNCTION()
+		FTransform GetItemEquipedTransform();
+
+
+	UFUNCTION()
+		FTransform GetItemSheathedTransform();
 
 };
