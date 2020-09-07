@@ -16,6 +16,32 @@ enum Resources
 	Food UMETA(DisplayName = "Food")
 };
 
+UENUM()
+enum Tiers
+{
+	Tier1 UMETA(DisplayName = "Tier1"),
+	Tier2 UMETA(DisplayName = "Tier2"),
+	Tier3 UMETA(DisplayName = "Tier3")
+};
+
+USTRUCT(BlueprintType)
+struct FResourceTierStats {
+
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class UStaticMesh* ResourceMesh = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TSubclassOf<ACharacter> ResourceSpawnCharacter = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float ResourceGatherMultiplier = 1;
+};
+
 
 UCLASS()
 class T9_API AResourceActor : public AActor, public ISelectInterface
@@ -34,6 +60,12 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Resource Static Meshs", Meta = (AllowPrivateAccess = "true"))
+		TEnumAsByte<Tiers> Tier;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Resource Static Meshs", Meta = (AllowPrivateAccess = "true"))
+		TArray<ACharacter*> ResourceSpawns;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Resource Static Meshs", Meta = (AllowPrivateAccess = "true"))
 		class UInstancedStaticMeshComponent* StaticMeshComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Resource Box Collider", Meta = (AllowPrivateAccess = "true"))
@@ -50,6 +82,9 @@ protected:
 
 	UPROPERTY()
 	    TArray<UStaticMeshComponent*> Meshs;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gathering")
+		TMap<TEnumAsByte<Tiers>, FResourceTierStats> ResourceTiers;
 
 	UPROPERTY()
 		int OutlineColour = 1;
@@ -80,6 +115,6 @@ public:
 		class UStaticMeshComponent* GridSpace;
 
 	UFUNCTION()
-		void ResourceInit(class AGameGridActor* Grid);
+		virtual void ResourceInit(class AGameGridActor* Grid, TEnumAsByte<Tiers> StartingResourceTier = Tier1);
 
 };

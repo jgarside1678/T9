@@ -45,10 +45,8 @@ protected:
 
 public:	
 
-	FVector BoxExtent;
-	FVector Origin;
-	float BuildingX;
-	float BuildingY;
+	FVector Origin, BoxExtent;
+	float BuildingX, BuildingY;
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 

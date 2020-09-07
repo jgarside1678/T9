@@ -18,11 +18,13 @@ AResourceActor::AResourceActor()
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
 	BoxCollider->SetupAttachment(RootComponent);
 	BoxCollider->SetCollisionProfileName("Trigger");
+	BoxCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Ignore);
 	RootComponent = BoxCollider;
 	StaticMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Static Mesh Component"));
 	StaticMeshComponent->SetupAttachment(RootComponent);
 	GridSpace = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GridSpace"));
 	GridSpace->SetupAttachment(RootComponent);
+	GridSpace->SetCollisionProfileName("NoCollision");
 	if (GridSpace) {
 		GridSpace->SetCustomDepthStencilValue(OutlineColour);
 		GridSpace->SetRenderCustomDepth(true);
@@ -58,27 +60,33 @@ void AResourceActor::Tick(float DeltaTime)
 void AResourceActor::GetClosestStaticMesh(FVector Location, FVector& ClosestMeshLocation, FVector& ClosestMeshBounds)
 {
 	FTransform ComponentTransform;
+	FVector ClosestInstanceBounds;
+	FVector MeshBounds = StaticMeshComponent->GetStaticMesh()->GetBounds().BoxExtent;;
 	float ClosestDistance = 1000000;
 	for (int x = 0; x < StaticMeshComponent->GetInstanceCount(); x++) {
 		StaticMeshComponent->GetInstanceTransform(x, ComponentTransform, true);
 		float Distance = (Location - ComponentTransform.GetLocation()).Size();
 		if (Distance < ClosestDistance) {
 			ClosestDistance = Distance;
+			ClosestInstanceBounds = MeshBounds * ComponentTransform.GetScale3D();
 			ClosestMeshLocation = ComponentTransform.GetLocation();
 		}
 	}
-	ClosestMeshBounds = FVector(CollectionDistance.X * ComponentTransform.GetScale3D().X, CollectionDistance.Y * ComponentTransform.GetScale3D().Y, CollectionDistance.Z * ComponentTransform.GetScale3D().Z);
-	//DrawDebugBox(GetWorld(), ComponentLocation, FVector(CollectionDistance.X * MeshScale.X, CollectionDistance.Y * MeshScale.Y, CollectionDistance.Z * MeshScale.Z), FQuat(GetActorRotation()), FColor::Green, true, -1, 0, 10);
+	ClosestMeshBounds = ClosestInstanceBounds;
+	//ClosestMeshBounds = FVector(CollectionDistance.X * ClosestTransform.GetScale3D().X, CollectionDistance.Y * ClosestTransform.GetScale3D().Y, CollectionDistance.Z * ClosestTransform.GetScale3D().Z);
+	DrawDebugBox(GetWorld(), ClosestMeshLocation, ClosestInstanceBounds, FColor::Red, true, -1, 0, 10);
 }
 
 void AResourceActor::SetSelected()
 {
 	StaticMeshComponent->SetRenderCustomDepth(true);
+	for (int x = 0; x < ResourceSpawns.Num(); x++) ResourceSpawns[x]->GetMesh()->SetRenderCustomDepth(true);
 }
 
 void AResourceActor::SetUnSelected()
 {
 	StaticMeshComponent->SetRenderCustomDepth(false);
+	for (int x = 0; x < ResourceSpawns.Num(); x++) ResourceSpawns[x]->GetMesh()->SetRenderCustomDepth(false);
 }
 
 FString AResourceActor::GetName()
@@ -86,11 +94,15 @@ FString AResourceActor::GetName()
 	return Name;
 }
 
-void AResourceActor::ResourceInit(AGameGridActor* Grid)
+void AResourceActor::ResourceInit(AGameGridActor* Grid, TEnumAsByte<Tiers> StartingResourceTier)
 {
 	FVector Location = GetActorLocation() - (BoxExtentMultiplier * 100);
 	Grid->SetTilesActive(Location, BoxExtentMultiplier.X*2, BoxExtentMultiplier.Y*2);
 	GridSpace->SetWorldScale3D(FVector(BoxExtentMultiplier.X * 2, BoxExtentMultiplier.Y * 2, 1));
 	GridSpace->SetRelativeLocation(FVector(0, 0, 1));
+	if (ResourceTiers.Contains(StartingResourceTier) && ResourceTiers[StartingResourceTier].ResourceMesh) {
+		StaticMeshComponent->SetStaticMesh(ResourceTiers[StartingResourceTier].ResourceMesh);
+		Name = ResourceTiers[StartingResourceTier].Name;
+	}
 }
 

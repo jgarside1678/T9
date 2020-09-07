@@ -14,6 +14,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "T9/Actors/Resources/Resource_Wood.h"
 #include "T9/Actors/Resources/Resource_Stone.h"
+#include "T9/Actors/Resources/Resource_Food.h"
 #include "DrawDebugHelpers.h"
 #include "Internationalization/Text.h"
 
@@ -402,7 +403,7 @@ void AGameGridActor::GenerateTerrain() {
 		float XPosition = (Sections[x].X *100) +GetActorLocation().X;
 		float YPosition = (Sections[x].Y * 100) + GetActorLocation().Y;
 		WoodResource = GetWorld()->SpawnActor<AResourceActor>(AResource_Wood::StaticClass(), FVector(XPosition, YPosition, 5.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
-		WoodResource->ResourceInit(this);
+		WoodResource->ResourceInit(this, (Tiers)FMath::RandRange(0, 2));
 	}
 
 	GetRandomSections(Sections);
@@ -412,7 +413,17 @@ void AGameGridActor::GenerateTerrain() {
 		float XPosition = (Sections[x].X * 100) + GetActorLocation().X;
 		float YPosition = (Sections[x].Y * 100) + GetActorLocation().Y;
 		StoneResource = GetWorld()->SpawnActor<AResourceActor>(AResource_Stone::StaticClass(), FVector(XPosition, YPosition, 5.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
-		StoneResource->ResourceInit(this);
+		StoneResource->ResourceInit(this, (Tiers)FMath::RandRange(0, 2));
+	}
+
+	GetRandomSections(Sections);
+	for (int x = 0; x < Sections.Num(); x++) {
+		AResourceActor* FoodResource;
+		FActorSpawnParameters SpawnParams;
+		float XPosition = (Sections[x].X * 100) + GetActorLocation().X;
+		float YPosition = (Sections[x].Y * 100) + GetActorLocation().Y;
+		FoodResource = GetWorld()->SpawnActor<AResourceActor>(AResource_Food::StaticClass(), FVector(XPosition, YPosition, 5.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		FoodResource->ResourceInit(this, (Tiers)FMath::RandRange(0, 2));
 	}
 
 }

@@ -15,6 +15,9 @@
 #include "BuildMenu.h"
 #include "InventorySlot.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Components/StaticMeshComponent.h"
+#include "T9/Actors/Resources/ResourceCharacter.h"
+#include "T9/Actors/Resources/ResourceActor.h"
 //#include "Blueprint/WidgetLayoutLibrary.h"
 #include "LevelUp.h"
 #include "ShowItems.h"
@@ -203,6 +206,8 @@ void AGameHUD::AddPlayerAlert(FString Title, FString Message, float MessageTimeo
 //Sets actual Objects in game selected
 void AGameHUD::SetGameObjectSelected(FHitResult Hit)
 {
+	if (SelectMenuWidget->IsInViewport()) SelectMenuWidget->RemoveFromViewport();
+	if (QuickSelectMenu->IsInViewport()) QuickSelectMenu->RemoveFromViewport();
 	if (SelectedObject) {
 		if (SelectMenuWidget)SelectMenuWidget->RemoveFromViewport();
 		if (AItemActor* Item = Cast<AItemActor>(SelectedObject)) {
@@ -222,20 +227,19 @@ void AGameHUD::SetGameObjectSelected(FHitResult Hit)
 			QuickSelectMenu->SetPositionInViewport(FVector2D(LocationX, LocationY) - FVector2D(120, 30));
 			QuickSelectMenu->Init(SelectedObject);
 			Select->SetSelected();
+
 		}
 		else if (AItemActor* Item = Cast<AItemActor>(SelectedObject)) {
 			if (Item->WidgetComponent) {
 				Item->WidgetComponent->SetVisibility(true);
 			}
 		}
-		else {
-			if (SelectMenuWidget->IsInViewport()) SelectMenuWidget->RemoveFromViewport();
-			if (QuickSelectMenu->IsInViewport()) QuickSelectMenu->RemoveFromViewport();
+		else if (AResourceCharacter* Spawned = Cast<AResourceCharacter>(HitActor)) {
+			SelectedObject = Spawned->GetParentResource();
+			QuickSelectMenu->SetPositionInViewport(FVector2D(LocationX, LocationY) - FVector2D(120, 30));
+			QuickSelectMenu->Init(SelectedObject);
+			Spawned->GetParentResource()->SetSelected();
 		}
-	}
-	else {
-		if (SelectMenuWidget->IsInViewport()) SelectMenuWidget->RemoveFromViewport();
-		if (QuickSelectMenu->IsInViewport()) QuickSelectMenu->RemoveFromViewport();
 	}
 	if (ShowItemsState) HideShowItems();
 }

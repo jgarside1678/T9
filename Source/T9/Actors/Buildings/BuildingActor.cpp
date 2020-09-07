@@ -27,6 +27,7 @@ ABuildingActor::ABuildingActor()
 	SetActorTickInterval(0.025);
 	BuildingRangeCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("DefenceRangeCollider"));
 	BuildingRangeCollider->SetCollisionProfileName("Trigger");
+	BuildingRangeCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Ignore);
 	BuildingRangeCollider->SetCanEverAffectNavigation(false);
 	RootComponent = BuildingRangeCollider;
 	//Needed Because all the meshs are made for a right handed cartesian graph ffs.

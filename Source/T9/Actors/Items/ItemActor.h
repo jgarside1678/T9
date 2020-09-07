@@ -26,7 +26,10 @@ enum SubType
 	Hatchet UMETA(DisplayName = "Hatchet"),
 	Axe UMETA(DisplayName = "Axe"),
 	Bow UMETA(DisplayName = "Bow"),
-	Spear UMETA(DisplayName = "Spear")
+	CrossBow UMETA(DisplayName = "CrossBow"),
+	Spear UMETA(DisplayName = "Spear"),
+	Sword UMETA(DisplayName = "Sword"),
+	Shield UMETA(DisplayName = "Shield")
 };
 
 UENUM(BlueprintType)

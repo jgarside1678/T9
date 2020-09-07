@@ -88,7 +88,8 @@ void AMainPlayerController::ToggleInventory()
 
 void AMainPlayerController::SelectPressed() {
 	FHitResult Hit;
-	bool ValidHit = GetHitResultUnderCursorByChannel((ETraceTypeQuery)ECC_PhysicsBody, true, Hit);
+	GetHitResultUnderCursor(ECC_GameTraceChannel2, true, Hit);
+	//bool ValidHit = GetHitResultUnderCursorByChannel((ETraceTypeQuery)ECC_GameTraceChannel2, true, Hit);
 	if (Hit.Actor.IsValid()) {
 		HUDPointer->SetGameObjectSelected(Hit);
 	}
