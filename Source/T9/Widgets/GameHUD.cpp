@@ -213,7 +213,7 @@ void AGameHUD::SetGameObjectSelected(FHitResult Hit)
 		if (AItemActor* Item = Cast<AItemActor>(SelectedObject)) {
 			if(Item->WidgetComponent) Item->WidgetComponent->SetVisibility(false);
 		}
-		if (ISelectInterface* Select = Cast<ISelectInterface>(HitActor)) Select->SetUnSelected();
+		if (ISelectInterface* Select = Cast<ISelectInterface>(SelectedObject)) Select->SetUnSelected();
 	}
 
 	HitActor = Hit.Actor.Get();

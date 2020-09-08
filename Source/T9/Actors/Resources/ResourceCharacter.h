@@ -32,10 +32,19 @@ protected:
 		bool Dead = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
+		ACharacter* CombatTarget = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
 		float MaxResourceAmount;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
 		float CurrentResourceAmount;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
+	    TArray<class UMaterialInstance*> Materials;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
+	     class UAnimMontage* IdleMontage;
 
 public:	
 	// Called every frame

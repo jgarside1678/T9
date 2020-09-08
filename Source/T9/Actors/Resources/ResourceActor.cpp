@@ -87,6 +87,7 @@ void AResourceActor::SetUnSelected()
 {
 	StaticMeshComponent->SetRenderCustomDepth(false);
 	for (int x = 0; x < ResourceSpawns.Num(); x++) ResourceSpawns[x]->GetMesh()->SetRenderCustomDepth(false);
+
 }
 
 FString AResourceActor::GetName()
@@ -100,9 +101,10 @@ void AResourceActor::ResourceInit(AGameGridActor* Grid, TEnumAsByte<Tiers> Start
 	Grid->SetTilesActive(Location, BoxExtentMultiplier.X*2, BoxExtentMultiplier.Y*2);
 	GridSpace->SetWorldScale3D(FVector(BoxExtentMultiplier.X * 2, BoxExtentMultiplier.Y * 2, 1));
 	GridSpace->SetRelativeLocation(FVector(0, 0, 1));
-	if (ResourceTiers.Contains(StartingResourceTier) && ResourceTiers[StartingResourceTier].ResourceMesh) {
-		StaticMeshComponent->SetStaticMesh(ResourceTiers[StartingResourceTier].ResourceMesh);
+	if (ResourceTiers.Contains(StartingResourceTier)) {
+		Tier = StartingResourceTier;
 		Name = ResourceTiers[StartingResourceTier].Name;
+		if(ResourceTiers[StartingResourceTier].ResourceMesh) StaticMeshComponent->SetStaticMesh(ResourceTiers[StartingResourceTier].ResourceMesh);
 	}
 }
 

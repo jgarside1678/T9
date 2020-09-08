@@ -6,6 +6,8 @@
 #include "T9/Actors/Components/BuildingSpawnComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "T9/Actors/Resources/ResourceCharacter_Boar.h"
+#include "T9/Actors/Resources/ResourceCharacter_Goat.h"
+#include "T9/Actors/Resources/ResourceCharacter_Bear.h"
 #include "T9/Actors/Resources/ResourceCharacter.h"
 #include "Components/StaticMeshComponent.h"
 
@@ -13,9 +15,9 @@ AResource_Food::AResource_Food() {
 	ResourceType = Food;
 	CollectionDistance = FVector(50);
 	BoxExtentMultiplier = FVector(8);
-	ResourceTiers.Add(Tier1, FResourceTierStats{ "Wild Goats", nullptr, AResourceCharacter_Boar::StaticClass(), 1 });
+	ResourceTiers.Add(Tier1, FResourceTierStats{ "Wild Goats", nullptr, AResourceCharacter_Goat::StaticClass(), 1 });
 	ResourceTiers.Add(Tier2, FResourceTierStats{ "Wild Boars", nullptr, AResourceCharacter_Boar::StaticClass(), 1.25 });
-	ResourceTiers.Add(Tier3, FResourceTierStats{ "Wild Bears",nullptr, AResourceCharacter_Boar::StaticClass(), 1.5 });
+	ResourceTiers.Add(Tier3, FResourceTierStats{ "Wild Bears",nullptr, AResourceCharacter_Bear::StaticClass(), 1.5 });
 	if (ResourceTiers.Contains(Tier)) Name = ResourceTiers[Tier].Name;
 	BoxCollider->SetBoxExtent(BoxExtentMultiplier * 100);
 
@@ -32,10 +34,7 @@ AResource_Food::AResource_Food() {
 	Sections.Add(FVector2D(FMath::RandRange(-100, 100), FMath::RandRange(300, 100)));
 	Sections.Add(FVector2D(FMath::RandRange(100, 300), FMath::RandRange(300, 100)));
 
-
-	for (int x = 0; x < Sections.Num(); x++) {
-		MaxSpawnCount++;
-	}
+	MaxSpawnCount = FMath::RandRange(3,5);
 
 
 }
@@ -72,9 +71,13 @@ void AResource_Food::Respawn() {
 ACharacter* AResource_Food::Spawn() {
 	if (CurrentSpawnCount < MaxSpawnCount) {
 		FActorSpawnParameters SpawnParams;
-		FVector SpawnLocation = UKismetMathLibrary::RandomPointInBoundingBox(GetActorLocation(), BoxCollider->GetScaledBoxExtent());
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		AResourceCharacter* SpawnedActorRef = GetWorld()->SpawnActor<AResourceCharacter>(ResourceTiers[Tier].ResourceSpawnCharacter, FVector(SpawnLocation.X,SpawnLocation.Y, 100), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		FVector SpawnLocation;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::DontSpawnIfColliding;
+		AResourceCharacter* SpawnedActorRef = nullptr;
+		while (!SpawnedActorRef) {
+			SpawnLocation = UKismetMathLibrary::RandomPointInBoundingBox(GetActorLocation(), BoxCollider->GetScaledBoxExtent());
+			SpawnedActorRef = GetWorld()->SpawnActor<AResourceCharacter>(ResourceTiers[Tier].ResourceSpawnCharacter, FVector(SpawnLocation.X, SpawnLocation.Y, 100), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		}
 		ResourceSpawns.Add(SpawnedActorRef);
 		if (SpawnedActorRef) {
 			CurrentSpawnCount++;
