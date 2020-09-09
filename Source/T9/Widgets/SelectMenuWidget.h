@@ -43,6 +43,9 @@ public:
 
 	virtual void NativePreConstruct() override;
 
+	UPROPERTY(meta = (BindWidget))
+		class UImage* BuildingImage;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Selectwidget")
 		ESelectTab CurrentTab = ESelectTab::StatsTab;
 

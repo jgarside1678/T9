@@ -8,6 +8,7 @@
 #include "Components/TextBlock.h"
 #include "Components/Overlay.h"
 #include "Components/PanelWidget.h"
+#include "Components/Image.h"
 #include "Components/WrapBox.h"
 #include "InventorySlot.h"
 #include "T9/Actors/Components/InventoryComponent.h"
@@ -42,6 +43,7 @@ void USelectMenuWidget::NativeConstruct()
 		SelectedBuilding = Cast<ABuildingActor>(SelectedActor);
 		SelectedObjectInterface = TScriptInterface<ISelectInterface>(SelectedActor);
 		if (SelectedBuilding) {
+			BuildingImage->SetBrushFromTexture(SelectedBuilding->GetImage());
 			SelectedInventory = SelectedBuilding->GetInventory();
 			SelectedInventory->OnInventoryUpdate.AddUniqueDynamic(this, &USelectMenuWidget::InitializeSelectedInventory);
 			UActorComponent* ActorComp = SelectedBuilding->GetComponentByClass(UBuildingSpawnComponent::StaticClass());
@@ -127,21 +129,22 @@ void USelectMenuWidget::UpdateStatsTab()
 		SelectedName->SetText(FText::FromString(SelectedObjectInterface->GetName()));
 	}
 	if (SelectedBuilding) {
+		struct FBuildingUpgrades BuildingUpgrades = SelectedBuilding->GetCurrentBaseStats();
 		StatsName1->SetText(FText::FromString(ANSI_TO_TCHAR("Health")));
 		StatsName2->SetText(FText::FromString(ANSI_TO_TCHAR("Damage")));
 		StatsName3->SetText(FText::FromString(ANSI_TO_TCHAR("Defence")));
 		StatsName4->SetText(FText::FromString(ANSI_TO_TCHAR("Speed")));
 		StatsName5->SetText(FText::FromString(ANSI_TO_TCHAR("Range")));
-		StatsBase1->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().MaxHealth)));
-		StatsBase2->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Attack.Damage)));
-		StatsBase3->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Defence)));
-		StatsBase4->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Attack.AttackSpeed)));
-		StatsBase5->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Attack.AttackRangeMultipler)));
-		StatsModified1->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetMaxHealth())));
-		StatsModified2->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetDamage())));
-		StatsModified3->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetDefence())));
-		StatsModified4->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Attack.AttackSpeed)));
-		StatsModified5->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Attack.AttackRangeMultipler)));
+		StatsBase1->SetText(FText::FromString(FString::FromInt(BuildingUpgrades.MaxHealth)));
+		StatsBase2->SetText(FText::FromString(FString::FromInt(BuildingUpgrades.Attack.Damage)));
+		StatsBase3->SetText(FText::FromString(FString::FromInt(BuildingUpgrades.Defence)));
+		StatsBase4->SetText(FText::FromString(FString::FromInt(BuildingUpgrades.Attack.AttackSpeed)));
+		StatsBase5->SetText(FText::FromString(FString::FromInt(BuildingUpgrades.Attack.AttackRangeMultipler)));
+		StatsModified1->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetMaxHealth() - BuildingUpgrades.MaxHealth)));
+		StatsModified2->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetDamage() - BuildingUpgrades.Attack.Damage)));
+		StatsModified3->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetDefence() - BuildingUpgrades.Defence)));
+		StatsModified4->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Attack.AttackSpeed - BuildingUpgrades.Attack.AttackSpeed)));
+		StatsModified5->SetText(FText::FromString(FString::FromInt(SelectedBuilding->GetCurrentBaseStats().Attack.AttackRangeMultipler - BuildingUpgrades.Attack.AttackRangeMultipler)));
 		if (SpawnComp && SpawnComp->ActorsSpawned[0]) {
 			AAlliance_ResourceGatherer* ResourceCharacter = (AAlliance_ResourceGatherer*)SpawnComp->ActorsSpawned[0];
 			StatsName1_Character->SetText(FText::FromString(ANSI_TO_TCHAR("Gatherer Amount")));

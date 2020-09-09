@@ -77,7 +77,7 @@ ABuildingActor::ABuildingActor()
 void ABuildingActor::BeginPlay()
 {
 	Super::BeginPlay();
-	if (Upgrades.Num() == 0) Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 100 ,100.0f, 0.0f, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{}, FBuildingProduction{0} });
+	if (Upgrades.Num() == 0) Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 100 ,100.0f, 0.0f, nullptr, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{}, FBuildingProduction{0} });
 	if (StaticMeshComponent->GetStaticMesh()) {
 		BuildingDetectionRange = Upgrades[Level].Attack.AttackRangeMultipler;
 		BuildingExtent = StaticMeshComponent->GetStaticMesh()->GetBoundingBox().GetExtent() * StaticMeshComponent->GetRelativeScale3D();
@@ -271,9 +271,8 @@ void ABuildingActor::EndOverlap(UPrimitiveComponent* OverlappedComponent,
 }
 
 void ABuildingActor::Upgrade() {
-	if (Upgrades.Contains(Level+1)) {
+	if (Upgrades.Contains(Level+1) && PS && PS->RemoveResources(Upgrades[Level+1].Cost)) {
 		Level++;
-		if (PS )PS->RemoveResources(Upgrades[Level].Cost);
 		TotalCosts += Upgrades[Level].Cost;
 
 		//if (UpgradeAudio) {
@@ -318,6 +317,12 @@ float ABuildingActor::GetDamage() {
 float ABuildingActor::GetDefence()
 {
 	return Defence;
+}
+
+UTexture2D* ABuildingActor::GetImage()
+{
+	if (Upgrades.Contains(Level))	return Upgrades[Level].Image;
+	else return Upgrades[0].Image;
 }
 
 void ABuildingActor::RestoreBuilding()

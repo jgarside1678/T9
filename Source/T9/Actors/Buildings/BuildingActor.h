@@ -98,6 +98,9 @@ struct FBuildingUpgrades {
 		float Defence;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class UTexture2D* Image = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FBuildingCosts Cost;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -316,6 +319,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		float GetDefence();
+
+	UFUNCTION(BlueprintCallable)
+		class UTexture2D* GetImage();
 
 	UPROPERTY()
 		bool IsDead = false;
