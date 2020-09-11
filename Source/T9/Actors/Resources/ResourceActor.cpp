@@ -9,9 +9,11 @@
 #include "T9/Actors/GameGridActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/InstancedStaticMeshComponent.h"
+#include "Components/WidgetComponent.h"
+#include "T9/Widgets/ResourceQuickSelect.h"
 
 // Sets default values
-AResourceActor::AResourceActor()
+AResourceActor::AResourceActor() :	ResourceQuickSelectComponent(CreateDefaultSubobject<UWidgetComponent>(TEXT("Resource Quick Select")))
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -36,6 +38,17 @@ AResourceActor::AResourceActor()
 			GridSpace->SetMaterial(0, PlaneColour.Object);
 		}
 	}
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> ResourceQuickSelectWidget(TEXT("WidgetBlueprint'/Game/UI/ResourceQuickSelect_BP.ResourceQuickSelect_BP_C'"));
+	if (ResourceQuickSelectWidget.Succeeded()) ResourceQuickSelectClass = ResourceQuickSelectWidget.Class;
+
+	if (ResourceQuickSelectComponent) {
+		ResourceQuickSelectComponent->SetupAttachment(RootComponent);
+		ResourceQuickSelectComponent->SetWidgetSpace(EWidgetSpace::Screen);
+		ResourceQuickSelectComponent->SetRelativeLocation(FVector(0.0f, 0.0f, ResourceSelectHeight));
+		ResourceQuickSelectComponent->SetVisibility(false);
+		if (ResourceQuickSelectClass != nullptr) ResourceQuickSelectComponent->SetWidgetClass(ResourceQuickSelectClass);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -47,6 +60,7 @@ void AResourceActor::BeginPlay()
 	if (PS) {
 		PS->SpawnedResources.Add(this);
 	}
+	ResourceQuickSelect = Cast<UResourceQuickSelect>(ResourceQuickSelectComponent->GetUserWidgetObject());
 }
 
 // Called every frame
@@ -81,12 +95,14 @@ void AResourceActor::SetSelected()
 {
 	StaticMeshComponent->SetRenderCustomDepth(true);
 	for (int x = 0; x < ResourceSpawns.Num(); x++) ResourceSpawns[x]->GetMesh()->SetRenderCustomDepth(true);
+	if (ResourceQuickSelectComponent) ResourceQuickSelectComponent->SetVisibility(true);
 }
 
 void AResourceActor::SetUnSelected()
 {
 	StaticMeshComponent->SetRenderCustomDepth(false);
 	for (int x = 0; x < ResourceSpawns.Num(); x++) ResourceSpawns[x]->GetMesh()->SetRenderCustomDepth(false);
+	if (ResourceQuickSelectComponent) ResourceQuickSelectComponent->SetVisibility(false);
 
 }
 
@@ -106,5 +122,6 @@ void AResourceActor::ResourceInit(AGameGridActor* Grid, TEnumAsByte<Tiers> Start
 		Name = ResourceTiers[StartingResourceTier].Name;
 		if(ResourceTiers[StartingResourceTier].ResourceMesh) StaticMeshComponent->SetStaticMesh(ResourceTiers[StartingResourceTier].ResourceMesh);
 	}
+	if (ResourceQuickSelect)	ResourceQuickSelect->Init(this);
 }
 

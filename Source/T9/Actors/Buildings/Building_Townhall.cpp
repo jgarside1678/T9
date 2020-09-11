@@ -7,7 +7,7 @@
 
 
 ABuilding_Townhall::ABuilding_Townhall(const FObjectInitializer& ObjectInitializer) {
-
+	HealthBarHeight = 1700;
 	OutlineColour = 1;
 	GridLength = FVector2D(12);
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh(TEXT("StaticMesh'/Game/Assets/Pirate_Town_Set/Meshes/Town_Hall.Town_Hall'"));

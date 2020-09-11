@@ -18,10 +18,16 @@
 #include "T9/Actors/GameGridActor.h"
 #include "Components/AudioComponent.h"
 #include "T9/T9GameModeBase.h"
+#include "T9/Widgets/HealthBarWidget.h"
+#include "Components/WidgetComponent.h"
+#include "T9/Widgets/QuickSelectMenu.h"
 
 // Sets default values
-ABuildingActor::ABuildingActor()
+ABuildingActor::ABuildingActor() : 
+	HealthWidgetComponent(CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"))),
+	QuickSelectWidgetComponent(CreateDefaultSubobject<UWidgetComponent>(TEXT("Quick Select")))
 {
+
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	SetActorTickInterval(0.025);
@@ -70,6 +76,29 @@ ABuildingActor::ABuildingActor()
 	InventoryComponent->AddInventorySlot(FSlot{});
 	InventoryComponent->OnInventoryUpdate.AddDynamic(this, &ABuildingActor::UpdateBuildingModifiers);
 
+	//Widgets
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> HealthWidget(TEXT("WidgetBlueprint'/Game/UI/AllianceHealthBar.AllianceHealthBar_C'"));
+	if (HealthWidget.Succeeded()) HealthWidgetClass = HealthWidget.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> QuickSelectWidget(TEXT("WidgetBlueprint'/Game/UI/QuickSelectMenu_BP.QuickSelectMenu_BP_C'"));
+	if (QuickSelectWidget.Succeeded()) QuickSelectWidgetClass = QuickSelectWidget.Class;
+
+	if (HealthWidgetComponent) {
+		HealthWidgetComponent->SetupAttachment(RootComponent);
+		HealthWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
+		if (HealthWidgetClass != nullptr) HealthWidgetComponent->SetWidgetClass(HealthWidgetClass);
+		HealthBar = Cast<UHealthBarWidget>(HealthWidgetComponent->GetUserWidgetObject());
+	}
+
+	if (QuickSelectWidgetComponent) {
+		QuickSelectWidgetComponent->SetupAttachment(RootComponent);
+		QuickSelectWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
+		QuickSelectWidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, QuickSelectWidgetHeight));
+		QuickSelectWidgetComponent->SetVisibility(false);
+		if (QuickSelectWidgetClass != nullptr) QuickSelectWidgetComponent->SetWidgetClass(QuickSelectWidgetClass);
+	}
+
 }
 
 
@@ -96,13 +125,17 @@ void ABuildingActor::BeginPlay()
 	CalculateDamage();
 	CalculateMaxHealth();
 	CalculateDefence();
-	ResetHealth();
 	TArray<AActor*> CollidingActors;
 	GetOverlappingActors(CollidingActors, AEnemyCharacter::StaticClass());
 	if(CollidingActors.Num() > 0) SetTarget();
 	TotalCosts = Upgrades[Level].Cost;
 	PS->SetBuildingCount(BuildingName, GetBuildingCount() + 1);
 	PS->SpawnedBuildings.Add(this);
+	HealthBar = Cast<UHealthBarWidget>(HealthWidgetComponent->GetUserWidgetObject());
+	HealthWidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, HealthBarHeight));
+	QuickSelectMenu = Cast<UQuickSelectMenu>(QuickSelectWidgetComponent->GetUserWidgetObject());
+	if(QuickSelectMenu)	QuickSelectMenu->Init(this);
+	ResetHealth();
 }
 
 void ABuildingActor::SetTarget()
@@ -112,16 +145,19 @@ void ABuildingActor::SetTarget()
 void ABuildingActor::SetMaxHealth(float Number)
 {
 	MaxHealth = Number;
+	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 }
 
 void ABuildingActor::SetCurrentHealth(float Number)
 {
 	CurrentHealth = Number;
+	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 }
 
 void ABuildingActor::IncreaseMaxHealth(float Number)
 {
 	MaxHealth += Number;
+	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 }
 
 float ABuildingActor::GetCurrentHealth()
@@ -149,6 +185,7 @@ void ABuildingActor::SetSelected() {
 		StaticMeshComponent->SetRenderCustomDepth(true);
 	}
 	if (BuildingRangeCollider) BuildingRangeCollider->SetHiddenInGame(false);
+	if (QuickSelectWidgetComponent) QuickSelectWidgetComponent->SetVisibility(true);
 }
 
 
@@ -157,11 +194,13 @@ void ABuildingActor::SetUnSelected() {
 		StaticMeshComponent->SetRenderCustomDepth(false);
 	}
 	if (BuildingRangeCollider) BuildingRangeCollider->SetHiddenInGame(true);
+	if (QuickSelectWidgetComponent) QuickSelectWidgetComponent->SetVisibility(false);
 }
 
 void ABuildingActor::ResetHealth()
 {
 	CurrentHealth = MaxHealth;
+	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 }
 
 // Called every frame
@@ -203,6 +242,7 @@ void ABuildingActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, Da
 			SetDisabled(true);
 			CurrentHealth = 0;
 		}
+		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 	}
 }
 
@@ -330,6 +370,7 @@ void ABuildingActor::RestoreBuilding()
 	if (Disabled && PS->RemoveResources(Upgrades[Level].Cost * 0.5)) {
 		ResetHealth();
 		SetDisabled(false);
+		if (QuickSelectMenu) QuickSelectMenu->SetUpgradeImage();
 	}
 }
 
@@ -344,6 +385,7 @@ void ABuildingActor::SetDisabled(bool Input)
 	Disabled = Input;
 	UActorComponent* SpawnComp = GetComponentByClass(UBuildingSpawnComponent::StaticClass());
 	if (Disabled) {
+		if (QuickSelectMenu) QuickSelectMenu->SetRestoreImage();
 		if (SpawnComp) ((UBuildingSpawnComponent*)SpawnComp)->KillAll();
 		PS->AddPower(-Upgrades[Level].PowerRating);
 		SetActorTickEnabled(false);
@@ -403,8 +445,9 @@ FBuildingUpgrades ABuildingActor::GetCurrentBaseStats() {
 }
 
 FBuildingUpgrades ABuildingActor::GetUpgradeBaseStats() {
-	if(Upgrades.Contains(Level+1))	return Upgrades[Level + 1];
-	return FBuildingUpgrades();
+	if (Upgrades.Contains(Level + 1))	return Upgrades[Level + 1];
+	else if (Upgrades.Contains(Level))	return Upgrades[Level];
+	else return FBuildingUpgrades{};
 }
 
 UInventoryComponent* ABuildingActor::GetInventory()
@@ -426,4 +469,14 @@ void ABuildingActor::UpdateBuildingModifiers()
 	CalculateDamage();
 	CalculateMaxHealth();
 	CalculateDefence();
+}
+
+UWidgetComponent* ABuildingActor::GetHealthWidget()
+{
+	return HealthWidgetComponent;
+}
+
+UWidgetComponent* ABuildingActor::GetQuickSelectWidget()
+{
+	return QuickSelectWidgetComponent;
 }

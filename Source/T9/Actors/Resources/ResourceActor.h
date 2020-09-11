@@ -92,6 +92,20 @@ protected:
 	UPROPERTY()
 		FVector BoxExtentMultiplier = FVector(1);
 
+	//Resource Widgets
+
+	UPROPERTY()
+		float ResourceSelectHeight = 200.0f;
+
+	UPROPERTY()
+		class UWidgetComponent* ResourceQuickSelectComponent;
+
+	UPROPERTY()
+		TSubclassOf<UUserWidget> ResourceQuickSelectClass = nullptr;
+
+	UPROPERTY()
+		class UResourceQuickSelect* ResourceQuickSelect;
+
 
 public:	
 	// Called every frame

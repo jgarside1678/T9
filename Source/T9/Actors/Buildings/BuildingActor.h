@@ -45,6 +45,14 @@ struct FBuildingCosts {
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int Food = 0;
+
+	inline FBuildingCosts& operator-=(const FBuildingCosts& Right) {
+		this->Gold -= Right.Gold;
+		this->Wood -= Right.Wood;
+		this->Stone -= Right.Stone;
+		this->Food -= Right.Food;
+		return *this;
+	}
 };
 
 USTRUCT(BlueprintType)
@@ -63,6 +71,14 @@ struct FBuildingProduction {
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int Food = 0;
+
+	inline FBuildingProduction& operator-=(const FBuildingProduction& Right) {
+		this->Gold -= Right.Gold;
+		this->Wood -= Right.Wood;
+		this->Stone -= Right.Stone;
+		this->Food -= Right.Food;
+		return *this;
+	}
 };
 
 USTRUCT(BlueprintType)
@@ -78,6 +94,13 @@ struct FBuildingAttack {
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float AttackRangeMultipler = 1;
+
+	inline FBuildingAttack& operator-=(const FBuildingAttack& Right) {
+		this->Damage -= Right.Damage;
+		this->AttackSpeed -= Right.AttackSpeed;
+		this->AttackRangeMultipler -= Right.AttackRangeMultipler;
+		return *this;
+	}
 };
 
 USTRUCT(BlueprintType)
@@ -114,6 +137,17 @@ struct FBuildingUpgrades {
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class UStaticMesh* TurretMesh = nullptr;
+
+	inline FBuildingUpgrades& operator-=(const FBuildingUpgrades& Right) {
+		this->XP -= Right.XP;
+		this->PowerRating -= Right.PowerRating;
+		this->MaxHealth -= Right.MaxHealth;
+		this->Defence -= Right.Defence;
+		this->Cost -= Right.Cost;
+		this->Attack -= Right.Attack;
+		this->Production -= Right.Production;
+		return *this;
+	}
 };
 
 
@@ -223,6 +257,32 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		struct FItemModifiers ItemModifiers;
+
+	//Building Widgets
+
+	UPROPERTY()
+		float HealthBarHeight = 500.0f;
+
+	UPROPERTY()
+		class UWidgetComponent* HealthWidgetComponent;
+
+	UPROPERTY()
+		TSubclassOf<UUserWidget> HealthWidgetClass = nullptr;
+
+	UPROPERTY()
+		class UHealthBarWidget* HealthBar;
+
+	UPROPERTY()
+		float QuickSelectWidgetHeight = 100.0f;
+
+	UPROPERTY()
+		class UWidgetComponent* QuickSelectWidgetComponent;
+
+	UPROPERTY()
+		TSubclassOf<UUserWidget> QuickSelectWidgetClass = nullptr;
+
+	UPROPERTY()
+		class UQuickSelectMenu* QuickSelectMenu;
 
 
 public:
@@ -368,6 +428,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void UpdateBuildingModifiers();
+
+	UFUNCTION(BlueprintCallable)
+		class UWidgetComponent* GetHealthWidget();
+
+	UFUNCTION(BlueprintCallable)
+		class UWidgetComponent* GetQuickSelectWidget();
 
 };
 

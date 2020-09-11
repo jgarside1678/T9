@@ -22,7 +22,6 @@
 #include "LevelUp.h"
 #include "ShowItems.h"
 #include "PlayerAlert.h"
-#include "QuickSelectMenu.h"
 #include "T9/Actors/GameGridActor.h"
 #include "T9/Actors/Items/ItemActor.h"
 #include "Inventory.h"
@@ -40,9 +39,6 @@ AGameHUD::AGameHUD() {
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> Select(TEXT("WidgetBlueprint'/Game/UI/SelectMenu.SelectMenu_C'"));
 	if (Select.Succeeded()) SelectMenuWidget = CreateWidget<USelectMenuWidget>(GetWorld(), Select.Class);
-
-	static ConstructorHelpers::FClassFinder<UUserWidget> QuickSelect(TEXT("WidgetBlueprint'/Game/UI/QuickSelectMenu_BP.QuickSelectMenu_BP_C'"));
-	if (QuickSelect.Succeeded()) QuickSelectMenu = CreateWidget<UQuickSelectMenu>(GetWorld(), QuickSelect.Class);
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> Inventory(TEXT("WidgetBlueprint'/Game/UI/Inventory_BP.Inventory_BP_C'"));
 	if (Inventory.Succeeded()) InventoryWidget = CreateWidget<UInventory>(GetWorld(), Inventory.Class);
@@ -207,41 +203,15 @@ void AGameHUD::AddPlayerAlert(FString Title, FString Message, float MessageTimeo
 void AGameHUD::SetGameObjectSelected(FHitResult Hit)
 {
 	if (SelectMenuWidget->IsInViewport()) SelectMenuWidget->RemoveFromViewport();
-	if (QuickSelectMenu->IsInViewport()) QuickSelectMenu->RemoveFromViewport();
-	if (SelectedObject) {
-		if (SelectMenuWidget)SelectMenuWidget->RemoveFromViewport();
-		if (AItemActor* Item = Cast<AItemActor>(SelectedObject)) {
-			if(Item->WidgetComponent) Item->WidgetComponent->SetVisibility(false);
-		}
-		if (ISelectInterface* Select = Cast<ISelectInterface>(SelectedObject)) Select->SetUnSelected();
-	}
+	if (ShowItemsState) HideShowItems();
+	if (ISelectInterface* Select = Cast<ISelectInterface>(SelectedObject)) Select->SetUnSelected();
 
 	HitActor = Hit.Actor.Get();
 	if (HitActor)
 	{
-		float LocationX, LocationY;
-		PC->GetMousePosition(LocationX, LocationY);
 		SelectedObject = HitActor;
-		if (ISelectInterface* Select = Cast<ISelectInterface>(HitActor)) {
-			if (!QuickSelectMenu->IsInViewport()) QuickSelectMenu->AddToViewport();
-			QuickSelectMenu->SetPositionInViewport(FVector2D(LocationX, LocationY) - FVector2D(120, 30));
-			QuickSelectMenu->Init(SelectedObject);
-			Select->SetSelected();
-
-		}
-		else if (AItemActor* Item = Cast<AItemActor>(SelectedObject)) {
-			if (Item->WidgetComponent) {
-				Item->WidgetComponent->SetVisibility(true);
-			}
-		}
-		else if (AResourceCharacter* Spawned = Cast<AResourceCharacter>(HitActor)) {
-			SelectedObject = Spawned->GetParentResource();
-			QuickSelectMenu->SetPositionInViewport(FVector2D(LocationX, LocationY) - FVector2D(120, 30));
-			QuickSelectMenu->Init(SelectedObject);
-			Spawned->GetParentResource()->SetSelected();
-		}
+		if (ISelectInterface* Select = Cast<ISelectInterface>(HitActor)) Select->SetSelected();
 	}
-	if (ShowItemsState) HideShowItems();
 }
 
 

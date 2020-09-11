@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "T9/Actors/Components/InventoryComponent.h"
 #include "ShowItems.generated.h"
 
 /**

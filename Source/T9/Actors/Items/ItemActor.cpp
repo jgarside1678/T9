@@ -66,8 +66,7 @@ AItemActor::AItemActor()
 	if (WidgetComponent) {
 		WidgetComponent->SetupAttachment(RootComponent);
 		WidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
-		//WidgetComponent->SetRelativeLocation(FVector(0,0, -800.0f));
-		WidgetComponent->SetRelativeLocation(FVector(0,-220, -400));
+		WidgetComponent->SetRelativeLocation(FVector(0,0, -500.0f));
 		if (WidgetClass != nullptr) {
 			WidgetComponent->SetWidgetClass(WidgetClass);
 		}
@@ -116,6 +115,22 @@ void AItemActor::Tick(float DeltaTime)
 	}
 	ItemAnchor->AddLocalRotation(FRotator(0, 0.5, 0));
 	if (Start.Z < -50) SetActorLocation(FVector(Start.X, Start.Y, 50));
+}
+
+void AItemActor::SetSelected()
+{
+	if (ItemMesh) {
+		ItemMesh->SetRenderCustomDepth(true);
+	}
+	if (WidgetComponent) WidgetComponent->SetVisibility(true);
+}
+
+void AItemActor::SetUnSelected()
+{
+	if (ItemMesh) {
+		ItemMesh->SetRenderCustomDepth(false);
+	}
+	if (WidgetComponent) WidgetComponent->SetVisibility(false);
 }
 
 int AItemActor::GetItemGoldValue()

@@ -9,6 +9,7 @@
 
 
 ABuilding_Windmill::ABuilding_Windmill(const FObjectInitializer& ObjectInitializer) {
+	HealthBarHeight = 1400;
 	AdditionalStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Windmill Blades"));
 	AdditionalStaticMeshComponent->SetupAttachment(StaticMeshComponent);
 	AdditionalStaticMeshComponent->SetCanEverAffectNavigation(false);

@@ -372,5 +372,6 @@ FCharacterLevels ACharacterActor::GetCurrentBaseStats()
 FCharacterLevels ACharacterActor::GetUpgradeBaseStats()
 {
 	if (Levels.Contains(Level+1)) return Levels[Level+1];
+	else if (Levels.Contains(Level)) return Levels[Level];
 	return FCharacterLevels();
 }

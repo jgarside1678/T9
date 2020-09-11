@@ -6,17 +6,28 @@
 #include "T9/MainPlayerController.h"
 #include "T9/MainPlayerState.h"
 #include "Components/Button.h"
+#include "Components/Image.h"
 #include "T9/Actors/Buildings/BuildingActor.h"
 #include "SelectMenuWidget.h"
 
 UQuickSelectMenu::UQuickSelectMenu(const FObjectInitializer& ObjectInit) : Super(ObjectInit) {
-
+	static ConstructorHelpers::FObjectFinder<UTexture2D> SpriteRestore(TEXT("Texture2D'/Game/Assets/TheStone/PNG/19_Function_Button/ButtonIcon/128x128/btn_icon_hammer.btn_icon_hammer'"));
+	if (SpriteRestore.Succeeded()) {
+		RestoreImage = SpriteRestore.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UTexture2D> SpriteUpgrade(TEXT("Texture2D'/Game/Assets/TheStone/PNG/19_Function_Button/ButtonIcon/128x128/btn_icon_arrow_up.btn_icon_arrow_up'"));
+	if (SpriteUpgrade.Succeeded()) {
+		UpgradeImage = SpriteUpgrade.Object;
+	}
 }
 
-void UQuickSelectMenu::Init(AActor* Selected)
+void UQuickSelectMenu::Init(ABuildingActor* Building)
 {
-	SelectedBuilding = Cast<ABuildingActor>(Selected);
-	SelectedResource = Cast<AResourceActor>(Selected);
+	if (Building) {
+		SelectedBuilding = Building;
+		if(SelectedBuilding->GetDisabled()) RestoreUpgradeImage->SetBrushFromTexture(RestoreImage);
+		else RestoreUpgradeImage->SetBrushFromTexture(UpgradeImage);
+	}
 }
 
 void UQuickSelectMenu::MoveBuilding()
@@ -49,6 +60,16 @@ void UQuickSelectMenu::StoreBuilding()
 	}
 	if (HUD)HUD->SetGameObjectSelected(FHitResult());
 	this->RemoveFromViewport();
+}
+
+void UQuickSelectMenu::SetRestoreImage()
+{
+	RestoreUpgradeImage->SetBrushFromTexture(RestoreImage);
+}
+
+void UQuickSelectMenu::SetUpgradeImage()
+{
+	RestoreUpgradeImage->SetBrushFromTexture(UpgradeImage);
 }
 
 void UQuickSelectMenu::NativeConstruct()

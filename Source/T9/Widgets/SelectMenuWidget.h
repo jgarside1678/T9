@@ -93,6 +93,13 @@ public:
 
 
 	UFUNCTION(BlueprintCallable, Category = "WidgetFunctions")
+		void ShowCharacterStats();
+
+	UFUNCTION(BlueprintCallable, Category = "WidgetFunctions")
+		void ShowBuildingStats();
+
+
+	UFUNCTION(BlueprintCallable, Category = "WidgetFunctions")
 		void InitializeSelectedInventory();
 
 protected:
@@ -130,8 +137,10 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 		class UOverlay* Items;
 
-	//Stats
 
+	//Stats
+	UPROPERTY(meta = (BindWidget))
+		class UHorizontalBox* StatsBox;
 
 	UPROPERTY(meta = (BindWidget))
 		class UOverlay* Stats;
@@ -183,6 +192,10 @@ protected:
 
 	//Character Stats
 
+
+	UPROPERTY(meta = (BindWidget))
+		class UHorizontalBox* StatsBox_Character;
+
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* StatsName1_Character;
 
@@ -229,6 +242,9 @@ protected:
 		class UTextBlock* StatsModified5_Character;
 
 	//Upgrade
+
+	UPROPERTY(meta = (BindWidget))
+		class UHorizontalBox* UpgradesBox;
 
 	UPROPERTY(meta = (BindWidget))
 		class UOverlay* Upgrades;
@@ -288,6 +304,45 @@ protected:
 		class UTextBlock* UpgradesNew4;
 
 	UPROPERTY(meta = (BindWidget))
+		class UHorizontalBox* UpgradesBox_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* UpgradesName1_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* UpgradesName2_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* UpgradesName3_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* UpgradesName4_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* UpgradesOld1_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* UpgradesOld2_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* UpgradesOld3_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* UpgradesOld4_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* UpgradesNew1_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* UpgradesNew2_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* UpgradesNew3_Character;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* UpgradesNew4_Character;
+
+	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* GoldAmount;
 
 	UPROPERTY(meta = (BindWidget))
@@ -303,6 +358,9 @@ protected:
 	//Items// Inventory
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		class  UInventoryComponent* SelectedInventory;
+
+	UPROPERTY(meta = (BindWidget))
+		class  UTextBlock* ItemsTitle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		class  UInventoryComponent* SpawnInventory;

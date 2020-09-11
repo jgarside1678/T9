@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "T9/Interfaces/SelectInterface.h"
 #include "ResourceCharacter.generated.h"
 
 UCLASS()
-class T9_API AResourceCharacter : public ACharacter
+class T9_API AResourceCharacter : public ACharacter, public ISelectInterface
 {
 	GENERATED_BODY()
 
@@ -61,4 +62,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		AResourceActor* GetParentResource();
+
+	UFUNCTION()
+		virtual void SetSelected();
+
+	UFUNCTION()
+		virtual void SetUnSelected();
 };

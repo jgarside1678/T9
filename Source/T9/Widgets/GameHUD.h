@@ -139,9 +139,6 @@ protected:
 		class USelectMenuWidget* SelectMenuWidget;
 
 	UPROPERTY()
-		class UQuickSelectMenu* QuickSelectMenu;
-
-	UPROPERTY()
 		class UHUDWidget* HUDMenuWidget;
 
 	UPROPERTY()

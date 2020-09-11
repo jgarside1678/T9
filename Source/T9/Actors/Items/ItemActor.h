@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "T9/Interfaces/SelectInterface.h"
 #include "ItemActor.generated.h"
 
 
@@ -98,7 +99,7 @@ struct T9_API FItemModifiers {
 };
 
 UCLASS()
-class T9_API AItemActor : public AActor
+class T9_API AItemActor : public AActor, public ISelectInterface
 {
 	GENERATED_BODY()
 	
@@ -161,6 +162,9 @@ protected:
 		TSubclassOf<UUserWidget> WidgetClass = nullptr;
 
 	UPROPERTY()
+		class UWidgetComponent* WidgetComponent;
+
+	UPROPERTY()
 		class UItemPickUpWidget* ItemPickUp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
@@ -174,8 +178,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY()
-		class UWidgetComponent* WidgetComponent;
+
+	UFUNCTION()
+		virtual void SetSelected();
+
+	UFUNCTION()
+		virtual void SetUnSelected();
 
 
 	UFUNCTION(BlueprintCallable)

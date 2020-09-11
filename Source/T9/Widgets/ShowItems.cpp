@@ -8,7 +8,6 @@
 #include "Components/Image.h"
 #include "Components/WidgetComponent.h"
 #include "InventorySlot.h"
-#include "T9/Actors/Components/InventoryComponent.h"
 #include "Components/WrapBox.h"
 #include "T9/MainPlayerState.h"
 

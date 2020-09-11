@@ -2,6 +2,7 @@
 
 
 #include "ResourceCharacter.h"
+#include "ResourceActor.h"
 
 // Sets default values
 AResourceCharacter::AResourceCharacter()
@@ -49,4 +50,14 @@ bool AResourceCharacter::CheckIfDead() {
 AResourceActor* AResourceCharacter::GetParentResource()
 {
 	return ParentResource;
+}
+
+void AResourceCharacter::SetSelected()
+{
+	ParentResource->SetSelected();
+}
+
+void AResourceCharacter::SetUnSelected()
+{
+	ParentResource->SetUnSelected();
 }

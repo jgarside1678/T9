@@ -18,7 +18,7 @@ public:
 	UQuickSelectMenu(const FObjectInitializer& ObjectInit);
 
 	UFUNCTION(BlueprintCallable)
-		void Init(class AActor* Selected);
+		void Init(class ABuildingActor* Building);
 
 	UFUNCTION(BlueprintCallable)
 		void MoveBuilding();
@@ -32,13 +32,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void StoreBuilding();
 
+	UFUNCTION(BlueprintCallable)
+		void SetRestoreImage();
+
+	UFUNCTION(BlueprintCallable)
+		void SetUpgradeImage();
+
 protected:
 
 	UPROPERTY()
 		class ABuildingActor* SelectedBuilding;
-
-	UPROPERTY()
-		class AResourceActor* SelectedResource;
 
 	virtual void NativeConstruct() override;
 
@@ -52,4 +55,26 @@ protected:
 
 	UPROPERTY()
 		class AGameHUD* HUD;
+
+	UPROPERTY(meta = (BindWidget))
+		class UImage* RestoreUpgradeImage;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* Move;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* RestoreUpgrade;
+
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* Info;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* Store;
+
+	UPROPERTY()
+		class UTexture2D* RestoreImage;
+
+	UPROPERTY()
+		class UTexture2D* UpgradeImage;
 };

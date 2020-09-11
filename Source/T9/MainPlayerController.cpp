@@ -133,7 +133,6 @@ void AMainPlayerController::SelectInteract() {
 					}
 					else CreateAlert("Error", "Conditions to build this building were not met.", 5);
 				}
-				else UE_LOG(LogTemp, Warning, TEXT("FUCK"));
 			}
 		}
 		else UE_LOG(LogTemp, Warning, TEXT("No Object Found"));
