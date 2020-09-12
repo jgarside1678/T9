@@ -11,11 +11,11 @@
 #include "SelectMenuWidget.h"
 
 UQuickSelectMenu::UQuickSelectMenu(const FObjectInitializer& ObjectInit) : Super(ObjectInit) {
-	static ConstructorHelpers::FObjectFinder<UTexture2D> SpriteRestore(TEXT("Texture2D'/Game/Assets/TheStone/PNG/19_Function_Button/ButtonIcon/128x128/btn_icon_hammer.btn_icon_hammer'"));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> SpriteRestore(TEXT("Texture2D'/Game/UI/Assets/TheStone/PNG/19_Function_Button/ButtonIcon/128x128/btn_icon_hammer.btn_icon_hammer'"));
 	if (SpriteRestore.Succeeded()) {
 		RestoreImage = SpriteRestore.Object;
 	}
-	static ConstructorHelpers::FObjectFinder<UTexture2D> SpriteUpgrade(TEXT("Texture2D'/Game/Assets/TheStone/PNG/19_Function_Button/ButtonIcon/128x128/btn_icon_arrow_up.btn_icon_arrow_up'"));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> SpriteUpgrade(TEXT("Texture2D'/Game/UI/Assets/TheStone/PNG/19_Function_Button/ButtonIcon/128x128/btn_icon_arrow_up.btn_icon_arrow_up'"));
 	if (SpriteUpgrade.Succeeded()) {
 		UpgradeImage = SpriteUpgrade.Object;
 	}

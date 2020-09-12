@@ -11,11 +11,11 @@ AResourceCharacter_Bear::AResourceCharacter_Bear() {
 	Health = 500;
 	MaxResourceAmount = 5000;
 	CurrentResourceAmount = MaxResourceAmount;
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/Assets/StylizedWildAnimals/Meshes/Bear/SK_Bear.SK_Bear'"));
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/Assets/StylizedWildAnimals/Animations/Bear/BearAnimation_BP.BearAnimation_BP_C'"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material1(TEXT("MaterialInstanceConstant'/Game/Assets/StylizedWildAnimals/Materials/Instances/Bear/MI_Bear_Black.MI_Bear_Black'"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material2(TEXT("MaterialInstanceConstant'/Game/Assets/StylizedWildAnimals/Materials/Instances/Bear/MI_Bear_Brown.MI_Bear_Brown'"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material3(TEXT("MaterialInstanceConstant'/Game/Assets/StylizedWildAnimals/Materials/Instances/Bear/MI_Bear_White.MI_Bear_White'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/Neutral/StylizedWildAnimals/Meshes/Bear/SK_Bear.SK_Bear'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Neutral/StylizedWildAnimals/Animations/Bear/BearAnimation_BP.BearAnimation_BP_C'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material1(TEXT("MaterialInstanceConstant'/Game/AI/Neutral/StylizedWildAnimals/Materials/Instances/Bear/MI_Bear_Black.MI_Bear_Black'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material2(TEXT("MaterialInstanceConstant'/Game/AI/Neutral/StylizedWildAnimals/Materials/Instances/Bear/MI_Bear_Brown.MI_Bear_Brown'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material3(TEXT("MaterialInstanceConstant'/Game/AI/Neutral/StylizedWildAnimals/Materials/Instances/Bear/MI_Bear_White.MI_Bear_White'"));
 	//static ConstructorHelpers::FObjectFinder<UAnimMontage> AnimationMont(TEXT("AnimMontage'/Game/Assets/Goblin/Goblin_Attack_Montage.Goblin_Attack_Montage'"));
 	if (Material1.Succeeded()) Materials.Add(Material1.Object);
 	if (Material2.Succeeded()) Materials.Add(Material2.Object);

@@ -21,7 +21,7 @@ ABuilding_Windmill::ABuilding_Windmill(const FObjectInitializer& ObjectInitializ
 	GridLength = FVector2D(9, 8);
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh(TEXT("StaticMesh'/Game/Assets/Pirate_Town_Set/Meshes/Windmill.Windmill'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> WindmillBlades(TEXT("StaticMesh'/Game/Assets/Pirate_Town_Set/Meshes/Windmill_Fan.Windmill_Fan'"));
-	static ConstructorHelpers::FObjectFinder<UTexture2D> ImageLevel1(TEXT("Texture2D'/Game/Assets/UI/WindmillImage.WindmillImage'"));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> ImageLevel1(TEXT("Texture2D'/Game/UI/Assets/Sprites/WindmillImage.WindmillImage'"));
 
 	if (BaseMesh.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(BaseMesh.Object);

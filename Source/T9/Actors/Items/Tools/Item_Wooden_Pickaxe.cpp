@@ -9,7 +9,7 @@ AItem_Wooden_Pickaxe::AItem_Wooden_Pickaxe() {
 	ItemType = Tool;
 	ItemSubType = PickAxe;
 	ItemRarity = Common;
-	static ConstructorHelpers::FObjectFinder<UTexture2D> Sprite(TEXT("Texture2D'/Game/Assets/CraftResourcesIcons/Textures/Tex_tools_07.Tex_tools_07'"));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> Sprite(TEXT("Texture2D'/Game/UI/Assets/CraftResourcesIcons/Textures/Tex_tools_07.Tex_tools_07'"));
 	if (Sprite.Succeeded()) {
 		ItemImage = Sprite.Object;
 	}

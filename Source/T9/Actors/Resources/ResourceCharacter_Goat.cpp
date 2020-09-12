@@ -11,12 +11,12 @@ AResourceCharacter_Goat::AResourceCharacter_Goat() {
 	Health = 250;
 	MaxResourceAmount = 2000;
 	CurrentResourceAmount = MaxResourceAmount;
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/Assets/StylizedWildAnimals/Meshes/Goat/SK_Goat.SK_Goat'"));
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/Assets/StylizedWildAnimals/Animations/Goat/GoatAnimation_BP.GoatAnimation_BP_C'"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material1(TEXT("MaterialInstanceConstant'/Game/Assets/StylizedWildAnimals/Materials/Instances/Goat/MI_Goat_Black.MI_Goat_Black'"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material2(TEXT("MaterialInstanceConstant'/Game/Assets/StylizedWildAnimals/Materials/Instances/Goat/MI_Goat_Brown.MI_Goat_Brown'"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material3(TEXT("MaterialInstanceConstant'/Game/Assets/StylizedWildAnimals/Materials/Instances/Goat/MI_Goat_White.MI_Goat_White'"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> AnimationMont(TEXT("AnimMontage'/Game/Assets/StylizedWildAnimals/Animations/Goat/Goat_Idle_Montage.Goat_Idle_Montage'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/Neutral/StylizedWildAnimals/Meshes/Goat/SK_Goat.SK_Goat'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Neutral/StylizedWildAnimals/Animations/Goat/GoatAnimation_BP.GoatAnimation_BP_C'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material1(TEXT("MaterialInstanceConstant'/Game/AI/Neutral/StylizedWildAnimals/Materials/Instances/Goat/MI_Goat_Black.MI_Goat_Black'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material2(TEXT("MaterialInstanceConstant'/Game/AI/Neutral/StylizedWildAnimals/Materials/Instances/Goat/MI_Goat_Brown.MI_Goat_Brown'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material3(TEXT("MaterialInstanceConstant'/Game/AI/Neutral/StylizedWildAnimals/Materials/Instances/Goat/MI_Goat_White.MI_Goat_White'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> AnimationMont(TEXT("AnimMontage'/Game/AI/Neutral/StylizedWildAnimals/Animations/Goat/Goat_Idle_Montage.Goat_Idle_Montage'"));
 	if (Material1.Succeeded()) Materials.Add(Material1.Object);
 	if (Material2.Succeeded()) Materials.Add(Material2.Object);
 	if (Material3.Succeeded()) Materials.Add(Material3.Object);

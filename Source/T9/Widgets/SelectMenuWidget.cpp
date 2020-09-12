@@ -19,11 +19,11 @@
 
 USelectMenuWidget::USelectMenuWidget(const FObjectInitializer& ObjectInit) : Super(ObjectInit)
 {
-	static ConstructorHelpers::FObjectFinder<UTexture2D> SpriteOn(TEXT("Texture2D'/Game/Assets/TheStone/PNG/17_Components/radiobtn_on.radiobtn_on'"));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> SpriteOn(TEXT("Texture2D'/Game/UI/Assets/TheStone/PNG/17_Components/radiobtn_on.radiobtn_on'"));
 	if (SpriteOn.Succeeded()) {
 		TabButtonImageOn = SpriteOn.Object;
 	}
-	static ConstructorHelpers::FObjectFinder<UTexture2D> SpriteOff(TEXT("Texture2D'/Game/Assets/TheStone/PNG/17_Components/radiobtn_off.radiobtn_off'"));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> SpriteOff(TEXT("Texture2D'/Game/UI/Assets/TheStone/PNG/17_Components/radiobtn_off.radiobtn_off'"));
 	if (SpriteOff.Succeeded()) {
 		TabButtonImageOff = SpriteOff.Object;
 	}

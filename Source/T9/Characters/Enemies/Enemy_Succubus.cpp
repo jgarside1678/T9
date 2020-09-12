@@ -22,9 +22,9 @@ AEnemy_Succubus::AEnemy_Succubus(const FObjectInitializer& ObjectInitializer) {
 	Levels.Add(11, FCharacterLevels{ 50, 0, 1300, 0, 1000 });
 	DeathTime = 1.8;
 	AwarenessDistance = 2000;
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/ModularCharacterSuccubus/Meshes/OneMeshCharacter/SK_Succubus.SK_Succubus'"));
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/ModularCharacterSuccubus/Animations/Succubus_Animation_BP.Succubus_Animation_BP_C'"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> AnimationMont(TEXT("AnimMontage'/Game/AI/ModularCharacterSuccubus/Animations/Succubus_Anim_attack_Montage.Succubus_Anim_attack_Montage'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/Enemies/ModularCharacterSuccubus/Meshes/OneMeshCharacter/SK_Succubus.SK_Succubus'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Enemies/ModularCharacterSuccubus/Animations/Succubus_Animation_BP.Succubus_Animation_BP_C'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> AnimationMont(TEXT("AnimMontage'/Game/AI/Enemies/ModularCharacterSuccubus/Animations/Succubus_Anim_attack_Montage.Succubus_Anim_attack_Montage'"));
 	//SetActorScale3D(FVector(2));
 	if (MeshAsset.Succeeded()) {
 		GetMesh()->SkeletalMesh = MeshAsset.Object;

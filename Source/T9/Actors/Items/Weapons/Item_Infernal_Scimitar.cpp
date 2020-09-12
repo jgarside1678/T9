@@ -13,7 +13,7 @@ AItem_Infernal_Scimitar::AItem_Infernal_Scimitar() {
 	ItemRarity = Legendary;
 	ItemEquipedTransform = FTransform(FRotator(7, 43, 15), FVector(12, -14, 6), FVector(0.7));
 	ItemSheathedTransform = FTransform(FRotator(56, -170, -80), FVector(-10, 18, 2), FVector(0.5));
-	static ConstructorHelpers::FObjectFinder<UTexture2D> Sprite(TEXT("Texture2D'/Game/Assets/UI/InfernalScimitarImage.InfernalScimitarImage'"));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> Sprite(TEXT("Texture2D'/Game/UI/Assets/Sprites/InfernalScimitarImage.InfernalScimitarImage'"));
 	if (Sprite.Succeeded()) {
 		ItemImage = Sprite.Object;
 	}
