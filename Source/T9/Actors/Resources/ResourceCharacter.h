@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "T9/Interfaces/SelectInterface.h"
+#include "T9/Interfaces/DamageInterface.h"
 #include "ResourceCharacter.generated.h"
 
 UCLASS()
-class T9_API AResourceCharacter : public ACharacter, public ISelectInterface
+class T9_API AResourceCharacter : public ACharacter, public ISelectInterface, public IDamageInterface
 {
 	GENERATED_BODY()
 
@@ -58,9 +59,6 @@ public:
 		void Init(AResourceActor* OwningResource, FVector SpawnLocation);
 
 	UFUNCTION(BlueprintCallable)
-		bool CheckIfDead();
-
-	UFUNCTION(BlueprintCallable)
 		AResourceActor* GetParentResource();
 
 	UFUNCTION()
@@ -68,4 +66,20 @@ public:
 
 	UFUNCTION()
 		virtual void SetUnSelected();
+
+	UPROPERTY()
+		float CapsuleRadius = 50;
+
+	UFUNCTION()
+		virtual void TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeOfDamage = All);
+
+
+	UFUNCTION()
+		virtual void DamageEnemy(AActor* Actor, float AmountOfDamage);
+
+
+	UFUNCTION(BlueprintCallable)
+		virtual bool CheckIfDead();
+
+
 };

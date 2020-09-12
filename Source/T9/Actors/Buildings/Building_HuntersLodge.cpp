@@ -9,7 +9,7 @@
 ABuilding_HuntersLodge::ABuilding_HuntersLodge(const FObjectInitializer& ObjectInitializer) {
 	HealthBarHeight = 1000;
 	OutlineColour = 1;
-	GridLength = FVector2D(12);
+	GridLength = FVector2D(5, 6);
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh(TEXT("StaticMesh'/Game/Assets/Pirate_Town_Set/Meshes/House.House'"));
 	static ConstructorHelpers::FObjectFinder<UTexture2D> ImageLevel1(TEXT("Texture2D'/Game/UI/Assets/Sprites/WatchTowerImage.WatchTowerImage'"));
 	//static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Pirate_Town_Set/Meshes/Town_Hall_2.Town_Hall_2'"));
@@ -17,6 +17,7 @@ ABuilding_HuntersLodge::ABuilding_HuntersLodge(const FObjectInitializer& ObjectI
 	//static ConstructorHelpers::FObjectFinder<UAnimSequence> AnimationMont(TEXT("AnimSequence'/Game/AI/Alliance/StylizedHumanMale/Animations/Standing_1H_Magic_Attack_01_mixamo_com.Standing_1H_Magic_Attack_01_mixamo_com'"));
 	if (BaseMesh.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(BaseMesh.Object);
+		MeshDisplacement->SetRelativeLocation(FVector(70, 0, 0));
 	}
 
 	//{Level, FBuildingUpgrades{XP, PowerRating, Maxhealth, Defence, FBuildingCosts{Gold, Wood, Stone, Food}, FBuildingAttack{Damage, AttackSpeed, AttackRange}, FBuildingProduction{Gold, Wood, Stone, Food}}

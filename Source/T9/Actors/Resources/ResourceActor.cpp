@@ -10,6 +10,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/InstancedStaticMeshComponent.h"
 #include "Components/WidgetComponent.h"
+#include "T9/Actors/Resources/ResourceCharacter.h"
 #include "T9/Widgets/ResourceQuickSelect.h"
 
 // Sets default values
@@ -90,6 +91,25 @@ void AResourceActor::GetClosestStaticMesh(FVector Location, FVector& ClosestMesh
 	//ClosestMeshBounds = FVector(CollectionDistance.X * ClosestTransform.GetScale3D().X, CollectionDistance.Y * ClosestTransform.GetScale3D().Y, CollectionDistance.Z * ClosestTransform.GetScale3D().Z);
 	DrawDebugBox(GetWorld(), ClosestMeshLocation, ClosestInstanceBounds, FColor::Red, true, -1, 0, 10);
 }
+
+void AResourceActor::GetClosestSpawnedCharacter(FVector Location, AResourceCharacter*& ClosestCharacter)
+{
+	ACharacter* Closest = nullptr;
+	FVector ClosestOrigin;
+	float ClosestDistance = 1000000;
+	for (int x = 0; x < ResourceSpawns.Num(); x++) {
+		if (ResourceSpawns[x]) {
+			FVector CharacterLocation = ResourceSpawns[x]->GetActorLocation();
+			float Distance = (Location - CharacterLocation).Size();
+			if (Distance < ClosestDistance) {
+				ClosestDistance = Distance;
+				Closest = ResourceSpawns[x];
+			}
+		}
+	}
+	ClosestCharacter = Cast<AResourceCharacter>(Closest);
+}
+
 
 void AResourceActor::SetSelected()
 {

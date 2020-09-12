@@ -89,6 +89,7 @@ ABuildingActor::ABuildingActor() :
 		HealthWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
 		if (HealthWidgetClass != nullptr) HealthWidgetComponent->SetWidgetClass(HealthWidgetClass);
 		HealthBar = Cast<UHealthBarWidget>(HealthWidgetComponent->GetUserWidgetObject());
+		HealthWidgetComponent->SetVisibility(false);
 	}
 
 	if (QuickSelectWidgetComponent) {
@@ -186,6 +187,7 @@ void ABuildingActor::SetSelected() {
 	}
 	if (BuildingRangeCollider) BuildingRangeCollider->SetHiddenInGame(false);
 	if (QuickSelectWidgetComponent) QuickSelectWidgetComponent->SetVisibility(true);
+	if (HealthWidgetComponent) HealthWidgetComponent->SetVisibility(true);
 }
 
 
@@ -195,6 +197,7 @@ void ABuildingActor::SetUnSelected() {
 	}
 	if (BuildingRangeCollider) BuildingRangeCollider->SetHiddenInGame(true);
 	if (QuickSelectWidgetComponent) QuickSelectWidgetComponent->SetVisibility(false);
+	if(HealthWidgetComponent) HealthWidgetComponent->SetVisibility(false);
 }
 
 void ABuildingActor::ResetHealth()

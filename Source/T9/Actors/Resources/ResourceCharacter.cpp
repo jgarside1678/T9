@@ -47,6 +47,7 @@ bool AResourceCharacter::CheckIfDead() {
 	return Dead;
 }
 
+
 AResourceActor* AResourceCharacter::GetParentResource()
 {
 	return ParentResource;
@@ -60,4 +61,21 @@ void AResourceCharacter::SetSelected()
 void AResourceCharacter::SetUnSelected()
 {
 	ParentResource->SetUnSelected();
+}
+
+void AResourceCharacter::TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage)
+{
+	if (!Dead) {
+		Health -= AmountOfDamage;
+		if (Health <= 0) {
+			Dead = true;
+			Controller->UnPossess();
+		}
+	}
+}
+
+void AResourceCharacter::DamageEnemy(AActor* Actor, float AmountOfDamage)
+{
+	IDamageInterface* Enemy = Cast<IDamageInterface>(Actor);
+	if (Enemy != nullptr) Enemy->TakeDamage(this, AmountOfDamage);
 }

@@ -114,7 +114,11 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	void GetClosestStaticMesh(FVector Location, FVector& ClosestMeshLocation, FVector& ClosestMeshBounds);
+	UFUNCTION()
+	    void GetClosestStaticMesh(FVector Location, FVector& ClosestMeshLocation, FVector& ClosestMeshBounds);
+
+	UFUNCTION()
+		void GetClosestSpawnedCharacter(FVector Location, class AResourceCharacter*& ClosestCharacter);
 
 	UFUNCTION()
 		virtual void SetSelected() override;
