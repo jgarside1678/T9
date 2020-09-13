@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "T9/MainPlayerController.h"
 #include "T9/Characters/CharacterActor.h"
+#include "T9/Actors/Resources/ResourceCharacter.h"
 #include "T9/Actors/Buildings/BuildingActor.h"
 #include "T9/MainPlayerState.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -31,6 +32,7 @@ void UAI_UpdateTargetLocation::OnBecomeRelevant(UBehaviorTreeComponent& OwnerCom
 	Target = Cast<AActor>(Cont->GetBlackboard()->GetValueAsObject(bb_keys::target_actor));
 	TargetBuilding = Cast<ABuildingActor>(Target);
 	TargetCharacter = Cast<ACharacterActor>(Target);
+	TargetResourceCharacter = Cast<AResourceCharacter>(Target);
 	Super::OnBecomeRelevant(OwnerComp, NodeMemory);
 }
 
@@ -51,6 +53,12 @@ void UAI_UpdateTargetLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	else if (TargetCharacter) {
 		FVector Min = FVector(TargetCharacter->GetActorLocation() - TargetCharacter->CapsuleRadius - 10);
 		FVector Max = FVector(TargetCharacter->GetActorLocation() + TargetCharacter->CapsuleRadius + 10);
+		FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(NPC->GetActorLocation(), Min - NPC->GetAttackRange(), Max + NPC->GetAttackRange());
+		Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
+	}
+	else if (TargetResourceCharacter) {
+		FVector Min = FVector(TargetResourceCharacter->GetActorLocation() - TargetResourceCharacter->CapsuleRadius - 10);
+		FVector Max = FVector(TargetResourceCharacter->GetActorLocation() + TargetResourceCharacter->CapsuleRadius + 10);
 		FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(NPC->GetActorLocation(), Min - NPC->GetAttackRange(), Max + NPC->GetAttackRange());
 		Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
 	}

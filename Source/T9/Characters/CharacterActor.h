@@ -95,6 +95,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
 		float ArmourDamageTakenMultiplier = 1;
 
+	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
+		float AttackRange = 5;
+
 	UPROPERTY()
 		float HealthBarHeight = 140.0f;
 
@@ -164,13 +167,19 @@ protected:
 		int AttackStreakForSpecial = 4;
 
 	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
+		virtual void BaseCalculate();
+
+	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
 	    virtual void CalculateDamage(int BaseAdditionalDamage = 0);
 
 	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
 		virtual void CalculateMaxHealth(int BaseAdditionalHealth = 0);
 
 	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
-		virtual void CalculateArmour(int BaseAdditionalHealth = 0);
+		virtual void CalculateArmour(int BaseAdditionalArmour = 0);
+
+	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
+		virtual void CalculateAttackRange(int BaseAdditionalAttackRange = 0);
 
 	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
 	    virtual void DeathInit();

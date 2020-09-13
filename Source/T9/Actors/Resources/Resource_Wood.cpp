@@ -15,7 +15,6 @@ AResource_Wood::AResource_Wood() {
 	ResourceTiers.Add(Tier1, FResourceTierStats{ "Chestnut Oak Forest", Tier1Mesh.Object,nullptr, 1});
 	ResourceTiers.Add(Tier2, FResourceTierStats{ "Scarlet Oak Forest", Tier2Mesh.Object, nullptr, 1.25});
 	ResourceTiers.Add(Tier3, FResourceTierStats{ "Pink Cherry Forest",Tier3Mesh.Object, nullptr, 1.5});
-	if(ResourceTiers.Contains(Tier)) Name = ResourceTiers[Tier].Name;
 	if (Tier1Mesh.Succeeded()) StaticMeshComponent->SetStaticMesh(Tier1Mesh.Object);
 	BoxCollider->SetBoxExtent(BoxExtentMultiplier * 100);
 

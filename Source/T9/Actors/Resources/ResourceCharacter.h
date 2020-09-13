@@ -21,6 +21,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	FTimerHandle DeathTimerHandle;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
 		AResourceActor* ParentResource;
 
@@ -37,10 +39,7 @@ protected:
 		ACharacter* CombatTarget = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
-		float MaxResourceAmount;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
-		float CurrentResourceAmount;
+		float DecayDuration = 30;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
 	    TArray<class UMaterialInstance*> Materials;
@@ -80,6 +79,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		virtual bool CheckIfDead();
+
+	UFUNCTION()
+		void DeathInit();
 
 
 };

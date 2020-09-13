@@ -32,7 +32,7 @@ EBTNodeResult::Type UAI_FindClosestResourceCharacter::ExecuteTask(UBehaviorTreeC
 	if (!NPC->IsDead) {
 		AResourceActor* Target = Cast<AResourceActor>(Cont->GetBlackboard()->GetValueAsObject(bb_keys::target_actor));
 		FVector const Origin = NPC->GetActorLocation();
-
+		NPC->IsGathering = false;
 		//Locate nearest Building
 		SpawnedResources = PS->SpawnedResources;
 		for (int x = 0; x < SpawnedResources.Num(); x++) {
@@ -49,6 +49,7 @@ EBTNodeResult::Type UAI_FindClosestResourceCharacter::ExecuteTask(UBehaviorTreeC
 
 		if ((ClosestResource != nullptr) && (Target != ClosestResource)) {
 			AResourceCharacter* TargetCharacter = nullptr;
+			NPC->SetResource(ClosestResource);
 			ClosestResource->GetClosestSpawnedCharacter(Origin, TargetCharacter);
 			if (TargetCharacter) {
 				UE_LOG(LogTemp, Warning, TEXT("Wagwan"));
@@ -64,11 +65,13 @@ EBTNodeResult::Type UAI_FindClosestResourceCharacter::ExecuteTask(UBehaviorTreeC
 				Cont->GetBlackboard()->SetValueAsObject(bb_keys::hunt, (UObject*)TargetCharacter);
 				Cont->GetBlackboard()->SetValueAsObject(bb_keys::resource, (UObject*)ClosestResource);
 				Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
+				FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+				return EBTNodeResult::Succeeded;
 			}
 		}
 
 	}
-	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-	return EBTNodeResult::Succeeded;
+	FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+	return EBTNodeResult::Failed;
 }
 

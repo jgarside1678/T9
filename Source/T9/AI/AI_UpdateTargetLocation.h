@@ -37,4 +37,8 @@ protected:
 
 	UPROPERTY()
 		class ACharacterActor* TargetCharacter;
+
+
+	UPROPERTY()
+		class AResourceCharacter* TargetResourceCharacter;
 };

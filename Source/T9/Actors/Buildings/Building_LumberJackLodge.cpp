@@ -30,7 +30,7 @@ ABuilding_LumberJackLodge::ABuilding_LumberJackLodge(const FObjectInitializer& O
 	SpawnComponent = CreateDefaultSubobject<UBuildingSpawnComponent>(TEXT("Spawn Component"));
 	SpawnComponent->ActorToSpawn = AAlliance_Lumberjack::StaticClass();
 	SpawnComponent->SpawnMethod = PointSpawn;
-	SpawnComponent->SpawnLocation = FVector(800, 0, 50);
+	SpawnComponent->SpawnLocation = FVector(250, 0, 50);
 	SpawnComponent->MaxSpawnRange = 500;
 	SpawnComponent->GetInventoryComponent()->AddInventorySlot(FSlot{ 1, Tool });
 	SpawnComponent->GetInventoryComponent()->AddInventorySlot(FSlot{ 1, Armour });

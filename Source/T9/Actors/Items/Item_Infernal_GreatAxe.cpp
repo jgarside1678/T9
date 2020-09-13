@@ -5,7 +5,7 @@
 
 AItem_Infernal_GreatAxe::AItem_Infernal_GreatAxe() {
 	//Damage, Health, Defence, Gather
-	Modifiers = { 300, 1};
+	Modifiers = { FItemModifiersOffensive{300, 1.2}, FItemModifiersDefensive{}, FItemModifiersProduction{} };
 	ItemSocket = MainHand;
 	ItemName = "Infernal GreatAxe Of Kharg";
 	ItemType = Weapon;

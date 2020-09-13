@@ -8,8 +8,10 @@
 #include "T9/MainPlayerState.h"
 #include "T9/Actors/GameGridActor.h"
 #include "Components/StaticMeshComponent.h"
+#include "T9/Actors/Components/BuildingSpawnComponent.h"
 #include "Components/InstancedStaticMeshComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "T9/Actors/Resources/ResourceCharacter.h"
 #include "T9/Widgets/ResourceQuickSelect.h"
 
@@ -98,7 +100,7 @@ void AResourceActor::GetClosestSpawnedCharacter(FVector Location, AResourceChara
 	FVector ClosestOrigin;
 	float ClosestDistance = 1000000;
 	for (int x = 0; x < ResourceSpawns.Num(); x++) {
-		if (ResourceSpawns[x]) {
+		if (ResourceSpawns[x] && !ResourceSpawns[x]->IsPendingKill()) {
 			FVector CharacterLocation = ResourceSpawns[x]->GetActorLocation();
 			float Distance = (Location - CharacterLocation).Size();
 			if (Distance < ClosestDistance) {
@@ -114,21 +116,37 @@ void AResourceActor::GetClosestSpawnedCharacter(FVector Location, AResourceChara
 void AResourceActor::SetSelected()
 {
 	StaticMeshComponent->SetRenderCustomDepth(true);
-	for (int x = 0; x < ResourceSpawns.Num(); x++) ResourceSpawns[x]->GetMesh()->SetRenderCustomDepth(true);
+	for (int x = 0; x < ResourceSpawns.Num(); x++) if(ResourceSpawns[x] && !ResourceSpawns[x]->IsPendingKill()) ResourceSpawns[x]->GetMesh()->SetRenderCustomDepth(true);
 	if (ResourceQuickSelectComponent) ResourceQuickSelectComponent->SetVisibility(true);
 }
 
 void AResourceActor::SetUnSelected()
 {
 	StaticMeshComponent->SetRenderCustomDepth(false);
-	for (int x = 0; x < ResourceSpawns.Num(); x++) ResourceSpawns[x]->GetMesh()->SetRenderCustomDepth(false);
+	for (int x = 0; x < ResourceSpawns.Num(); x++) if (ResourceSpawns[x] && !ResourceSpawns[x]->IsPendingKill()) ResourceSpawns[x]->GetMesh()->SetRenderCustomDepth(false);
 	if (ResourceQuickSelectComponent) ResourceQuickSelectComponent->SetVisibility(false);
 
 }
 
 FString AResourceActor::GetName()
 {
-	return Name;
+	return ResourceTiers[Tier].Name;
+}
+
+FResourceTierStats AResourceActor::GetResourceStats()
+{
+	if (ResourceTiers.Contains(Tier)) return ResourceTiers[Tier];
+	else return FResourceTierStats();
+}
+
+int AResourceActor::GetTier()
+{
+	return (int)Tier;
+}
+
+int AResourceActor::GetSpawnedUnits()
+{
+	return ResourceSpawns.Num() + StaticMeshComponent->GetInstanceCount();
 }
 
 void AResourceActor::ResourceInit(AGameGridActor* Grid, TEnumAsByte<Tiers> StartingResourceTier)
@@ -139,9 +157,58 @@ void AResourceActor::ResourceInit(AGameGridActor* Grid, TEnumAsByte<Tiers> Start
 	GridSpace->SetRelativeLocation(FVector(0, 0, 1));
 	if (ResourceTiers.Contains(StartingResourceTier)) {
 		Tier = StartingResourceTier;
-		Name = ResourceTiers[StartingResourceTier].Name;
 		if(ResourceTiers[StartingResourceTier].ResourceMesh) StaticMeshComponent->SetStaticMesh(ResourceTiers[StartingResourceTier].ResourceMesh);
 	}
 	if (ResourceQuickSelect)	ResourceQuickSelect->Init(this);
+}
+
+
+void AResourceActor::KillAll() {
+	for (int x = 0; x < ResourceSpawns.Num(); x++) {
+		if (ResourceSpawns[x] != nullptr) ResourceSpawns[x]->Destroy();
+	}
+	CurrentSpawnCount = 0;
+}
+
+
+void AResourceActor::AutoRespawn() {
+	if (CurrentSpawnCount < MaxSpawnCount) {
+		AutoSpawning = true;
+		Spawn();
+		GetWorldTimerManager().SetTimer(ResourceSpawnTimerHandle, this, &AResourceActor::AutoRespawn, SpawnTime, false, SpawnTime);
+	}
+	else AutoSpawning = false;
+}
+
+void AResourceActor::Respawn() {
+	if (!AutoSpawning) {
+		GetWorldTimerManager().SetTimer(ResourceSpawnTimerHandle, this, &AResourceActor::AutoRespawn, SpawnTime, false, SpawnTime);
+	}
+}
+
+ACharacter* AResourceActor::Spawn() {
+	if (CurrentSpawnCount < MaxSpawnCount) {
+		FActorSpawnParameters SpawnParams;
+		FVector SpawnLocation;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::DontSpawnIfColliding;
+		AResourceCharacter* SpawnedActorRef = nullptr;
+		while (!SpawnedActorRef) {
+			SpawnLocation = UKismetMathLibrary::RandomPointInBoundingBox(GetActorLocation(), BoxCollider->GetScaledBoxExtent());
+			SpawnedActorRef = GetWorld()->SpawnActor<AResourceCharacter>(ResourceTiers[Tier].ResourceSpawnCharacter, FVector(SpawnLocation.X, SpawnLocation.Y, 100), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		}
+		ResourceSpawns.Add(SpawnedActorRef);
+		if (SpawnedActorRef) {
+			CurrentSpawnCount++;
+			SpawnedActorRef->Init(this, SpawnLocation);
+		}
+		if (SpawnedActorRef) return SpawnedActorRef;
+	}
+	return nullptr;
+}
+
+void AResourceActor::ReduceCurrentSpawnCount(int Amount) {
+	CurrentSpawnCount -= Amount;
+	if (CurrentSpawnCount < 0) CurrentSpawnCount = 0;
+	Respawn();
 }
 

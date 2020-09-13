@@ -15,7 +15,6 @@ AResource_Stone::AResource_Stone() {
 	ResourceTiers.Add(Tier1, FResourceTierStats{ "Stone Quarry", Tier1Mesh.Object, nullptr, 1 });
 	ResourceTiers.Add(Tier2, FResourceTierStats{ "Basalt Quarry", Tier2Mesh.Object, nullptr, 1.25 });
 	ResourceTiers.Add(Tier3, FResourceTierStats{ "Granite Quarry",Tier3Mesh.Object, nullptr, 1.5 });
-	if (ResourceTiers.Contains(Tier)) Name = ResourceTiers[Tier].Name;
 	if (Tier1Mesh.Succeeded()) StaticMeshComponent->SetStaticMesh(Tier1Mesh.Object);
 	BoxCollider->SetBoxExtent(BoxExtentMultiplier * 100);
 

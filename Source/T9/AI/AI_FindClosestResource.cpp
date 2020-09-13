@@ -47,6 +47,7 @@ EBTNodeResult::Type UAI_FindClosestResource::ExecuteTask(UBehaviorTreeComponent&
 		}
 
 		if ((ClosestResource != nullptr) && (Target != ClosestResource)) {
+			NPC->SetResource(ClosestResource);
 			FVector ClosestResourceBounds, ClosestResourceOrigin;
 			ClosestResource->GetClosestStaticMesh(Origin, ClosestResourceOrigin, ClosestResourceBounds);
 			FVector Direction = (Origin - ClosestResourceOrigin).GetSafeNormal();

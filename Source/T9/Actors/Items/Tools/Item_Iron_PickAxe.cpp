@@ -4,7 +4,7 @@
 #include "Item_Iron_PickAxe.h"
 
 AItem_Iron_PickAxe::AItem_Iron_PickAxe() {
-	Modifiers = {30, 1, 50, 1, 5000, 1, 10, 1};
+	Modifiers = { FItemModifiersOffensive{50, 1.2}, FItemModifiersDefensive{}, FItemModifiersProduction{30, 10} };
 	ItemSocket = MainHand;
 	ItemName = "Sindering Axe";
 	ItemType = Tool;

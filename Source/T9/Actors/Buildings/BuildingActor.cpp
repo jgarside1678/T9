@@ -22,6 +22,8 @@
 #include "Components/WidgetComponent.h"
 #include "T9/Widgets/QuickSelectMenu.h"
 
+#include "InstancedFoliageActor.h"
+#include "FoliageType.h"
 // Sets default values
 ABuildingActor::ABuildingActor() : 
 	HealthWidgetComponent(CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"))),
@@ -126,6 +128,9 @@ void ABuildingActor::BeginPlay()
 	CalculateDamage();
 	CalculateMaxHealth();
 	CalculateDefence();
+	CalculateAttackRange();
+	CalculateAttackSpeed();
+
 	TArray<AActor*> CollidingActors;
 	GetOverlappingActors(CollidingActors, AEnemyCharacter::StaticClass());
 	if(CollidingActors.Num() > 0) SetTarget();
@@ -137,6 +142,17 @@ void ABuildingActor::BeginPlay()
 	QuickSelectMenu = Cast<UQuickSelectMenu>(QuickSelectWidgetComponent->GetUserWidgetObject());
 	if(QuickSelectMenu)	QuickSelectMenu->Init(this);
 	ResetHealth();
+
+	AInstancedFoliageActor* Instance = AInstancedFoliageActor::GetInstancedFoliageActorForCurrentLevel(GetWorld(), false);
+	FBox newBox = FBox(GetActorLocation()- BuildingExtent, GetActorLocation()+ BuildingExtent);
+	TArray<UInstancedStaticMeshComponent*> components;
+	Instance->GetComponents<UInstancedStaticMeshComponent>(components);
+	for (int z = 0; z < components.Num(); z++) {
+		TArray<int32> Indexs = components[z]->GetInstancesOverlappingBox(newBox, true);
+		for (int x = 0; x < Indexs.Num(); x++) {
+			components[z]->RemoveInstance(Indexs[x]);
+		}
+	}
 }
 
 void ABuildingActor::SetTarget()
@@ -326,6 +342,8 @@ void ABuildingActor::Upgrade() {
 		CalculateDamage();
 		CalculateMaxHealth();
 		CalculateDefence();
+		CalculateAttackRange();
+		CalculateAttackSpeed();
 
 		if(!Disabled) PS->AddPower(Upgrades[Level].PowerRating - Upgrades[Level - 1].PowerRating);
 
@@ -335,7 +353,6 @@ void ABuildingActor::Upgrade() {
 
 		if (Upgrades[Level].BaseMesh != nullptr) StaticMeshComponent->SetStaticMesh(Upgrades[Level].BaseMesh);
 		PS->AddCurrentXP(Upgrades[Level].XP);
-		BuildingRangeCollider->SetBoxExtent(BuildingExtent * Upgrades[Level].Attack.AttackRangeMultipler);
 		ResetHealth();
 	}
 	else UE_LOG(LogTemp, Warning, TEXT("Not enough money to upgrade"));
@@ -360,6 +377,16 @@ float ABuildingActor::GetDamage() {
 float ABuildingActor::GetDefence()
 {
 	return Defence;
+}
+
+float ABuildingActor::GetAttackRange()
+{
+	return AttackRange;
+}
+
+float ABuildingActor::GetAttackSpeed()
+{
+	return AttackSpeed;
 }
 
 UTexture2D* ABuildingActor::GetImage()
@@ -395,7 +422,7 @@ void ABuildingActor::SetDisabled(bool Input)
 	}
 	else {
 		SetActorTickEnabled(true);
-		if (SpawnComp) ((UBuildingSpawnComponent*)SpawnComp)->Init();
+		if (SpawnComp) ((UBuildingSpawnComponent*)SpawnComp)->Respawn();
 		PS->AddPower(Upgrades[Level].PowerRating);
 		SetTarget();
 	}
@@ -410,24 +437,42 @@ void ABuildingActor::CalculateDamage()
 {
 	Damage = 0;
 	if(Upgrades.Contains(Level)) Damage += Upgrades[Level].Attack.Damage;
-	Damage += ItemModifiers.ItemDamageBase;
-	Damage *= ItemModifiers.ItemDamageMultiplier;
+	Damage += ItemModifiers.OffensiveStats.ItemDamageBase;
+	Damage *= ItemModifiers.OffensiveStats.ItemDamageMultiplier;
+}
+
+void ABuildingActor::CalculateAttackRange()
+{
+	AttackRange = 0;
+	if (Upgrades.Contains(Level)) AttackRange += Upgrades[Level].Attack.AttackRangeMultipler;
+	AttackRange += ItemModifiers.OffensiveStats.ItemAttackRangeBase;
+	AttackRange *= ItemModifiers.OffensiveStats.ItemAttackRangeMultiplier;
+	BuildingRangeCollider->SetBoxExtent(BuildingExtent * AttackRange);
+}
+
+void ABuildingActor::CalculateAttackSpeed()
+{
+	AttackSpeed = 0;
+	if (Upgrades.Contains(Level)) AttackSpeed += Upgrades[Level].Attack.AttackSpeed;
+	AttackSpeed += ItemModifiers.OffensiveStats.ItemDamageBase;
+	AttackSpeed *= ItemModifiers.OffensiveStats.ItemDamageMultiplier;
+	AttackSpeedMultiplier = 10 * UKismetMathLibrary::Exp(-AttackSpeed / 100);
 }
 
 void ABuildingActor::CalculateMaxHealth()
 {
 	MaxHealth = 0;
 	if (Upgrades.Contains(Level)) MaxHealth += Upgrades[Level].MaxHealth;
-	MaxHealth += ItemModifiers.ItemHealthBase;
-	MaxHealth *= ItemModifiers.ItemHealthMultiplier;
+	MaxHealth += ItemModifiers.DefensiveStats.ItemHealthBase;
+	MaxHealth *= ItemModifiers.DefensiveStats.ItemHealthMultiplier;
 }
 
 void ABuildingActor::CalculateDefence()
 {
 	Defence = 0;
 	if (Upgrades.Contains(Level)) Defence += Upgrades[Level].Defence;
-	Defence += ItemModifiers.ItemDefenceBase;
-	Defence *= ItemModifiers.ItemDefenceMultiplier;
+	Defence += ItemModifiers.DefensiveStats.ItemDefenceBase;
+	Defence *= ItemModifiers.DefensiveStats.ItemDefenceMultiplier;
 	DefenceDamageTakenMultiplier = UKismetMathLibrary::Exp(-Defence / 1000);
 }
 
@@ -472,6 +517,8 @@ void ABuildingActor::UpdateBuildingModifiers()
 	CalculateDamage();
 	CalculateMaxHealth();
 	CalculateDefence();
+	CalculateAttackRange();
+	CalculateAttackSpeed();
 }
 
 UWidgetComponent* ABuildingActor::GetHealthWidget()

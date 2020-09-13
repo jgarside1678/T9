@@ -70,6 +70,7 @@ void AResourceCharacter::TakeDamage(AActor* AttackingActor, float AmountOfDamage
 		if (Health <= 0) {
 			Dead = true;
 			Controller->UnPossess();
+			GetWorldTimerManager().SetTimer(DeathTimerHandle, this, &AResourceCharacter::DeathInit, DecayDuration, false, DecayDuration);
 		}
 	}
 }
@@ -78,4 +79,9 @@ void AResourceCharacter::DamageEnemy(AActor* Actor, float AmountOfDamage)
 {
 	IDamageInterface* Enemy = Cast<IDamageInterface>(Actor);
 	if (Enemy != nullptr) Enemy->TakeDamage(this, AmountOfDamage);
+}
+
+void AResourceCharacter::DeathInit() {
+	Destroy();
+	ParentResource->ReduceCurrentSpawnCount(1);
 }

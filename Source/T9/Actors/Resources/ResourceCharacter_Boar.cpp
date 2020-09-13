@@ -8,9 +8,8 @@
 #include "UObject/ConstructorHelpers.h"
 
 AResourceCharacter_Boar::AResourceCharacter_Boar() {
-	Health = 100;
-	MaxResourceAmount = 1000;
-	CurrentResourceAmount = MaxResourceAmount;
+	Health = 250;
+	DecayDuration = 60;
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/Neutral/StylizedWildAnimals/Meshes/Boar/SK_Boar.SK_Boar'"));
 	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Neutral/StylizedWildAnimals/Animations/Boar/BoarAnimation_BP.BoarAnimation_BP_C'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material1(TEXT("MaterialInstanceConstant'/Game/AI/Neutral/StylizedWildAnimals/Materials/Instances/Boar/MI_Boar_Blue.MI_Boar_Blue'"));

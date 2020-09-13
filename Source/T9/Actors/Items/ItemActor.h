@@ -56,8 +56,9 @@ enum Rarity
 	Mythical UMETA(DisplayName = "Mythical")
 };
 
+
 USTRUCT(BlueprintType)
-struct T9_API FItemModifiers {
+struct T9_API FItemModifiersOffensive {
 
 	GENERATED_BODY()
 
@@ -66,6 +67,34 @@ struct T9_API FItemModifiers {
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		float ItemDamageMultiplier = 1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		int ItemAttackRangeBase = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		float ItemAttackRangeMultiplier = 1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		int ItemAttackSpeedBase = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		float ItemAttackSpeedMultiplier = 1;
+
+	inline FItemModifiersOffensive& operator+=(const FItemModifiersOffensive& Right) {
+		this->ItemDamageBase += Right.ItemDamageBase;
+		this->ItemDamageMultiplier *= Right.ItemDamageMultiplier;
+		this->ItemAttackRangeBase += Right.ItemAttackRangeBase;
+		this->ItemAttackRangeMultiplier *= Right.ItemAttackRangeMultiplier;
+		this->ItemAttackSpeedBase += Right.ItemAttackSpeedBase;
+		this->ItemAttackSpeedMultiplier *= Right.ItemAttackSpeedMultiplier;
+		return *this;
+	}
+};
+
+USTRUCT(BlueprintType)
+struct T9_API FItemModifiersDefensive {
+
+	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		int ItemHealthBase = 0;
@@ -79,22 +108,53 @@ struct T9_API FItemModifiers {
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		float ItemDefenceMultiplier = 1;
 
+	inline FItemModifiersDefensive& operator+=(const FItemModifiersDefensive& Right) {
+		this->ItemHealthBase += Right.ItemHealthBase;
+		this->ItemHealthMultiplier *= Right.ItemHealthMultiplier;
+		this->ItemDefenceBase += Right.ItemDefenceBase;
+		this->ItemDefenceMultiplier *= Right.ItemDefenceMultiplier;
+		return *this;
+	}
+};
+
+USTRUCT(BlueprintType)
+struct T9_API FItemModifiersProduction {
+
+	GENERATED_BODY()
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		int ItemGatherBase = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		float ItemGatherMultiplier = 1;
 
-	inline FItemModifiers& operator+=(const FItemModifiers& Right) {
-		this->ItemDamageBase += Right.ItemDamageBase;
-		this->ItemDamageMultiplier *= Right.ItemDamageMultiplier;
-		this->ItemHealthBase += Right.ItemHealthBase;
-		this->ItemHealthMultiplier *= Right.ItemHealthMultiplier;
-		this->ItemDefenceBase += Right.ItemDefenceBase;
-		this->ItemDefenceMultiplier *= Right.ItemDefenceMultiplier;
+	inline FItemModifiersProduction& operator+=(const FItemModifiersProduction& Right) {
+
 		this->ItemGatherBase += Right.ItemGatherBase;
 		this->ItemGatherMultiplier *= Right.ItemGatherMultiplier;
-			return *this;
+		return *this;
+	}
+};
+
+USTRUCT(BlueprintType)
+struct T9_API FItemModifiers {
+
+	GENERATED_BODY()
+
+		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		FItemModifiersOffensive OffensiveStats;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		FItemModifiersDefensive DefensiveStats;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		FItemModifiersProduction ProductionStats;
+
+	inline FItemModifiers& operator+=(const FItemModifiers& Right) {
+		this->OffensiveStats += Right.OffensiveStats;
+		this->DefensiveStats += Right.DefensiveStats;
+		this->ProductionStats += Right.ProductionStats;
+		return *this;
 	}
 };
 

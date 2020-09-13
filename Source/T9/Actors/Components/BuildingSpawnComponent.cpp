@@ -127,6 +127,7 @@ void UBuildingSpawnComponent::KillAll() {
 	}
 	CurrentSpawnCount = 0;
 	MyOwner->GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
+	AutoSpawning = false;
 }
 
 UInventoryComponent* UBuildingSpawnComponent::GetInventoryComponent()

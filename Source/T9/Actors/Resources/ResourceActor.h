@@ -77,8 +77,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
 		class AMainPlayerState* PS;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
-		FString Name = "Resource";
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+	//	FString Name = "Resource";
 
 	UPROPERTY()
 	    TArray<UStaticMeshComponent*> Meshs;
@@ -106,6 +106,17 @@ protected:
 	UPROPERTY()
 		class UResourceQuickSelect* ResourceQuickSelect;
 
+	FTimerHandle ResourceSpawnTimerHandle;
+
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+		int MaxSpawnCount = 1;
+
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+		int CurrentSpawnCount = 0;
+
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+		float SpawnTime = 10.0f;
+
 
 public:	
 	// Called every frame
@@ -129,10 +140,37 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual FString GetName() override;
 
+	UFUNCTION(BlueprintCallable)
+		struct FResourceTierStats GetResourceStats();
+
+	UFUNCTION(BlueprintCallable)
+		int GetTier();
+
+	UFUNCTION(BlueprintCallable)
+		int GetSpawnedUnits();
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* GridSpace;
 
 	UFUNCTION()
 		virtual void ResourceInit(class AGameGridActor* Grid, TEnumAsByte<Tiers> StartingResourceTier = Tier1);
+
+	UFUNCTION()
+		ACharacter* Spawn();
+
+	UPROPERTY()
+		bool AutoSpawning = false;
+
+	UFUNCTION()
+		void AutoRespawn();
+
+	UFUNCTION()
+		void ReduceCurrentSpawnCount(int Amount);
+
+	UFUNCTION()
+		void Respawn();
+
+	UFUNCTION()
+		void KillAll();
 
 };

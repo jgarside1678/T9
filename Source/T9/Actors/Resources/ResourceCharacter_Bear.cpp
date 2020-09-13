@@ -9,8 +9,7 @@
 
 AResourceCharacter_Bear::AResourceCharacter_Bear() {
 	Health = 500;
-	MaxResourceAmount = 5000;
-	CurrentResourceAmount = MaxResourceAmount;
+	DecayDuration = 90;
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/Neutral/StylizedWildAnimals/Meshes/Bear/SK_Bear.SK_Bear'"));
 	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Neutral/StylizedWildAnimals/Animations/Bear/BearAnimation_BP.BearAnimation_BP_C'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material1(TEXT("MaterialInstanceConstant'/Game/AI/Neutral/StylizedWildAnimals/Materials/Instances/Bear/MI_Bear_Black.MI_Bear_Black'"));

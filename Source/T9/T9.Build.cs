@@ -8,7 +8,7 @@ public class T9 : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AIModule", "ProceduralMeshComponent", "GameplayTasks", "NavigationSystem", "Niagara" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AIModule", "ProceduralMeshComponent", "GameplayTasks", "NavigationSystem", "Niagara", "Foliage" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

@@ -190,6 +190,15 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
 		float DefenceDamageTakenMultiplier = 1;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+		float AttackRange;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+		float AttackSpeed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+		float AttackSpeedMultiplier = 3;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		TEnumAsByte<DamageType> TypeOfDamage = Alliance;
 
@@ -283,6 +292,8 @@ protected:
 
 	UPROPERTY()
 		class UQuickSelectMenu* QuickSelectMenu;
+
+	TArray<UActorComponent*> InstancedStaticMeshArray;
 
 
 public:
@@ -381,6 +392,12 @@ public:
 		float GetDefence();
 
 	UFUNCTION(BlueprintCallable)
+		float GetAttackRange();
+
+	UFUNCTION(BlueprintCallable)
+		float GetAttackSpeed();
+
+	UFUNCTION(BlueprintCallable)
 		class UTexture2D* GetImage();
 
 	UPROPERTY()
@@ -405,6 +422,12 @@ public:
 
 	UFUNCTION()
 		void CalculateDamage();
+
+	UFUNCTION()
+		void CalculateAttackRange();
+
+	UFUNCTION()
+		void CalculateAttackSpeed();
 
 	UFUNCTION()
 		void CalculateMaxHealth();

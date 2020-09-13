@@ -77,7 +77,7 @@ void ADefensiveBuildingActor::AttackTarget()
 				}
 				else TargetInterface->TakeDamage(this, GetDamage(), Enemy);
 			}
-			GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ADefensiveBuildingActor::AttackTarget, Upgrades[Level].Attack.AttackSpeed, false, Upgrades[Level].Attack.AttackSpeed);
+			GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ADefensiveBuildingActor::AttackTarget, AttackSpeedMultiplier, false, AttackSpeedMultiplier);
 		}
 		else SetTarget();
 	}

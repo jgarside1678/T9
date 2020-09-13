@@ -5,7 +5,7 @@
 
 
 AItem_Infernal_Scimitar::AItem_Infernal_Scimitar() {
-	Modifiers = { 150, 1 };
+	Modifiers = { FItemModifiersOffensive{150, 1.2, 5, 2, 20, 1.5}, FItemModifiersDefensive{}, FItemModifiersProduction{} };
 	ItemSocket = MainHand;
 	ItemName = "Infernal Scimitar Of Zhurk";
 	ItemType = Weapon;

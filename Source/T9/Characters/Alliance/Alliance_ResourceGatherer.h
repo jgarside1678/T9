@@ -67,6 +67,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Gathering", Meta = (AllowPrivateAccess = "true"))
 		FGathererLevels GetGathererUpgradeStats();
 
+	UFUNCTION()
+		void CalculateGatherAmount();
+
+	UFUNCTION()
+		void CalculateMaxResourceInventory();
+
+	UFUNCTION()
+		void SetResource(class AResourceActor* Resource);
+
 protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Gathering", Meta = (AllowPrivateAccess = "true"))
@@ -77,4 +86,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gathering")
 		int MaxResourceInventory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gathering")
+		class AResourceActor* CurrentResource;
+
+	virtual void BaseCalculate() override;
 };

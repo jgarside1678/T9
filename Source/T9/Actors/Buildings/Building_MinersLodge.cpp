@@ -30,7 +30,7 @@ ABuilding_MinersLodge::ABuilding_MinersLodge(const FObjectInitializer& ObjectIni
 	SpawnComponent = CreateDefaultSubobject<UBuildingSpawnComponent>(TEXT("Spawn Component"));
 	SpawnComponent->ActorToSpawn = AAlliance_Miner::StaticClass();
 	SpawnComponent->SpawnMethod = PointSpawn;
-	SpawnComponent->SpawnLocation = FVector(800, 0, 50);
+	SpawnComponent->SpawnLocation = FVector(250, 0, 50);
 	SpawnComponent->MaxSpawnRange = 500;
 	SpawnComponent->GetInventoryComponent()->AddInventorySlot(FSlot{ 1, Tool });
 	SpawnComponent->GetInventoryComponent()->AddInventorySlot(FSlot{ 1, Armour });

@@ -100,9 +100,7 @@ void ACharacterActor::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invu
 {
 	SpawnBuilding = BuildingSpawn;
 	Level = SpawnLevel;
-	CalculateDamage();
-	CalculateMaxHealth();
-	CalculateArmour();
+	BaseCalculate();
 	ResetHealth();
 	NeedsController = SpawnController;
 	if (!GetController() && NeedsController) {
@@ -183,6 +181,14 @@ void ACharacterActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, D
 	}
 }
 
+void ACharacterActor::BaseCalculate()
+{
+	CalculateDamage();
+	CalculateMaxHealth();
+	CalculateArmour();
+	CalculateAttackRange();
+}
+
 void ACharacterActor::CalculateDamage(int BaseAdditionalDamage)
 {
 	if (Levels.Contains(Level)) {
@@ -190,8 +196,8 @@ void ACharacterActor::CalculateDamage(int BaseAdditionalDamage)
 	}
 	else if (Levels.Contains(Levels.Num())) Damage = Levels[Levels.Num()].BaseDamage;
 	Damage += BaseAdditionalDamage;
-	Damage += ItemModifiers.ItemDamageBase;
-	Damage *= ItemModifiers.ItemDamageMultiplier;
+	Damage += ItemModifiers.OffensiveStats.ItemDamageBase;
+	Damage *= ItemModifiers.OffensiveStats.ItemDamageMultiplier;
 }
 
 void ACharacterActor::CalculateMaxHealth(int BaseAdditionalHealth)
@@ -199,8 +205,8 @@ void ACharacterActor::CalculateMaxHealth(int BaseAdditionalHealth)
 	MaxHealth = 0;
 	if (Levels.Contains(Level)) MaxHealth +=  Levels[Level].MaxHealth;
 	else if (Levels.Contains(Levels.Num())) MaxHealth += Levels[Levels.Num()].MaxHealth;
-	MaxHealth += ItemModifiers.ItemHealthBase;
-	MaxHealth *= ItemModifiers.ItemHealthMultiplier;
+	MaxHealth += ItemModifiers.DefensiveStats.ItemHealthBase;
+	MaxHealth *= ItemModifiers.DefensiveStats.ItemHealthMultiplier;
 	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 }
 
@@ -208,10 +214,19 @@ void ACharacterActor::CalculateArmour(int BaseAdditionalHealth)
 {
 	Armour = 0;
 	if (Levels.Contains(Level)) Armour += Levels[Level].Armour;
-	Armour += ItemModifiers.ItemDefenceBase;
-	Armour *= ItemModifiers.ItemDefenceMultiplier;
+	Armour += ItemModifiers.DefensiveStats.ItemDefenceBase;
+	Armour *= ItemModifiers.DefensiveStats.ItemDefenceMultiplier;
 	ArmourDamageTakenMultiplier = UKismetMathLibrary::Exp(-Armour / 1000);
 }
+
+void ACharacterActor::CalculateAttackRange(int BaseAdditionalAttackRange)
+{
+	AttackRange = 0;
+	if (Levels.Contains(Level)) AttackRange += Levels[Level].AttackRange;
+	AttackRange += ItemModifiers.OffensiveStats.ItemAttackRangeBase;
+	AttackRange *= ItemModifiers.OffensiveStats.ItemAttackRangeMultiplier;
+}
+
 
 void ACharacterActor::DeathInit() {
 	IsDead = true;
@@ -254,9 +269,7 @@ bool ACharacterActor::IsDamageable()
 }
 
 float ACharacterActor::GetAttackRange() {
-	if (Levels.Contains(Level)) return Levels[Level].AttackRange;
-	else if (Levels.Contains(Levels.Num())) return Levels[Levels.Num()].AttackRange;
-	return 0;
+	return AttackRange;
 }
 
 void ACharacterActor::Attack(AActor* Target)
@@ -321,9 +334,7 @@ void ACharacterActor::AddMainHand(AItemActor* NewMainHand)
 		Equipment.MainHand = NewMainHand;
 		MainHandItem->SetStaticMesh(Equipment.MainHand->GetItemMesh());
 		ItemModifiers += Equipment.MainHand->GetItemModifiers();
-		CalculateDamage();
-		CalculateMaxHealth();
-		CalculateArmour();
+		BaseCalculate();
 		SheathMainHand();
 	}
 }
@@ -345,9 +356,7 @@ void ACharacterActor::ResetEquipment()
 	else {
 		OffHandItem->SetStaticMesh(NULL);
 	}
-	CalculateDamage();
-	CalculateMaxHealth();
-	CalculateArmour();
+	BaseCalculate();
 }
 
 

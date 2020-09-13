@@ -18,8 +18,8 @@ void AAlliance_ResourceGatherer::GatherResources()
 	IsGathering = true;
 	EquipMainHand();
 	if (GatheringLevels.Contains(Level)) {
-		GatheredResource += GatheringLevels[Level].GatherAmount;
-		if (GatheredResource > GatheringLevels[Level].MaxResourceInventory) GatheredResource = GatheringLevels[Level].MaxResourceInventory;
+		GatheredResource += GatherAmount;
+		if (GatheredResource > MaxResourceInventory) GatheredResource = MaxResourceInventory;
 	}
 }
 
@@ -74,5 +74,33 @@ FGathererLevels AAlliance_ResourceGatherer::GetGathererUpgradeStats()
 	if (GatheringLevels.Contains(Level+1)) return GatheringLevels[Level+1];
 	else if(GatheringLevels.Contains(Level)) return GatheringLevels[Level];
 	else return FGathererLevels();
+}
+
+void AAlliance_ResourceGatherer::CalculateGatherAmount()
+{
+	GatherAmount = 0;
+	if (GatheringLevels.Contains(Level)) GatherAmount += GatheringLevels[Level].GatherAmount;
+	if (CurrentResource) GatherAmount *= CurrentResource->GetResourceStats().ResourceGatherMultiplier;
+	GatherAmount += ItemModifiers.ProductionStats.ItemGatherBase;
+	GatherAmount *= ItemModifiers.ProductionStats.ItemGatherMultiplier;
+}
+
+void AAlliance_ResourceGatherer::CalculateMaxResourceInventory()
+{
+	MaxResourceInventory = 0;
+	if (GatheringLevels.Contains(Level)) MaxResourceInventory += GatheringLevels[Level].MaxResourceInventory;
+}
+
+void AAlliance_ResourceGatherer::SetResource(AResourceActor* Resource)
+{
+	CurrentResource = Resource;
+	CalculateGatherAmount();
+}
+
+void AAlliance_ResourceGatherer::BaseCalculate()
+{
+	Super::BaseCalculate();
+	CalculateGatherAmount();
+	CalculateMaxResourceInventory();
 }
 
