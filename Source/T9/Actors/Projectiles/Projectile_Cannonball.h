@@ -4,15 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "T9/Actors/Projectiles/TrackingProjectile.h"
-#include "Projectile_Arrow.generated.h"
+#include "Projectile_Cannonball.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class T9_API AProjectile_Arrow : public ATrackingProjectile
+class T9_API AProjectile_Cannonball : public ATrackingProjectile
 {
 	GENERATED_BODY()
+
 public:
-	AProjectile_Arrow(const FObjectInitializer& ObjectInitializer);
+
+	AProjectile_Cannonball(const FObjectInitializer& ObjectInitializer);
+
+protected:
+
 };

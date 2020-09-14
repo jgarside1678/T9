@@ -9,6 +9,7 @@
 #include "Components/Image.h"
 #include "T9/Actors/Buildings/BuildingActor.h"
 #include "SelectMenuWidget.h"
+#include "Components/WidgetComponent.h"
 
 UQuickSelectMenu::UQuickSelectMenu(const FObjectInitializer& ObjectInit) : Super(ObjectInit) {
 	static ConstructorHelpers::FObjectFinder<UTexture2D> SpriteRestore(TEXT("Texture2D'/Game/UI/Assets/TheStone/PNG/19_Function_Button/ButtonIcon/128x128/btn_icon_hammer.btn_icon_hammer'"));
@@ -42,7 +43,6 @@ void UQuickSelectMenu::UpgradeRestoreBuilding()
 		else SelectedBuilding->Upgrade();
 	}
 	if (HUD)HUD->SetGameObjectSelected(FHitResult());
-	this->RemoveFromViewport();
 }
 
 void UQuickSelectMenu::InfoBuilding()
@@ -50,7 +50,7 @@ void UQuickSelectMenu::InfoBuilding()
 	if (HUD) {
 		HUD->ShowSelectMenu();
 	}
-	this->RemoveFromViewport();
+	if(SelectedBuilding) SelectedBuilding->GetQuickSelectWidget()->SetVisibility(false);
 }
 
 void UQuickSelectMenu::StoreBuilding()
@@ -59,7 +59,6 @@ void UQuickSelectMenu::StoreBuilding()
 		SelectedBuilding->RemoveBuilding();
 	}
 	if (HUD)HUD->SetGameObjectSelected(FHitResult());
-	this->RemoveFromViewport();
 }
 
 void UQuickSelectMenu::SetRestoreImage()

@@ -82,7 +82,8 @@ void AProjectile::ProjectileExplode()
 {
 	if (ProjectilePrimitive) {
 		if (ExplosionEffect) {
-			UNiagaraFunctionLibrary::SpawnSystemAttached(ExplosionEffect, Target->GetRootComponent(), FName(""), FVector(0, 0, 0), FRotator(0), EAttachLocation::SnapToTarget, true);
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(Target, ExplosionEffect, GetActorLocation(), FRotator(0), FVector(2), true, true);
+			//UNiagaraFunctionLibrary::SpawnSystemAttached(ExplosionEffect, Target->GetRootComponent(), FName(""), FVector(0, 0, 0), FRotator(0), EAttachLocation::SnapToTarget, true);
 		}
 	}
 }
