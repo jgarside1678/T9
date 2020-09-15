@@ -56,6 +56,7 @@ void ACharacterActor::BeginPlay()
 	if (WidgetComponent) {
 		if (WidgetClass != nullptr) {
 			WidgetComponent->SetWidgetClass(WidgetClass);
+			WidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, HealthBarHeight));
 		}
 		HealthBar = Cast<UHealthBarWidget>(WidgetComponent->GetUserWidgetObject());
 	}
@@ -288,7 +289,7 @@ void ACharacterActor::Attack(AActor* Target)
 			SpawnedActorRef->ProjectileInnit(Target, Damage, this, 0, ProjectileDamage);
 		}
 		else DamageEnemy(Target, Damage);
-		if(AttackMontage) PlayAnimMontage(AttackMontage);
+		if(AttackMontage) PlayAnimMontage(AttackMontage, 1, AttackMontage->GetSectionName(AttackStreak));
 		AttackStreak++;
 	}
 }

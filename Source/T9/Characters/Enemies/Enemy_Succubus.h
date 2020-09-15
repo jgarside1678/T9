@@ -12,7 +12,7 @@
 
 
 UENUM()
-enum Phase
+enum SuccubusPhase
 {
 	Normal UMETA(DisplayName = "Normal"),
 	Flying UMETA(DisplayName = "Flying"),
@@ -27,7 +27,7 @@ public :
 	AEnemy_Succubus(const FObjectInitializer& ObjectInitializer);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Phase")
-		TEnumAsByte<Phase> CurrentPhase;
+		TEnumAsByte<SuccubusPhase> CurrentPhase;
 
 protected:
 

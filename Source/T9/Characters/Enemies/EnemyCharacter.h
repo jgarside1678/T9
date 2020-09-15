@@ -46,4 +46,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY()
+	     virtual void ChangePhase(int Phase = -1);
+
 };
