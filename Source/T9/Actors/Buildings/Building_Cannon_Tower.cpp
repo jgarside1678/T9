@@ -12,7 +12,7 @@ ABuilding_Cannon_Tower::ABuilding_Cannon_Tower(const FObjectInitializer& ObjectI
 	GridLength = FVector2D(3);
 	TurretStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TurretMesh"));
 	TurretStaticMeshComponent->SetupAttachment(StaticMeshComponent);
-	TurretStaticMeshComponent->SetRelativeLocation(FVector(0, 0, 220.0));
+	TurretStaticMeshComponent->SetRelativeLocation(FVector(0, 0, 250.0));
 	TurretStaticMeshComponent->SetCanEverAffectNavigation(false);
 	Projectile = AProjectile_Cannonball::StaticClass();
 	ProjectileSpawn->SetupAttachment(TurretStaticMeshComponent);

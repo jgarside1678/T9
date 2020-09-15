@@ -12,7 +12,7 @@ ABuilding_Mortar_Tower::ABuilding_Mortar_Tower(const FObjectInitializer& ObjectI
 	GridLength = FVector2D(3);
 	TurretStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TurretMesh"));
 	TurretStaticMeshComponent->SetupAttachment(StaticMeshComponent);
-	TurretStaticMeshComponent->SetRelativeLocation(FVector(0, 0, 260.0));
+	TurretStaticMeshComponent->SetRelativeLocation(FVector(0, 0, 265.0));
 	TurretStaticMeshComponent->SetCanEverAffectNavigation(false);
 	Projectile = AProjectile_Mortar::StaticClass();
 	ProjectileSpawn->SetupAttachment(TurretStaticMeshComponent);

@@ -25,7 +25,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-#
+
 void AEnemyCharacter::GenerateLoot() {
 	int Total = 0, CurrentMin = 1, CurrentMax = 0;
 	for (int x = 0; x < DropTable.Num(); x++) {
