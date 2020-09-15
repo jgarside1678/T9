@@ -43,5 +43,9 @@ protected:
 
 	virtual void SpecialAttack(AActor* Target) override;
 
+	virtual void TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage) override;
+
+	virtual void ChangePhase(int NewPhase = -1) override;
+
 	virtual void CalculateDamage(int BaseAdditionalDamage) override;
 };

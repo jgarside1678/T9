@@ -13,17 +13,17 @@
 AEnemy_Lava_Elemental::AEnemy_Lava_Elemental(const FObjectInitializer& ObjectInitializer) {
 	HealthBarHeight = 400;
 	Projectile = AProjectile_Magic_DeathsDecay::StaticClass();
-	Levels.Add(1, FCharacterLevels{ 100, 500, 300, 0, 1000 });
-	Levels.Add(2, FCharacterLevels{ 300, 500, 400, 0, 1000 });
-	Levels.Add(3, FCharacterLevels{ 300, 500, 500, 0, 1000 });
-	Levels.Add(4, FCharacterLevels{ 300, 500, 600, 0, 1000 });
-	Levels.Add(5, FCharacterLevels{ 300, 500, 700, 0, 1000 });
-	Levels.Add(6, FCharacterLevels{ 300, 500, 800, 0, 1000 });
-	Levels.Add(7, FCharacterLevels{ 300, 500, 900, 0, 1000 });
-	Levels.Add(8, FCharacterLevels{ 300, 500, 1000, 0, 1000 });
-	Levels.Add(9, FCharacterLevels{ 300, 500, 1100, 0, 1000 });
-	Levels.Add(10, FCharacterLevels{ 300, 500, 1200, 0, 1000 });
-	Levels.Add(11, FCharacterLevels{ 300, 500, 1300, 0, 1000 });
+	Levels.Add(1, FCharacterLevels{ 100, 500, 3000, 50, 10000 });
+	Levels.Add(2, FCharacterLevels{ 300, 500, 4000, 50, 10000 });
+	Levels.Add(3, FCharacterLevels{ 300, 500, 5000, 50, 10000 });
+	Levels.Add(4, FCharacterLevels{ 300, 500, 6000, 50, 10000 });
+	Levels.Add(5, FCharacterLevels{ 300, 500, 7000, 50, 10000 });
+	Levels.Add(6, FCharacterLevels{ 300, 500, 8000, 50, 10000 });
+	Levels.Add(7, FCharacterLevels{ 300, 500, 9000, 50, 10000 });
+	Levels.Add(8, FCharacterLevels{ 300, 500, 10000, 50, 10000 });
+	Levels.Add(9, FCharacterLevels{ 300, 500, 11000, 50, 10000 });
+	Levels.Add(10, FCharacterLevels{ 300, 500, 12000, 50, 10000 });
+	Levels.Add(11, FCharacterLevels{ 300, 500, 13000, 50, 10000 });
 	DeathTime = 4;
 	AwarenessDistance = 2000;
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/Enemies/StylizedLavaElemental/Meshes/SK_LavaElemental.SK_LavaElemental'"));
@@ -72,6 +72,41 @@ void AEnemy_Lava_Elemental::SpecialAttack(AActor* Target)
 {
 	Heal(0.3);
 	Super::SpecialAttack(Target);
+}
+
+void AEnemy_Lava_Elemental::TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage)
+{
+	Super::TakeDamage(AttackingActor, AmountOfDamage, TypeDamage);
+	if (CurrentHealth < MaxHealth * 0.2)ChangePhase(4);
+	else if (CurrentHealth < MaxHealth * 0.4 && (int)CurrentPhase < 4)ChangePhase(3);
+	else if (CurrentHealth < MaxHealth * 0.6 && (int)CurrentPhase < 3)ChangePhase(2);
+	else if (CurrentHealth < MaxHealth * 0.8 && (int)CurrentPhase < 2)ChangePhase(1);
+}
+
+void AEnemy_Lava_Elemental::ChangePhase(int NewPhase)
+{
+	switch (NewPhase) {
+	case 0:
+		CurrentPhase = Red;
+		CalculateDamage(50);
+		break;
+	case 1:
+		CurrentPhase = Cyan;
+		CalculateDamage(100);
+		break;
+	case 2:
+		CurrentPhase = Gold;
+		break;
+	case 3:
+		CurrentPhase = Green;
+		break;
+	case 4:
+		CurrentPhase = Purple;
+		break;
+	default:
+		break;
+	}
+	GetMesh()->SetMaterial(0, PhaseMaterials[CurrentPhase]);
 }
 
 void AEnemy_Lava_Elemental::CalculateDamage(int BaseAdditionalDamage)
