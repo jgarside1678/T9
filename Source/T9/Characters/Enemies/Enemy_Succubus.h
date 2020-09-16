@@ -35,7 +35,7 @@ protected:
 
 	virtual void SpecialAttack(AActor* Target) override;
 
-	virtual void CalculateDamage(int BaseAdditionalDamage) override;
+	virtual void CalculateDamage(int BaseAdditionalDamage = 0, float AdditionalDamageMultiplier = 1) override;
 
 	void FlyingHeal();
 

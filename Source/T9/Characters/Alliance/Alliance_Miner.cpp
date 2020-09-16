@@ -35,9 +35,9 @@ AAlliance_Miner::AAlliance_Miner() {
 	GatheringLevels.Add(2, FGathererLevels{ 50, 420 });
 	GatheringLevels.Add(3, FGathererLevels{ 50, 620 });
 
-	Levels.Add(1, FCharacterLevels{ 10, 0, 100, 20 });
-	Levels.Add(2, FCharacterLevels{ 20, 0, 300, 50 });
-	Levels.Add(3, FCharacterLevels{ 30, 0, 500, 100 });
+	Levels.Add(1, FCharacterLevels{ 10, 150, 0, 100, 20 });
+	Levels.Add(2, FCharacterLevels{ 20, 150, 0, 300, 50 });
+	Levels.Add(3, FCharacterLevels{ 30, 150, 0, 500, 100 });
 
 	Equipment.DefaultMainHandTransformSheathed = FTransform(FRotator(349.199066, 32.399937, 262.799347), FVector(18.000000, 20.000000, -15.000000), FVector(0.4));
 	Equipment.DefaultMainHandTransformEquiped = FTransform(FRotator(-20, -30, 7), FVector(32, -40, 7), FVector(0.5));

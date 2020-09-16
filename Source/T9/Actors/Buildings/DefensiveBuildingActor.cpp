@@ -77,7 +77,7 @@ void ADefensiveBuildingActor::AttackTarget()
 				}
 				else TargetInterface->TakeDamage(this, GetDamage(), Enemy);
 			}
-			GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ADefensiveBuildingActor::AttackTarget, AttackSpeedMultiplier, false, AttackSpeedMultiplier);
+			GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ADefensiveBuildingActor::AttackTarget, AttackInterval, false, AttackInterval);
 		}
 		else SetTarget();
 	}

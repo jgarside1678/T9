@@ -17,6 +17,7 @@ EBTNodeResult::Type UAI_AttackTarget::ExecuteTask(UBehaviorTreeComponent& OwnerC
 	auto const NPC = Cast<ACharacterActor>(Cont->GetPawn());
 	UObject* Target = Cont->GetBlackboard()->GetValueAsObject(bb_keys::target_actor);
 	if (Target != nullptr && Target->IsValidLowLevel() && !NPC->IsDead) {
+		Cont->GetBlackboard()->SetValueAsFloat(bb_keys::attack_interval, NPC->GetAttackInterval());
 		AActor* TargetActor = (AActor*)Target;
 		if (ABuildingActor* Building = Cast<ABuildingActor>(TargetActor)) {
 			if (Building->GetDisabled()) {

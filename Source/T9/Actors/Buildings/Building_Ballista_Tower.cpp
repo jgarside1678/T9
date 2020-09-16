@@ -18,21 +18,23 @@ ABuilding_Ballista_Tower::ABuilding_Ballista_Tower(const FObjectInitializer& Obj
 	ProjectileSpawn->SetupAttachment(TurretStaticMeshComponent);
 	ProjectileSpawn->SetRelativeLocation(FVector(0.0f, 0.0f, 40.0f));
 	ProjectileDelay = 0.5f;
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base3A.Tower_Base3A'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base3B.Tower_Base3B'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base3C.Tower_Base3C'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Turret_Crossbow1_Turret.Turret_Crossbow1_Turret'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Turret_Crossbow2_Turret.Turret_Crossbow2_Turret'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Turret_Crossbow3_Turret.Turret_Crossbow3_Turret'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base3A.Tower_Base3A'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base3B.Tower_Base3B'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh3(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base3C.Tower_Base3C'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Turret_Crossbow1_Turret.Turret_Crossbow1_Turret'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Turret_Crossbow2_Turret.Turret_Crossbow2_Turret'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh3(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Turret_Crossbow3_Turret.Turret_Crossbow3_Turret'"));
 	static ConstructorHelpers::FObjectFinder<UTexture2D> ImageLevel1(TEXT("Texture2D'/Game/UI/Assets/Sprites/WatchTowerImage.WatchTowerImage'"));
-	if (BaseMesh.Succeeded()) {
-		StaticMeshComponent->SetStaticMesh(BaseMesh.Object);
+	if (BaseMesh1.Succeeded()) {
+		StaticMeshComponent->SetStaticMesh(BaseMesh1.Object);
 	}
-	if (TurretMesh.Succeeded())		TurretStaticMeshComponent->SetStaticMesh(TurretMesh.Object);
+	if (TurretMesh1.Succeeded())		TurretStaticMeshComponent->SetStaticMesh(TurretMesh1.Object);
 	//{Level, FBuildingUpgrades{XP, PowerRating, Maxhealth, Defence, FBuildingCosts{Gold, Wood, Stone, Food}, FBuildingAttack{Damage, AttackSpeed, AttackRange}, FBuildingProduction{Gold, Wood, Stone, Food}}
 	Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 100, 1000.0f, 10.0f, ImageLevel1.Object, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{40, 100, 10}, FBuildingProduction{} });
-	Upgrades.Add(2, FBuildingUpgrades{ 250.0f, 200, 5000.0f, 50.0f, ImageLevel1.Object,FBuildingCosts{250, 20, 20, 20}, FBuildingAttack{60, 100, 10}, FBuildingProduction{}, BaseMesh1.Object, TurretMesh1.Object });
+	Upgrades.Add(2, FBuildingUpgrades{ 250.0f, 200, 5000.0f, 50.0f, ImageLevel1.Object,FBuildingCosts{250, 20, 20, 20}, FBuildingAttack{60, 100, 10}, FBuildingProduction{}, BaseMesh1.Object, TurretMesh2.Object });
 	Upgrades.Add(3, FBuildingUpgrades{ 500.0f, 300, 10000.0f, 100.0f, ImageLevel1.Object, FBuildingCosts{500, 50, 50, 50}, FBuildingAttack{100, 100, 10}, FBuildingProduction{}, BaseMesh2.Object, TurretMesh2.Object });
+	Upgrades.Add(4, FBuildingUpgrades{ 700.0f, 400, 10000.0f, 100.0f, ImageLevel1.Object, FBuildingCosts{500, 50, 50, 50}, FBuildingAttack{150, 100, 10}, FBuildingProduction{}, BaseMesh2.Object, TurretMesh3.Object });
+	Upgrades.Add(5, FBuildingUpgrades{ 1000.0f, 500, 10000.0f, 100.0f, ImageLevel1.Object, FBuildingCosts{500, 50, 50, 50}, FBuildingAttack{200, 100, 10}, FBuildingProduction{}, BaseMesh3.Object, TurretMesh3.Object });
 	BuildingDetectionRange = Upgrades[Level].Attack.AttackRangeMultipler;
 	ResetHealth();
 	BuildingName = "Ballista Tower";

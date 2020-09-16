@@ -23,19 +23,19 @@ ABuilding_Wizards_Tower::ABuilding_Wizards_Tower(const FObjectInitializer& Objec
 	DefenderDisplacement->SetRelativeRotation(FRotator(0,0,0));
 	BuildingDefender = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Building Defender"));
 	BuildingDefender->SetupAttachment(DefenderDisplacement);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1A.Tower_Base1A'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1B.Tower_Base1B'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1C.Tower_Base1C'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1A.Tower_Base1A'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1B.Tower_Base1B'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh3(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1C.Tower_Base1C'"));
 	static ConstructorHelpers::FObjectFinder<UTexture2D> ImageLevel1(TEXT("Texture2D'/Game/UI/Assets/Sprites/WatchTowerImage.WatchTowerImage'"));
 	static ConstructorHelpers::FObjectFinder<UAnimSequence> AnimationMont(TEXT("AnimSequence'/Game/AI/Alliance/StylizedHumanMale/Animations/WizardTowerAttack.WizardTowerAttack'"));
 	if (AnimationMont.Succeeded()) DefenderAttackAnimation = AnimationMont.Object;
-	if (BaseMesh.Succeeded()) {
-		StaticMeshComponent->SetStaticMesh(BaseMesh.Object);
+	if (BaseMesh1.Succeeded()) {
+		StaticMeshComponent->SetStaticMesh(BaseMesh1.Object);
 	}
 	//{Level, FBuildingUpgrades{XP, PowerRating, Maxhealth, Defence, FBuildingCosts{Gold, Wood, Stone, Food}, FBuildingAttack{Damage, AttackSpeed, AttackRange}, FBuildingProduction{Gold, Wood, Stone, Food}}
 	Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 50, 1000.0f, 10.0f, ImageLevel1.Object,FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{40, 100, 10}, FBuildingProduction{} });
-	Upgrades.Add(2, FBuildingUpgrades{ 250.0f, 100, 5000.0f, 10.0f, ImageLevel1.Object,FBuildingCosts{250, 20, 20, 20}, FBuildingAttack{60, 100, 10}, FBuildingProduction{}, BaseMesh1.Object});
-	Upgrades.Add(3, FBuildingUpgrades{ 500.0f, 150, 10000.0f, 10.0f, ImageLevel1.Object, FBuildingCosts{500, 50, 50, 50}, FBuildingAttack{200, 100, 10}, FBuildingProduction{}, BaseMesh2.Object });
+	Upgrades.Add(2, FBuildingUpgrades{ 250.0f, 100, 5000.0f, 10.0f, ImageLevel1.Object,FBuildingCosts{250, 20, 20, 20}, FBuildingAttack{60, 100, 10}, FBuildingProduction{}, BaseMesh2.Object});
+	Upgrades.Add(3, FBuildingUpgrades{ 500.0f, 150, 10000.0f, 10.0f, ImageLevel1.Object, FBuildingCosts{500, 50, 50, 50}, FBuildingAttack{200, 100, 10}, FBuildingProduction{}, BaseMesh3.Object });
 	BuildingDetectionRange = Upgrades[Level].Attack.AttackRangeMultipler;
 	ResetHealth();
 	BuildingName = "Wizards Tower";

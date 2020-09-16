@@ -9,17 +9,17 @@
 #include "T9/Actors/Items/Tools/Item_Wooden_Pickaxe.h"
 
 AEnemy_Succubus::AEnemy_Succubus(const FObjectInitializer& ObjectInitializer) {
-	Levels.Add(1, FCharacterLevels{ 50, 0, 300, 0, 1000 });
-	Levels.Add(2, FCharacterLevels{ 50, 0, 400, 0, 1000 });
-	Levels.Add(3, FCharacterLevels{ 50, 0, 500, 0, 1000 });
-	Levels.Add(4, FCharacterLevels{ 50, 0, 600, 0, 1000 });
-	Levels.Add(5, FCharacterLevels{ 50, 0, 700, 0, 1000 });
-	Levels.Add(6, FCharacterLevels{ 50, 0, 800, 0, 1000 });
-	Levels.Add(7, FCharacterLevels{ 50, 0, 900, 0, 1000 });
-	Levels.Add(8, FCharacterLevels{ 50, 0, 1000, 0, 1000 });
-	Levels.Add(9, FCharacterLevels{ 50, 0, 1100, 0, 1000 });
-	Levels.Add(10, FCharacterLevels{ 50, 0, 1200, 0, 1000 });
-	Levels.Add(11, FCharacterLevels{ 50, 0, 1300, 0, 1000 });
+	Levels.Add(1, FCharacterLevels{ 50, 150, 0, 300, 0, 1000 });
+	Levels.Add(2, FCharacterLevels{ 50, 150, 0, 400, 0, 1000 });
+	Levels.Add(3, FCharacterLevels{ 50, 150, 0, 500, 0, 1000 });
+	Levels.Add(4, FCharacterLevels{ 50, 150, 0, 600, 0, 1000 });
+	Levels.Add(5, FCharacterLevels{ 50, 150, 0, 700, 0, 1000 });
+	Levels.Add(6, FCharacterLevels{ 50, 150, 0, 800, 0, 1000 });
+	Levels.Add(7, FCharacterLevels{ 50, 150, 0, 900, 0, 1000 });
+	Levels.Add(8, FCharacterLevels{ 50, 150, 0, 1000, 0, 1000 });
+	Levels.Add(9, FCharacterLevels{ 50, 150, 0, 1100, 0, 1000 });
+	Levels.Add(10, FCharacterLevels{ 50, 150, 0, 1200, 0, 1000 });
+	Levels.Add(11, FCharacterLevels{ 50, 150, 0, 1300, 0, 1000 });
 	DeathTime = 1.8;
 	AwarenessDistance = 2000;
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/Enemies/ModularCharacterSuccubus/Meshes/OneMeshCharacter/SK_Succubus.SK_Succubus'"));
@@ -52,10 +52,10 @@ void AEnemy_Succubus::SpecialAttack(AActor* Target) {
 	Super::SpecialAttack(Target);
 }
 
-void AEnemy_Succubus::CalculateDamage(int BaseAdditionalDamage) {
-	Super::CalculateDamage(BaseAdditionalDamage);
-	if (CurrentPhase == Flying) Damage *= 2;
-	else if (CurrentPhase == Channelling) Damage *= 3;
+void AEnemy_Succubus::CalculateDamage(int BaseAdditionalDamage, float AdditionalDamageMultiplier) {
+	if (CurrentPhase == Flying) Super::CalculateDamage(BaseAdditionalDamage, AdditionalDamageMultiplier*2);
+	else if (CurrentPhase == Channelling) Super::CalculateDamage(BaseAdditionalDamage, AdditionalDamageMultiplier * 3);
+	else Super::CalculateDamage(BaseAdditionalDamage, AdditionalDamageMultiplier);
 }
 
 void AEnemy_Succubus::FlyingHeal()

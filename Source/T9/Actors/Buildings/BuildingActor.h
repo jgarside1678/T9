@@ -197,7 +197,7 @@ protected:
 		float AttackSpeed;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
-		float AttackSpeedMultiplier = 3;
+		float AttackInterval = 3;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		TEnumAsByte<DamageType> TypeOfDamage = Alliance;

@@ -188,46 +188,67 @@ void ACharacterActor::BaseCalculate()
 	CalculateMaxHealth();
 	CalculateArmour();
 	CalculateAttackRange();
+	CalculateAttackSpeed();
 }
 
-void ACharacterActor::CalculateDamage(int BaseAdditionalDamage)
+void ACharacterActor::CalculateDamage(int BaseAdditionalDamage, float AdditionalDamageMultiplier)
 {
-	if (Levels.Contains(Level)) {
-		Damage = Levels[Level].BaseDamage;
-	}
-	else if (Levels.Contains(Levels.Num())) Damage = Levels[Levels.Num()].BaseDamage;
+	Damage = 0;
+	if (Levels.Contains(Level)) Damage += Levels[Level].BaseDamage;
+	else if (Levels.Contains(Levels.Num())) Damage += Levels[Levels.Num()].BaseDamage;
 	Damage += BaseAdditionalDamage;
+	Damage *= AdditionalDamageMultiplier;
 	Damage += ItemModifiers.OffensiveStats.ItemDamageBase;
 	Damage *= ItemModifiers.OffensiveStats.ItemDamageMultiplier;
 }
 
-void ACharacterActor::CalculateMaxHealth(int BaseAdditionalHealth)
+void ACharacterActor::CalculateMaxHealth(int BaseAdditionalHealth, float AdditionalHealthMultiplier)
 {
 	MaxHealth = 0;
 	if (Levels.Contains(Level)) MaxHealth +=  Levels[Level].MaxHealth;
 	else if (Levels.Contains(Levels.Num())) MaxHealth += Levels[Levels.Num()].MaxHealth;
+	MaxHealth += BaseAdditionalHealth;
+	MaxHealth *= AdditionalHealthMultiplier;
 	MaxHealth += ItemModifiers.DefensiveStats.ItemHealthBase;
 	MaxHealth *= ItemModifiers.DefensiveStats.ItemHealthMultiplier;
 	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 }
 
-void ACharacterActor::CalculateArmour(int BaseAdditionalHealth)
+void ACharacterActor::CalculateArmour(int BaseAdditionalArmour, float AdditionalArmourMultiplier)
 {
 	Armour = 0;
 	if (Levels.Contains(Level)) Armour += Levels[Level].Armour;
+	else if (Levels.Contains(Levels.Num())) Armour += Levels[Levels.Num()].Armour;
+	Armour += BaseAdditionalArmour;
+	Armour *= AdditionalArmourMultiplier;
 	Armour += ItemModifiers.DefensiveStats.ItemDefenceBase;
 	Armour *= ItemModifiers.DefensiveStats.ItemDefenceMultiplier;
 	ArmourDamageTakenMultiplier = UKismetMathLibrary::Exp(-Armour / 1000);
 }
 
-void ACharacterActor::CalculateAttackRange(int BaseAdditionalAttackRange)
+void ACharacterActor::CalculateAttackRange(int BaseAdditionalAttackRange, float AdditionalAttackRangeMultiplier)
 {
 	AttackRange = 0;
 	if (Levels.Contains(Level)) AttackRange += Levels[Level].AttackRange;
+	else if (Levels.Contains(Levels.Num())) MaxHealth += Levels[Levels.Num()].AttackRange;
+	AttackRange += BaseAdditionalAttackRange;
+	AttackRange *= AdditionalAttackRangeMultiplier;
 	AttackRange += ItemModifiers.OffensiveStats.ItemAttackRangeBase;
 	AttackRange *= ItemModifiers.OffensiveStats.ItemAttackRangeMultiplier;
 }
 
+
+void ACharacterActor::CalculateAttackSpeed(int BaseAdditionalAttackSpeed, float AdditionalAttackSpeedMultiplier)
+{
+	AttackSpeed = 0;
+	if (Levels.Contains(Level)) AttackSpeed += Levels[Level].AttackSpeed;
+	else if (Levels.Contains(Levels.Num())) AttackSpeed += Levels[Levels.Num()].AttackSpeed;
+	AttackSpeed += BaseAdditionalAttackSpeed;
+	AttackSpeed *= AdditionalAttackSpeedMultiplier;
+	AttackSpeed += ItemModifiers.OffensiveStats.ItemAttackSpeedBase;
+	AttackSpeed *= ItemModifiers.OffensiveStats.ItemAttackSpeedMultiplier;
+	AttackInterval = 10 * UKismetMathLibrary::Exp(-AttackSpeed / 100);
+}
 
 void ACharacterActor::DeathInit() {
 	IsDead = true;
@@ -271,6 +292,16 @@ bool ACharacterActor::IsDamageable()
 
 float ACharacterActor::GetAttackRange() {
 	return AttackRange;
+}
+
+float ACharacterActor::GetAttackSpeed()
+{
+	return AttackSpeed;
+}
+
+float ACharacterActor::GetAttackInterval()
+{
+	return AttackInterval;
 }
 
 void ACharacterActor::Attack(AActor* Target)

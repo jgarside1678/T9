@@ -17,6 +17,9 @@ struct T9_API FCharacterLevels {
 		float BaseDamage = 5;
 
 	UPROPERTY(VisibleAnywhere, Category = "CharacterLevelStats")
+		float AttackSpeed = 10;
+
+	UPROPERTY(VisibleAnywhere, Category = "CharacterLevelStats")
 		float AttackRange = 0;
 
 	UPROPERTY(VisibleAnywhere, Category = "CharacterLevelStats")
@@ -96,6 +99,12 @@ protected:
 		float ArmourDamageTakenMultiplier = 1;
 
 	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
+		float AttackSpeed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+		float AttackInterval = 2;
+
+	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
 		float AttackRange = 5;
 
 	UPROPERTY()
@@ -170,16 +179,19 @@ protected:
 		virtual void BaseCalculate();
 
 	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
-	    virtual void CalculateDamage(int BaseAdditionalDamage = 0);
+	    virtual void CalculateDamage(int BaseAdditionalDamage = 0, float AdditionalDamageMultiplier = 1);
 
 	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
-		virtual void CalculateMaxHealth(int BaseAdditionalHealth = 0);
+		virtual void CalculateMaxHealth(int BaseAdditionalHealth = 0, float AdditionalHealthMultiplier = 1);
 
 	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
-		virtual void CalculateArmour(int BaseAdditionalArmour = 0);
+		virtual void CalculateArmour(int BaseAdditionalArmour = 0, float AdditionalArmourMultiplier = 1);
 
 	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
-		virtual void CalculateAttackRange(int BaseAdditionalAttackRange = 0);
+		virtual void CalculateAttackSpeed(int BaseAdditionalAttackSpeed = 0, float AdditionalAttackSpeedMultiplier = 1);
+
+	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
+		virtual void CalculateAttackRange(int BaseAdditionalAttackRange = 0, float AdditionalAttackRangeMultiplier = 1);
 
 	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
 	    virtual void DeathInit();
@@ -283,6 +295,11 @@ public:
 	UFUNCTION()
 		float GetAttackRange();
 
+	UFUNCTION()
+		float GetAttackSpeed();
+
+	UFUNCTION()
+		float GetAttackInterval();
 
 	UFUNCTION()
 		virtual bool CheckIfDead();

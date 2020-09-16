@@ -456,7 +456,7 @@ void ABuildingActor::CalculateAttackSpeed()
 	if (Upgrades.Contains(Level)) AttackSpeed += Upgrades[Level].Attack.AttackSpeed;
 	AttackSpeed += ItemModifiers.OffensiveStats.ItemDamageBase;
 	AttackSpeed *= ItemModifiers.OffensiveStats.ItemDamageMultiplier;
-	AttackSpeedMultiplier = 10 * UKismetMathLibrary::Exp(-AttackSpeed / 100);
+	AttackInterval = 10 * UKismetMathLibrary::Exp(-AttackSpeed / 100);
 }
 
 void ABuildingActor::CalculateMaxHealth()

@@ -11,7 +11,7 @@
  */
 
 UENUM()
-enum LavaElementalPhase
+enum class LavaElementalPhase
 {
 	Red UMETA(DisplayName = "Red"),
 	Cyan UMETA(DisplayName = "Cyan"),
@@ -34,7 +34,7 @@ public:
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Phase")
-		TEnumAsByte<LavaElementalPhase> CurrentPhase;
+		LavaElementalPhase CurrentPhase;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Phase")
 		TArray<class UMaterialInstance*> PhaseMaterials;
@@ -47,5 +47,5 @@ protected:
 
 	virtual void ChangePhase(int NewPhase = -1) override;
 
-	virtual void CalculateDamage(int BaseAdditionalDamage) override;
+	virtual void CalculateDamage(int BaseAdditionalDamage = 0, float AdditionalDamageMultiplier = 1) override;
 };
