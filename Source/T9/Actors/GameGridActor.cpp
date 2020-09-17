@@ -6,7 +6,6 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "T9/Actors/Buildings/BuildingActor.h"
-#include "T9/Actors/Walls/WallActor.h"
 #include "ProceduralMeshComponent.h"
 #include "T9/MainPlayerController.h"
 #include "T9/MainPlayerState.h"
@@ -258,7 +257,7 @@ ABuildingActor* AGameGridActor::BuildBuildingOnTile(FBuildingMenuSlot ObjectToBu
 			UE_LOG(LogTemp, Warning, TEXT("Object Spawned"));
 			//BuiltBuildings.Add(SpawnedActorRef);
 			SetTilesActive(SelectedGridLocation, SelectionLengthY, SelectionLengthX);
-			SpawnedActorRef->BuildingInnit(this, SelectionGridPivotLocation, SelectedGridLocation, SelectionRotationY);
+			SpawnedActorRef->BuildingInit(this, SelectionGridPivotLocation, SelectedGridLocation, SelectionRotationY);
 			OnBuildingConstructed.Broadcast();
 			if (PS) {
 				if (PS->GetBuildingStorageCount(SpawnedActorRef->GetName()) <= 0) {
@@ -279,36 +278,6 @@ ABuildingActor* AGameGridActor::BuildBuildingOnTile(FBuildingMenuSlot ObjectToBu
 	}
 }
 
-
-////Method for Building AWallActor children which use instanced static meshes
-//AWallActor* AGameGridActor::BuildWallOnTile(FBuildingMenuSlot ObjectToBuild) {
-//	//FVector Location = SelectionGridPivotLocation;
-//	//if (CheckGridLocation(SelectedGridLocation, SelectionLengthY, SelectionLengthX)) {
-//	//	if (BuiltWalls.Num() == 0) {
-//	//		FActorSpawnParameters SpawnParams;
-//	//		AWallActor* SpawnedActorRef = GetWorld()->SpawnActor<AWallActor>(ObjectToBuild.Building, Location, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
-//	//		if (SpawnedActorRef) {
-//	//			BuiltWalls.Add(SpawnedActorRef);
-//	//			SetTilesActive(SelectedGridLocation, SelectionLengthY, SelectionLengthX);
-//	//			//SpawnedActorRef->BuildingInnit(Location.X, Location.Y, ObjectToBuild.BuildingHeightX, ObjectToBuild.BuildingWidthY);
-//	//			return nullptr;
-//	//		}
-//	//		else return nullptr;
-//	//	}
-//	//	else {
-//	//		AWallActor* Wall = (AWallActor*)BuiltWalls[0];
-//	//		Wall->InstancedStaticMesh->AddInstance(FTransform(Wall->GetActorQuat(), Location - Wall->GetActorLocation(), Wall->GetActorScale3D()));
-//	//		SetTilesActive(SelectedGridLocation, SelectionLengthY, SelectionLengthX);
-//	//		return nullptr;
-//	//	}
-//	//}
-//	//else {
-//	//	UE_LOG(LogTemp, Warning, TEXT("Object Not spawned because an object is already present on this tile location."));
-//	//	return nullptr;
-//	//}
-//	return nullptr;
-//
-//}
 
 //Toggles selection tile on and off as well as preview building
 void AGameGridActor::ToggleSelectionTile(bool Toggle)

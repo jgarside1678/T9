@@ -231,7 +231,7 @@ void ABuildingActor::ResetHealth()
 
 
 
-void ABuildingActor::BuildingInnit(AGameGridActor* BuildingGrid, FVector PivotLocation, FVector CornerLocation, int Rotation)
+void ABuildingActor::BuildingInit(AGameGridActor* BuildingGrid, FVector PivotLocation, FVector CornerLocation, int Rotation)
 {
 	Grid = BuildingGrid;
 	BuildingCenterLocation = PivotLocation;

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "T9/Actors/Buildings/BuildingActor.h"
-#include "T9/Actors/Walls/WallActor.h"
 #include "GameFramework/HUD.h"
 #include "Engine/DataTable.h"
 #include "BuildMenu_Slot.h"

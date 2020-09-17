@@ -230,7 +230,7 @@ protected:
 		class AMainPlayerState* PS;
 
 	UFUNCTION()
-		void BeginOverlap(UPrimitiveComponent* OverlappedComponent,
+		virtual void BeginOverlap(UPrimitiveComponent* OverlappedComponent,
 			AActor* OtherActor,
 			UPrimitiveComponent* OtherComp,
 			int32 OtherBodyIndex,
@@ -238,7 +238,7 @@ protected:
 			const FHitResult& SweepResult);
 
 	UFUNCTION()
-		void EndOverlap(UPrimitiveComponent* OverlappedComponent,
+		virtual void EndOverlap(UPrimitiveComponent* OverlappedComponent,
 			AActor* OtherActor,
 			UPrimitiveComponent* OtherComp,
 			int32 OtherBodyIndex);
@@ -313,9 +313,9 @@ public:
 
 	//For initalising spawn arguments
 	UFUNCTION()
-		void BuildingInnit(AGameGridActor* BuildingGrid, FVector BuildingCenterLocation, FVector BuildingCornerLocation, int Rotation);
+		virtual void BuildingInit(AGameGridActor* BuildingGrid, FVector PivotLocation, FVector CornerLocation, int Rotation);
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		int GridRotation;
 
 	UPROPERTY()
