@@ -16,18 +16,20 @@ EBTNodeResult::Type UAI_GatherResources::ExecuteTask(UBehaviorTreeComponent& Own
 {
 	auto const Cont = Cast<AAI_Controller>(OwnerComp.GetAIOwner());
 	auto const NPC = Cast<AAlliance_ResourceGatherer>(Cont->GetPawn());
-	bool FullInventory = Cont->GetBlackboard()->GetValueAsBool(bb_keys::inventory_is_full);
-	if (!FullInventory) {
+	bool Full = NPC->CheckFullInventory();
+	Cont->GetBlackboard()->SetValueAsBool(bb_keys::inventory_is_full, Full);
+	//bool FullInventory = Cont->GetBlackboard()->GetValueAsBool(bb_keys::inventory_is_full);
+	if (!Full) {
 		NPC->GatherResources();
-		bool Full = NPC->CheckFullInventory();
-		Cont->GetBlackboard()->SetValueAsBool(bb_keys::inventory_is_full, Full);
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return EBTNodeResult::Succeeded;
 	}
+	else {
 
 
-	FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
-	return EBTNodeResult::Failed;
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return EBTNodeResult::Failed;
+	}
 
 }
 

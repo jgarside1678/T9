@@ -4,23 +4,26 @@
 #include "Item_Iron_PickAxe.h"
 
 AItem_Iron_PickAxe::AItem_Iron_PickAxe() {
-	Modifiers = { FItemModifiersOffensive{50, 1.2}, FItemModifiersDefensive{}, FItemModifiersProduction{30, 10} };
+	Modifiers = { FItemModifiersOffensive{50, 1.2}, FItemModifiersDefensive{}, FItemModifiersProduction{30, 1} };
 	ItemSocket = MainHand;
-	ItemName = "Sindering Axe";
+	ItemName = "Iron PickAxe";
 	ItemType = Tool;
 	ItemSubType = Axe;
 	ItemRarity = Legendary;
-	ItemEquipedTransform = FTransform(FRotator(7,43, 15), FVector(12,-14,6), FVector(0.7));
-	ItemSheathedTransform = FTransform(FRotator(56,-170,-80), FVector(-10,18,2), FVector(0.5));
-	static ConstructorHelpers::FObjectFinder<UTexture2D> Sprite(TEXT("Texture2D'/Game/UI/Assets/Sprites/AxeTest.AxeTest'"));
+	ItemEquipedTransform = FTransform(FRotator(76.811546, -275.199890, -35.352055), FVector(-9.757370, 15.685856, -2.384092), FVector(0.4));// (Pitch = 62.345627, Yaw = 183.599503, Roll = 58.273315)
+	ItemSheathedTransform = FTransform(FRotator(0.000000, 269.999237, 53.999889), FVector(-44.610828, 18.124989,-22.864485), FVector(0.4));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> Sprite(TEXT("Texture2D'/Game/UI/Assets/Sprites/IronTwoHandedHammerImage.IronTwoHandedHammerImage'"));
 	if (Sprite.Succeeded()) {
 		ItemImage = Sprite.Object;
 	}
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Assets/FantasyWeapons/meshes/SM_axe3.SM_axe3'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Assets/StylizedWeaponKIt/Weapons/Models/SM_BattleHammer.SM_BattleHammer'"));
 	if (Mesh.Succeeded()) {
-		ItemMesh->SetWorldScale3D(FVector(0.8));
+		ItemMesh->SetWorldScale3D(FVector(0.5));
 		ItemMesh->SetStaticMesh(Mesh.Object);
-		//ItemMesh->SetRelativeLocation(FVector(63, -23, 0));
+		ItemMesh->SetRelativeLocation(FVector(0,-50,0));
+		ItemMesh->SetRelativeRotation(FRotator(90.000000, -23, 90.000000));
 	}
 	GoldValue = 40;
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> MaleAttackMontage(TEXT("AnimMontage'/Game/AI/Alliance/StylizedHumanMale/Animations/HumanMale_Attack_2Handed_Overhead_Montage.HumanMale_Attack_2Handed_Overhead_Montage'"));
+	if (MaleAttackMontage.Succeeded()) ItemAnimations.Add(HumanMale, MaleAttackMontage.Object);
 }

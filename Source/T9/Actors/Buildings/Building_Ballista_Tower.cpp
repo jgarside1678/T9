@@ -18,9 +18,9 @@ ABuilding_Ballista_Tower::ABuilding_Ballista_Tower(const FObjectInitializer& Obj
 	ProjectileSpawn->SetupAttachment(TurretStaticMeshComponent);
 	ProjectileSpawn->SetRelativeLocation(FVector(0.0f, 0.0f, 40.0f));
 	ProjectileDelay = 0.5f;
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base3A.Tower_Base3A'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base3B.Tower_Base3B'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh3(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base3C.Tower_Base3C'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base2A.Tower_Base2A'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base2B.Tower_Base2B'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh3(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base2C.Tower_Base2C'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Turret_Crossbow1_Turret.Turret_Crossbow1_Turret'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Turret_Crossbow2_Turret.Turret_Crossbow2_Turret'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh3(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Turret_Crossbow3_Turret.Turret_Crossbow3_Turret'"));

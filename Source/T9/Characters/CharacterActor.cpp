@@ -306,6 +306,7 @@ float ACharacterActor::GetAttackInterval()
 
 void ACharacterActor::Attack(AActor* Target)
 {
+	EquipMainHand();
 	if (AttackStreak >= AttackStreakForSpecial) SpecialAttack(Target);
 	else {
 		CalculateDamage();
@@ -364,6 +365,7 @@ void ACharacterActor::AddMainHand(AItemActor* NewMainHand)
 {
 	if (NewMainHand) {
 		Equipment.MainHand = NewMainHand;
+		if (UAnimMontage* NewAttackMontage = NewMainHand->GetItemAnimation(GetMesh()->SkeletalMesh->Skeleton)) AttackMontage = NewAttackMontage;
 		MainHandItem->SetStaticMesh(Equipment.MainHand->GetItemMesh());
 		ItemModifiers += Equipment.MainHand->GetItemModifiers();
 		BaseCalculate();
@@ -377,6 +379,7 @@ void ACharacterActor::ResetEquipment()
 	if (Equipment.DefaultMainHand) {
 		Equipment.MainHand = nullptr;
 		MainHandItem->SetStaticMesh(Equipment.DefaultMainHand);
+		MainHandItem->SetRelativeTransform(Equipment.DefaultMainHandTransformSheathed);
 	}
 	else {
 		MainHandItem->SetStaticMesh(NULL);

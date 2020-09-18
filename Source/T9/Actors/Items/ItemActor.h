@@ -177,6 +177,15 @@ protected:
 		void Despawn();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		TMap<USkeleton*, UAnimMontage*> ItemAnimations;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		USkeleton* HumanMale;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
+		USkeleton* HumanFemale;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
 		FTransform ItemEquipedTransform;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
@@ -283,5 +292,8 @@ public:
 
 	UFUNCTION()
 		FTransform GetItemSheathedTransform();
+
+	UFUNCTION()
+		UAnimMontage* GetItemAnimation(USkeleton* Skeleton);
 
 };

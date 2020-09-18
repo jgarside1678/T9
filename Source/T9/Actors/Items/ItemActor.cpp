@@ -19,7 +19,7 @@ AItemActor::AItemActor()
 	BoxCollider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	BoxCollider->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
 	BoxCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Block);
-	BoxCollider->SetHiddenInGame(false);
+	//BoxCollider->SetHiddenInGame(false);
 	BoxCollider->SetCanEverAffectNavigation(false);
 	BoxCollider->SetMassOverrideInKg(NAME_None, 10);
 	BoxCollider->BodyInstance.bLockXRotation = true;
@@ -71,6 +71,12 @@ AItemActor::AItemActor()
 			WidgetComponent->SetWidgetClass(WidgetClass);
 		}
 	}
+
+	static ConstructorHelpers::FObjectFinder<USkeleton> MaleSkeleton(TEXT("Skeleton'/Game/AI/Alliance/StylizedHumanMale/Meshes/SK_HumanMale_Base_Skeleton.SK_HumanMale_Base_Skeleton'"));
+	if (MaleSkeleton.Succeeded()) HumanMale = MaleSkeleton.Object;
+
+	static ConstructorHelpers::FObjectFinder<USkeleton> FemaleSkeleton(TEXT("Skeleton'/Game/AI/Alliance/StylizedHumanFemale/Meshes/SK_Body_Skeleton.SK_Body_Skeleton'"));
+	if (FemaleSkeleton.Succeeded()) HumanFemale = FemaleSkeleton.Object;
 
 
 }
@@ -196,4 +202,10 @@ FTransform AItemActor::GetItemEquipedTransform()
 FTransform AItemActor::GetItemSheathedTransform()
 {
 	return ItemSheathedTransform;
+}
+
+UAnimMontage* AItemActor::GetItemAnimation(USkeleton* Skeleton)
+{
+	if (ItemAnimations.Contains(Skeleton)) return ItemAnimations[Skeleton];
+	return nullptr;
 }
