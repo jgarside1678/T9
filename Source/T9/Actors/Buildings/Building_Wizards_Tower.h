@@ -24,4 +24,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void Upgrade() override;
+
+	virtual void AttackTarget() override;
+
+	UPROPERTY()
+		TArray<class UMaterialInstance*> HairColours;
+
 };

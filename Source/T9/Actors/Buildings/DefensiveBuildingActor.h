@@ -63,6 +63,9 @@ protected:
 	UFUNCTION()
 	   virtual void AttackTarget();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
+		int AttackStreak = 0;
+
 	UPROPERTY()
 		FRotator ProjectileSpawnRotation = FRotator(0, 0, 0);
 
@@ -83,7 +86,9 @@ protected:
 		class USceneComponent* DefenderDisplacement;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
-		class UAnimationAsset* DefenderAttackAnimation;
+		class UAnimMontage* DefenderAttackAnimation;
+
+	virtual void CalculateAttackSpeed() override;
 
 };
 

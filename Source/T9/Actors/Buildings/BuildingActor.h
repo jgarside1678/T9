@@ -318,6 +318,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		int GridRotation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
+		bool Upgrading = false;
+
 	UPROPERTY()
 		FVector BuildingCenterLocation;
 
@@ -360,6 +363,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void ResetHealth();
 
+	UFUNCTION(BlueprintCallable)
+		class AActor* GetTarget();
 
 	UFUNCTION()
 		virtual void SetSelected();
@@ -427,7 +432,7 @@ public:
 		void CalculateAttackRange();
 
 	UFUNCTION()
-		void CalculateAttackSpeed();
+		virtual void CalculateAttackSpeed();
 
 	UFUNCTION()
 		void CalculateMaxHealth();

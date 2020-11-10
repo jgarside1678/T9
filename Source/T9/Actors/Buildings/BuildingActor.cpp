@@ -222,6 +222,11 @@ void ABuildingActor::ResetHealth()
 	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 }
 
+AActor* ABuildingActor::GetTarget()
+{
+	return Target;
+}
+
 // Called every frame
 //void ABuildingActor::Tick(float DeltaTime)
 //{
@@ -331,6 +336,7 @@ void ABuildingActor::EndOverlap(UPrimitiveComponent* OverlappedComponent,
 
 void ABuildingActor::Upgrade() {
 	if (Upgrades.Contains(Level+1) && PS && PS->RemoveResources(Upgrades[Level+1].Cost)) {
+		Upgrading = true;
 		Level++;
 		TotalCosts += Upgrades[Level].Cost;
 
@@ -354,9 +360,9 @@ void ABuildingActor::Upgrade() {
 		if (Upgrades[Level].BaseMesh != nullptr) StaticMeshComponent->SetStaticMesh(Upgrades[Level].BaseMesh);
 		PS->AddCurrentXP(Upgrades[Level].XP);
 		ResetHealth();
+		Upgrading = true;
 	}
 	else UE_LOG(LogTemp, Warning, TEXT("Not enough money to upgrade"));
-
 	UE_LOG(LogTemp, Warning, TEXT("Using Parent call"));
 }
 

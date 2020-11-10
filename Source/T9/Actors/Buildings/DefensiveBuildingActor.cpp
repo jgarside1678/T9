@@ -20,6 +20,7 @@ ADefensiveBuildingActor::ADefensiveBuildingActor() {
 
 void ADefensiveBuildingActor::BeginPlay()
 {
+	ProjectileDelay = AttackInterval * 0.2;
 	Super::BeginPlay();
 }
 
@@ -67,7 +68,8 @@ void ADefensiveBuildingActor::AttackTarget()
 				if (BuildingDefender) {
 					UE_LOG(LogTemp, Warning, TEXT("Attack2"));
 					ProjectileSpawn->SetWorldLocation(BuildingDefender->GetSocketLocation("hand_r"));
-					if (DefenderAttackAnimation)	BuildingDefender->PlayAnimation(DefenderAttackAnimation, false);
+					if (DefenderAttackAnimation)	BuildingDefender->GetAnimInstance()->Montage_Play(DefenderAttackAnimation, 1 / (AttackInterval / DefenderAttackAnimation->CalculateSequenceLength()));
+				//BuildingDefender->GetAnimInstance()->
 				}
 				FVector Location = ProjectileSpawn->GetComponentLocation();
 				FRotator Rotation = ProjectileSpawn->GetRelativeRotation();
@@ -215,6 +217,11 @@ USkeletalMesh* ADefensiveBuildingActor::MergeMeshes(const FSkeletalMeshMergePara
         UE_LOG(LogTemp, Warning, TEXT("Found Duplicates: %s"), *((Total != UniqueTotal) ? FString("True") : FString("False")));
     }
     return BaseMesh;
+}
+
+void ADefensiveBuildingActor::CalculateAttackSpeed() {
+	Super::CalculateAttackSpeed();
+	ProjectileDelay = AttackInterval * 0.2;
 }
 
 
