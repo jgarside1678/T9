@@ -247,7 +247,7 @@ protected:
 		int BuildingDetectionRange = 3;
 
 	UPROPERTY()
-		int OutlineColour = 2;
+		int OutlineColour = 0;
 
 	//Audio
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")

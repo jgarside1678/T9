@@ -27,8 +27,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Terrain Basics", Meta = (AllowPrivateAccess = "true"))
 		class UBoxComponent* TerrainCollider;
 
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Terrain Basics", Meta = (AllowPrivateAccess = "true"))
+		FVector TerrainExtent = FVector(200);
 
 };

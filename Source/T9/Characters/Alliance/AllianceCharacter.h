@@ -75,12 +75,36 @@ protected:
 	UFUNCTION()
 		void MeshInit();
 
+    UPROPERTY(EditAnywhere)
+        class AAI_Controller* Cont;
+
+    UPROPERTY(EditAnywhere)
+        FVector CommandLocation;
+
+    UPROPERTY(EditAnywhere)
+        class AActor* CommandEnemyTarget;
+
+    UPROPERTY(EditAnywhere)
+        class AActor* CommandAllianceTarget;
+
+    UPROPERTY(EditAnywhere)
+        class AActor* CommandBuildingTarget;
+
+    virtual void SpawnInit(AActor* BuildingSpawn, int SpawnLevel = 1, bool Invuln = false, bool SpawnController = true) override;
+
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
     UFUNCTION(BlueprintCallable, Category = "Mesh Merge", meta = (UnsafeDuringActorConstruction = "true"))
         static class USkeletalMesh* MergeMeshes(const FSkeletalMeshMergeParams& Params);
+
+    UFUNCTION(BlueprintCallable, Category = "Command", meta = (UnsafeDuringActorConstruction = "true"))
+        void Command(FHitResult Hit);
+
+    UFUNCTION(BlueprintCallable, Category = "Command", meta = (UnsafeDuringActorConstruction = "true"))
+        FVector GetCommandLocation();
 
     //virtual void Attack(AActor* Target) override;
 };

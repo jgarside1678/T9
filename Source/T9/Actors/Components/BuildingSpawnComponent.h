@@ -9,7 +9,7 @@
 UENUM()
 enum SpawnMethods
 {
-	SurroundingBuilding UMETA(DisplayName = "SurroundingBuilding"),
+	SurroundOwner UMETA(DisplayName = "SurroundingBuilding"),
 	PointSpawn UMETA(DisplayName = "PointSpawn"),
 	RandomNearPointSpawn UMETA(DisplayName = "RandomNearPointSpawn")
 };
@@ -45,7 +45,12 @@ protected:
 
 public:	
 
-	FVector Origin, BoxExtent;
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+		FVector Origin;
+
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+		FVector BoxExtent;
+
 	float BuildingX, BuildingY;
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -55,7 +60,7 @@ public:
 	FTimerHandle RespawnTimerHandle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
-		TEnumAsByte<SpawnMethods> SpawnMethod = SurroundingBuilding;
+		TEnumAsByte<SpawnMethods> SpawnMethod = SurroundOwner;
 
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 		FVector SpawnLocation;
@@ -86,6 +91,9 @@ public:
 
 	UPROPERTY()
 		class ABuildingActor* OwningBuilding;
+
+	UPROPERTY()
+		class ATerrainActor* OwningTerrain;
 
 	UPROPERTY()
 		float YAxis;
@@ -121,7 +129,7 @@ public:
 	UFUNCTION()
 		class UInventoryComponent* GetInventoryComponent();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void UpdateCharactersInventory();
 		
 };

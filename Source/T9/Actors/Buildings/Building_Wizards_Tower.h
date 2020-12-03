@@ -25,9 +25,10 @@ protected:
 
 	virtual void Upgrade() override;
 
-	virtual void AttackTarget() override;
+	UPROPERTY()
+		TArray<class UMaterialInstance*> HairColours1;
 
 	UPROPERTY()
-		TArray<class UMaterialInstance*> HairColours;
+		TArray<class UMaterialInstance*> HairColours2;
 
 };

@@ -8,6 +8,7 @@
 #include "GameFramework/Actor.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "T9GameModeBase.h"
+#include "T9/Characters/Alliance/AllianceCharacter.h"
 #include "Engine/EngineTypes.h"
 #include "UObject/ConstructorHelpers.h"
 #include "EngineUtils.h"
@@ -124,7 +125,7 @@ void AMainPlayerController::MouseMove(float axis) {
 }
 
 void AMainPlayerController::SelectInteract() {
-	if ((GameGrid != nullptr) && (PS != nullptr)) {
+	if ((HUDPointer->BuildMenuState) && (GameGrid != nullptr) && (PS != nullptr)) {
 		if (HUDPointer->SelectedBuildMenuObject.Building != NULL) {
 				ABuildingActor* Building = Cast<ABuildingActor>(HUDPointer->PreviewBuilding);
 				if (Building) {
@@ -133,10 +134,17 @@ void AMainPlayerController::SelectInteract() {
 					}
 					else CreateAlert("Error", "Conditions to build this building were not met.", 5);
 				}
-			}
 		}
-		else UE_LOG(LogTemp, Warning, TEXT("No Object Found"));
 	}
+	else if (HUDPointer->SelectedAllianceCharacter) {
+		FHitResult Hit;
+		GetHitResultUnderCursor(ECC_GameTraceChannel2, true, Hit);
+		//bool ValidHit = GetHitResultUnderCursorByChannel((ETraceTypeQuery)ECC_GameTraceChannel2, true, Hit);
+		if (Hit.Actor.IsValid()) {
+			HUDPointer->SelectedAllianceCharacter->Command(Hit);
+		}
+	}
+}
 
 
 AGameGridActor* AMainPlayerController::GetGrid() {

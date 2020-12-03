@@ -12,6 +12,7 @@
 #include "TimerManager.h"
 #include "T9/Actors/Items/ItemActor.h"
 #include "T9/Actors/Components/InventoryComponent.h"
+#include "T9/Actors/Terrain/TerrainActor.h"
 #include "T9/Actors/Buildings/BuildingActor.h"
 #include <Runtime\Engine\Classes\Engine\World.h>
 #include "T9/MainPlayerController.h"
@@ -22,7 +23,7 @@ UBuildingSpawnComponent::UBuildingSpawnComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 
-	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Spawn Component Inventory"));
 	InventoryComponent->SetCapacity(3);
 	InventoryComponent->OnInventoryUpdate.AddDynamic(this, &UBuildingSpawnComponent::UpdateCharactersInventory);
 }
@@ -36,6 +37,7 @@ void UBuildingSpawnComponent::BeginPlay()
 	Super::BeginPlay();
 	MyOwner = (AActor*)GetOwner();
 	OwningBuilding = Cast<ABuildingActor>(MyOwner);
+	OwningTerrain = Cast<ATerrainActor>(MyOwner);
 	Init();
 	PC = (AMainPlayerController*)GetWorld()->GetFirstPlayerController();
 	PS = (AMainPlayerState*)PC->PlayerState;
@@ -53,6 +55,7 @@ void UBuildingSpawnComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 AActor* UBuildingSpawnComponent::Spawn() {
 	if (CurrentSpawnCount < MaxSpawnCount) {
+		if (SpawnMethod == SurroundOwner) RandomSpawnLocation();
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = SpawnParamCollision;
 		ACharacterActor* SpawnedActorRef = GetWorld()->SpawnActor<ACharacterActor>(ActorToSpawn, SpawnLocation, FRotator(0.0f,0.0f,0.0f), SpawnParams);
@@ -74,14 +77,14 @@ void UBuildingSpawnComponent::Init()
 {
 	if (ActorToSpawn && MyOwner && MaxSpawnCount > CurrentSpawnCount) {
 		AActor* NewSpawn = nullptr;
-		if (SpawnMethod == SurroundingBuilding && OwningBuilding) {
-			BoxExtent = OwningBuilding->BuildingExtent;
+		if (SpawnMethod == SurroundOwner) {
+			if (OwningBuilding) BoxExtent = OwningBuilding->BuildingExtent;
+			else if (OwningTerrain) BoxExtent = OwningTerrain->TerrainExtent;
 			Origin = MyOwner->GetActorLocation();
 			if (MaxSpawnRange < BoxExtent.X) {
 				MaxSpawnRange = BoxExtent.X + 200;
 			}
 			RandomSpawnLocation();
-			SpawnLocation = FVector(Origin.X + XAxis, Origin.Y + YAxis, 10.0f);
 		}
 		else if (SpawnMethod == PointSpawn) {
 			SpawnLocation += MyOwner->GetActorLocation();
@@ -112,6 +115,7 @@ void UBuildingSpawnComponent::RandomSpawnLocation()
 		}
 		else XAxis = RandomFloat(MaxSpawnRange, (MaxSpawnRange * -1));
 	}
+	SpawnLocation = FVector(Origin.X + XAxis, Origin.Y + YAxis, 10.0f);
 }
 
 float UBuildingSpawnComponent::RandomFloat(float a, float b) {

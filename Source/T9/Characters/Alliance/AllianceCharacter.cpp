@@ -6,10 +6,15 @@
 #include "T9/Widgets/HealthBarWidget.h"
 #include "SkeletalMeshMerge.h"
 #include "Components/SkeletalMeshComponent.h"
-
+#include "T9/AI/AI_Controller.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Engine/SkeletalMesh.h"
 #include "Animation/Skeleton.h"
+#include "DrawDebugHelpers.h"
+#include "T9/Characters/Enemies/EnemyCharacter.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
+#include "T9/BlackBoard_Keys.h"
 
 AAllianceCharacter::AAllianceCharacter() {
 	static ConstructorHelpers::FClassFinder<UUserWidget> widget(TEXT("WidgetBlueprint'/Game/UI/AllianceHealthBar.AllianceHealthBar_C'"));
@@ -17,6 +22,7 @@ AAllianceCharacter::AAllianceCharacter() {
 		WidgetClass = widget.Class;
 	}
     TypeOfDamage = Alliance;
+    GetMesh()->SetCustomDepthStencilValue(2);
 }
 
 void AAllianceCharacter::BeginPlay() {
@@ -179,3 +185,26 @@ USkeletalMesh* AAllianceCharacter::MergeMeshes(const FSkeletalMeshMergeParams& P
     return BaseMesh;
 }
 
+void AAllianceCharacter::Command(FHitResult Hit)
+{
+    CommandEnemyTarget = Cast<AEnemyCharacter>(Hit.Actor);
+    CommandAllianceTarget = Cast<AAllianceCharacter>(Hit.Actor);
+    CommandBuildingTarget = Cast<ABuildingActor>(Hit.Actor);
+    if (!CommandEnemyTarget && !CommandAllianceTarget && !CommandBuildingTarget) CommandLocation = FVector(Hit.Location.X, Hit.Location.Y, 10);
+    DrawDebugLine(GetWorld(), CommandLocation, FVector(CommandLocation.X, CommandLocation.Y, 3000), FColor::Blue, false, 20, 0, 10);
+    if (Cont) {
+        Cont->GetBlackboard()->SetValueAsVector(bb_keys::command_location, CommandLocation);
+        Cont->Reset();
+    }
+
+}
+
+FVector AAllianceCharacter::GetCommandLocation() {
+    return CommandLocation;
+}
+
+void AAllianceCharacter::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invuln, bool SpawnController)
+{
+    Super::SpawnInit(BuildingSpawn, SpawnLevel, Invuln, SpawnController);
+    Cont = Cast<AAI_Controller>(GetController());
+}

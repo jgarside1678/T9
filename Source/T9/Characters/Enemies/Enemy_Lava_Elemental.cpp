@@ -12,17 +12,17 @@
 
 AEnemy_Lava_Elemental::AEnemy_Lava_Elemental(const FObjectInitializer& ObjectInitializer) {
 	HealthBarHeight = 400;
-	Levels.Add(1, FCharacterLevels{ 100, 160, 0, 3000, 50, 10000 });
-	Levels.Add(2, FCharacterLevels{ 300, 160, 0, 4000, 50, 10000 });
-	Levels.Add(3, FCharacterLevels{ 300, 160, 0, 5000, 50, 10000 });
-	Levels.Add(4, FCharacterLevels{ 300, 170, 0, 6000, 50, 10000 });
-	Levels.Add(5, FCharacterLevels{ 300, 170, 0, 7000, 50, 10000 });
-	Levels.Add(6, FCharacterLevels{ 300, 170, 0, 8000, 50, 10000 });
-	Levels.Add(7, FCharacterLevels{ 300, 170, 0, 9000, 50, 10000 });
-	Levels.Add(8, FCharacterLevels{ 300, 170, 0, 10000, 50, 10000 });
-	Levels.Add(9, FCharacterLevels{ 300, 200, 0, 11000, 50, 10000 });
-	Levels.Add(10, FCharacterLevels{ 300, 200, 0, 12000, 50, 10000 });
-	Levels.Add(11, FCharacterLevels{ 300, 200, 0, 13000, 50, 10000 });
+	Levels.Add(1, FCharacterLevels{ 100, 160, 200, 3000, 50, 1000, 250 });
+	Levels.Add(2, FCharacterLevels{ 300, 160, 200, 4000, 50, 1000, 250 });
+	Levels.Add(3, FCharacterLevels{ 300, 160, 200, 5000, 50, 1000, 250 });
+	Levels.Add(4, FCharacterLevels{ 300, 170, 200, 6000, 50, 1000, 250 });
+	Levels.Add(5, FCharacterLevels{ 300, 170, 200, 7000, 50, 1000, 250 });
+	Levels.Add(6, FCharacterLevels{ 300, 170, 200, 8000, 50, 1000, 250 });
+	Levels.Add(7, FCharacterLevels{ 300, 170, 200, 9000, 50, 1000, 250 });
+	Levels.Add(8, FCharacterLevels{ 300, 170, 200, 10000, 50, 1000, 250 });
+	Levels.Add(9, FCharacterLevels{ 300, 200, 200, 11000, 50, 1000, 250 });
+	Levels.Add(10, FCharacterLevels{ 300, 200, 200, 12000, 50, 1000, 250 });
+	Levels.Add(11, FCharacterLevels{ 300, 200, 200, 13000, 50, 1000, 250 });
 	DeathTime = 4;
 	AwarenessDistance = 2000;
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/Enemies/StylizedLavaElemental/Meshes/SK_LavaElemental.SK_LavaElemental'"));

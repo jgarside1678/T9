@@ -39,7 +39,7 @@ ACharacterActor::ACharacterActor() :
 	OffHandItem->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 	//MainHandItemMesh->SetupAttachment(GetMesh());
 	MovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
-
+	ResetHealth();
 }
 
 
@@ -105,8 +105,7 @@ void ACharacterActor::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invu
 	ResetHealth();
 	NeedsController = SpawnController;
 	if (!GetController() && NeedsController) {
-		FTimerHandle ControllerTimerHandle;
-		GetWorldTimerManager().SetTimer(ControllerTimerHandle, this, &ACharacterActor::SpawnDefaultController, 2, false, 2);
+		SpawnDefaultController();
 	}
 	else {
 		WidgetComponent->SetVisibility(false);
@@ -179,6 +178,7 @@ void ACharacterActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, D
 		if (CurrentHealth <= 0) {
 			DeathInit();
 		}
+		else if (CurrentHealth > MaxHealth) CurrentHealth = MaxHealth;
 	}
 }
 
@@ -418,4 +418,14 @@ FCharacterLevels ACharacterActor::GetUpgradeBaseStats()
 	if (Levels.Contains(Level+1)) return Levels[Level+1];
 	else if (Levels.Contains(Level)) return Levels[Level];
 	return FCharacterLevels();
+}
+
+void ACharacterActor::SetSelected()
+{
+	if (GetMesh()) GetMesh()->SetRenderCustomDepth(true);
+}
+
+void ACharacterActor::SetUnSelected()
+{
+	if (GetMesh()) GetMesh()->SetRenderCustomDepth(false);
 }

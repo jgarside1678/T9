@@ -20,11 +20,8 @@ AItemActor::AItemActor()
 	BoxCollider->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
 	BoxCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Block);
 	//BoxCollider->SetHiddenInGame(false);
-	BoxCollider->SetCanEverAffectNavigation(false);
-	BoxCollider->SetMassOverrideInKg(NAME_None, 10);
-	BoxCollider->BodyInstance.bLockXRotation = true;
-	BoxCollider->BodyInstance.bLockYRotation = true;
-	BoxCollider->BodyInstance.bLockZRotation = true;
+	BoxCollider->SetCanEverAffectNavigation(false);	
+
 	RootComponent = BoxCollider;
 	ItemAnchor = CreateDefaultSubobject<USceneComponent>(TEXT("Anchor"));
 	ItemAnchor->SetupAttachment(RootComponent);
@@ -97,7 +94,10 @@ void AItemActor::BeginPlay()
 		ItemPickUp = Cast<UItemPickUpWidget>(WidgetComponent->GetUserWidgetObject());
 		if(ItemPickUp)ItemPickUp->ItemMenuInit(this);
 	}
-
+	BoxCollider->SetMassOverrideInKg(NAME_None, 10);
+	BoxCollider->BodyInstance.bLockXRotation = true;
+	BoxCollider->BodyInstance.bLockYRotation = true;
+	BoxCollider->BodyInstance.bLockZRotation = true;
 	GetWorldTimerManager().SetTimer(ItemDespawnHandle, this, &AItemActor::Despawn, 60, false, 60);
 }
 
