@@ -30,8 +30,7 @@ EBTNodeResult::Type UAI_FindClosestResourceCharacter::ExecuteTask(UBehaviorTreeC
 	auto const NPC = Cast<AAlliance_ResourceGatherer>(Cont->GetPawn());
 
 	if (!NPC->IsDead) {
-		AResourceCharacter* CommandedTarget = NPC->GetCommandedResourceCharacter();
-		AResourceActor* Target = Cast<AResourceActor>(Cont->GetBlackboard()->GetValueAsObject(bb_keys::utility_target));
+		AResourceActor* Target = Cast<AResourceActor>(Cont->GetBlackboard()->GetValueAsObject(bb_keys::target_actor));
 		FVector const Origin = NPC->GetActorLocation();
 		NPC->IsGathering = false;
 		//Locate nearest Building
@@ -50,12 +49,9 @@ EBTNodeResult::Type UAI_FindClosestResourceCharacter::ExecuteTask(UBehaviorTreeC
 
 		if ((ClosestResource != nullptr) && (Target != ClosestResource)) {
 			AResourceCharacter* TargetCharacter = nullptr;
-			if (CommandedTarget) ClosestResource = CommandedTarget->GetParentResource();
 			NPC->SetResource(ClosestResource);
-			if (CommandedTarget) TargetCharacter = CommandedTarget;
-			else ClosestResource->GetClosestSpawnedCharacter(Origin, TargetCharacter);
+			ClosestResource->GetClosestSpawnedCharacter(Origin, TargetCharacter);
 			if (TargetCharacter) {
-				
 				UE_LOG(LogTemp, Warning, TEXT("Wagwan"));
 				float ClosestResourceCharacterBounds = TargetCharacter->CapsuleRadius;
 				FVector ClosestResourceCharacterOrigin = TargetCharacter->GetActorLocation();
@@ -64,7 +60,7 @@ EBTNodeResult::Type UAI_FindClosestResourceCharacter::ExecuteTask(UBehaviorTreeC
 				FVector Max = FVector(ClosestResourceCharacterOrigin.X + ClosestResourceCharacterBounds, ClosestResourceCharacterOrigin.Y + ClosestResourceCharacterBounds, 1);
 				FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(Origin, Min - NPC->CapsuleRadius - NPC->GetAttackRange(), Max + NPC->CapsuleRadius + NPC->GetAttackRange());
 				DrawDebugLine(GetWorld(), ClampedVector, FVector(ClampedVector.X, ClampedVector.Y, 3000), FColor::Blue, false, 20, 0, 10);
-				Cont->GetBlackboard()->SetValueAsObject(bb_keys::combat_target, (UObject*)TargetCharacter);
+				Cont->GetBlackboard()->SetValueAsObject(bb_keys::target_actor, (UObject*)TargetCharacter);
 				Cont->GetBlackboard()->SetValueAsBool(bb_keys::target_is_dead, false);
 				Cont->GetBlackboard()->SetValueAsObject(bb_keys::hunt, (UObject*)TargetCharacter);
 				Cont->GetBlackboard()->SetValueAsObject(bb_keys::resource, (UObject*)ClosestResource);

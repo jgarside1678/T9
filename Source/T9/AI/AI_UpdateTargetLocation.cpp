@@ -29,7 +29,7 @@ void UAI_UpdateTargetLocation::OnBecomeRelevant(UBehaviorTreeComponent& OwnerCom
 	Cont = Cast<AAI_Controller>(OwnerComp.GetAIOwner());
 	NPC = Cast<ACharacterActor>(Cont->GetPawn());
 
-	Target = Cast<AActor>(Cont->GetBlackboard()->GetValueAsObject(bb_keys::combat_target));
+	Target = Cast<AActor>(Cont->GetBlackboard()->GetValueAsObject(bb_keys::target_actor));
 	TargetBuilding = Cast<ABuildingActor>(Target);
 	TargetCharacter = Cast<ACharacterActor>(Target);
 	TargetResourceCharacter = Cast<AResourceCharacter>(Target);
@@ -65,3 +65,23 @@ void UAI_UpdateTargetLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 }
 
+
+//void UAI_UpdateTargetLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) {
+//	AActor* Target = Cast<AActor>(Cont->GetBlackboard()->GetValueAsObject(bb_keys::target_actor));
+//	if (ABuildingActor* TargetBuilding = Cast<ABuildingActor>(Target)) {
+//		FVector ClosestBuildingBounds, ClosestBuildingOrigin;
+//		ClosestBuildingBounds = TargetBuilding->BuildingExtent;
+//		ClosestBuildingOrigin = TargetBuilding->GetActorLocation();
+//		FVector Direction = (NPC->GetActorLocation() - ClosestBuildingOrigin).GetSafeNormal();
+//		FVector TargetLocation = ClosestBuildingOrigin;
+//		FVector Min = FVector(ClosestBuildingOrigin.X - ClosestBuildingBounds.X - 50, ClosestBuildingOrigin.Y - ClosestBuildingBounds.Y - 50, -100.f);
+//		FVector Max = FVector(ClosestBuildingOrigin.X + ClosestBuildingBounds.X + 50, ClosestBuildingOrigin.Y + ClosestBuildingBounds.Y + 50, 100.f);
+//		FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(NPC->GetActorLocation(), Min - NPC->GetAttackRange(), Max + NPC->GetAttackRange());
+//		Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
+//	}
+//	else if (ACharacterActor* TargetCharacter = Cast<ACharacterActor>(Target)) {
+//		FVector MoveVector = TargetCharacter->GetActorLocation() + TargetCharacter->CapsuleRadius;
+//		Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, MoveVector);
+//	}
+//	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
+//}

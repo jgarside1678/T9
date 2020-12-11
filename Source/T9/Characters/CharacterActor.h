@@ -81,9 +81,6 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
-		class AAI_Controller* Cont;
-
-	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
 		int Level = 1;
 
 	UPROPERTY(VisibleAnywhere, Category = "Character Basics")

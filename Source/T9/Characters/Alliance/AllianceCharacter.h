@@ -76,6 +76,9 @@ protected:
 		void MeshInit();
 
     UPROPERTY(EditAnywhere)
+        class AAI_Controller* Cont;
+
+    UPROPERTY(EditAnywhere)
         FVector CommandLocation;
 
     UPROPERTY(EditAnywhere)
@@ -86,12 +89,6 @@ protected:
 
     UPROPERTY(EditAnywhere)
         class AActor* CommandBuildingTarget;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gathering")
-        class AResourceActor* CommandedResourceActor;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gathering")
-        class AResourceCharacter* CommandedResourceCharacter;
 
     virtual void SpawnInit(AActor* BuildingSpawn, int SpawnLevel = 1, bool Invuln = false, bool SpawnController = true) override;
 
@@ -104,7 +101,7 @@ public:
         static class USkeletalMesh* MergeMeshes(const FSkeletalMeshMergeParams& Params);
 
     UFUNCTION(BlueprintCallable, Category = "Command", meta = (UnsafeDuringActorConstruction = "true"))
-        virtual void Command(FHitResult Hit);
+        void Command(FHitResult Hit);
 
     UFUNCTION(BlueprintCallable, Category = "Command", meta = (UnsafeDuringActorConstruction = "true"))
         FVector GetCommandLocation();

@@ -167,12 +167,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
-	    virtual void SetTarget(AActor* NewTarget = nullptr);
+	    virtual void SetTarget();
 
 	UPROPERTY()
 		class AActor* Target;
-
-	class IDamageInterface* TargetInterface;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		int Level = 1;
