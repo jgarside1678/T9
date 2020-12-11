@@ -94,5 +94,8 @@ public:
 	UFUNCTION()
 	    virtual void ProjectileInnit(AActor* TargetActor, float AttackDamage, AActor* SpawnActor, float ProjectileDelay = 0, DamageType DamageActors = Enemy);
 
+	UFUNCTION()
+		class ADefensiveBuildingActor* GetSpawnBuilding();
+
 
 };

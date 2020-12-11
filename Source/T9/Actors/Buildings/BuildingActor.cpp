@@ -155,7 +155,7 @@ void ABuildingActor::BeginPlay()
 	}
 }
 
-void ABuildingActor::SetTarget()
+void ABuildingActor::SetTarget(AActor* NewTarget)
 {
 }
 
@@ -261,6 +261,7 @@ void ABuildingActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, Da
 {
 	int ScaledDamage = UKismetMathLibrary::FCeil(AmountOfDamage * DefenceDamageTakenMultiplier);
 	if((!Disabled && TypeDamage == All) || (!Disabled && TypeDamage == TypeOfDamage)) {
+		if (!Target || TargetInterface && TargetInterface->CheckIfDead()) SetTarget(AttackingActor);
 		CurrentHealth -= ScaledDamage;
 		if (CurrentHealth <= 0) {
 			SetDisabled(true);

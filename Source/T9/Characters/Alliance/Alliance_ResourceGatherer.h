@@ -76,6 +76,15 @@ public:
 	UFUNCTION()
 		void SetResource(class AResourceActor* Resource);
 
+	virtual void Command(FHitResult Hit) override;
+
+
+	UFUNCTION()
+		AResourceActor* GetCommandedResourceActor();
+
+	UFUNCTION()
+		AResourceCharacter* GetCommandedResourceCharacter();
+
 protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Gathering", Meta = (AllowPrivateAccess = "true"))
