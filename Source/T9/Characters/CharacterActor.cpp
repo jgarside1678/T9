@@ -13,11 +13,6 @@
 #include "UObject/ConstructorHelpers.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-#include "T9/AI/AI_Controller.h"
-#include "BehaviorTree/BlackboardComponent.h"
-#include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
-#include "T9/BlackBoard_Keys.h"
-
 // Sets default values
 ACharacterActor::ACharacterActor() :
 	WidgetComponent(CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar")))
@@ -116,9 +111,6 @@ void ACharacterActor::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invu
 		WidgetComponent->SetVisibility(false);
 	}
 	Invulnerable = Invuln;
-
-	Cont = Cast<AAI_Controller>(GetController());
-
 }
 
 AActor* ACharacterActor::GetSpawnBuilding() {
@@ -181,11 +173,6 @@ void ACharacterActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, D
 {
 	int ScaledDamage = UKismetMathLibrary::FCeil(AmountOfDamage * ArmourDamageTakenMultiplier);
 	if ((!IsDead && TypeDamage == All) || (!IsDead && TypeDamage == TypeOfDamage)) {
-		if (!CurrentTarget || !CurrentTarget->IsValidLowLevel()) {
-			CurrentTarget = AttackingActor;
-			Cont->GetBlackboard()->SetValueAsObject(bb_keys::combat_target, CurrentTarget);
-			Cont->Reset();
-		}
 		CurrentHealth -= ScaledDamage;
 		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 		if (CurrentHealth <= 0) {

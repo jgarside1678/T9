@@ -14,7 +14,7 @@ EBTNodeResult::Type UAI_SetTargetAsHunt::ExecuteTask(UBehaviorTreeComponent& Own
 {
 	AAI_Controller* Cont = Cast<AAI_Controller>(OwnerComp.GetAIOwner());
 	UObject* HuntTarget = Cont->GetBlackboard()->GetValueAsObject(bb_keys::hunt);
-	Cont->GetBlackboard()->SetValueAsObject(bb_keys::combat_target, (UObject*)HuntTarget);
+	Cont->GetBlackboard()->SetValueAsObject(bb_keys::target_actor, (UObject*)HuntTarget);
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }

@@ -104,21 +104,3 @@ void AAlliance_ResourceGatherer::BaseCalculate()
 	CalculateMaxResourceInventory();
 }
 
-
-
-void AAlliance_ResourceGatherer::Command(FHitResult Hit)
-{
-	IsGathering = false;
-	Super::Command(Hit);
-
-}
-
-AResourceActor* AAlliance_ResourceGatherer::GetCommandedResourceActor()
-{
-	return CommandedResourceActor;
-}
-
-AResourceCharacter* AAlliance_ResourceGatherer::GetCommandedResourceCharacter()
-{
-	return CommandedResourceCharacter;
-}

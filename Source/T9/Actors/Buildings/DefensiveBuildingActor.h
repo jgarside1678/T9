@@ -46,6 +46,8 @@ public:
 protected:
 	ADefensiveBuildingActor();
 
+	class IDamageInterface* TargetInterface;
+
 	virtual void BeginPlay() override;
 
 	FTimerHandle AttackTimerHandle;
@@ -56,7 +58,7 @@ protected:
 	UPROPERTY()
 		TEnumAsByte<TargetPiority> AttackPiority = Closest;
 
-	virtual void SetTarget(AActor* NewTarget = nullptr) override;
+	virtual void SetTarget() override;
 
 	UFUNCTION()
 	   virtual void AttackTarget();

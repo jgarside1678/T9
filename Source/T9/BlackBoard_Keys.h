@@ -7,8 +7,7 @@ namespace bb_keys
 {
 	//Global
 	TCHAR const* const move_location = TEXT("MoveToLocation");
-	TCHAR const* const combat_target = TEXT("CombatTarget");
-	TCHAR const* const utility_target = TEXT("UtilityTarget");
+	TCHAR const* const target_actor = TEXT("Target");
 	TCHAR const* const hunt = TEXT("Hunt");
 	TCHAR const* const resource = TEXT("Resource");
 	TCHAR const* const attacker = TEXT("Attacker");

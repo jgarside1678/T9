@@ -52,7 +52,7 @@ void AProjectile_Mortar::BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 {
 	if (Active) {
 		IDamageInterface* Enemy = Cast<IDamageInterface>(OtherActor);
-		if (Enemy != nullptr) Enemy->TakeDamage(Spawner, Damage, DamageActorsOfType);
+		if (Enemy != nullptr) Enemy->TakeDamage(this, Damage, DamageActorsOfType);
 		if (OtherActor != Spawner && !Exploded) {
 			Exploded = true;
 			this->SetActorScale3D(FVector(10));

@@ -165,7 +165,7 @@ bool AGameGridActor::TileToGridLocation()
 		float TempY = CurrentColumn * TileSize + GetActorLocation().Y;
 		int TilesWidth = SelectionLengthY;
 		int TilesHeight = SelectionLengthX;
-		if ((SelectionRotationY % 180) != 0) Swap(TilesWidth, TilesHeight);
+		if ((SelectionRotationY % 180) != 0) std::swap(TilesWidth, TilesHeight);
 		if (SelectionLengthY > 1) {
 			TempY -= floor(TilesWidth * 0.5) * TileSize;
 		}
@@ -199,7 +199,7 @@ void AGameGridActor::SetSelectedTile()
 
 void AGameGridActor::SetTilesActive(FVector Location, int TilesWidth, int TilesHeight)
 {
-	if ((SelectionRotationY % 180) != 0) Swap(TilesWidth, TilesHeight);
+	if ((SelectionRotationY % 180) != 0) std::swap(TilesWidth, TilesHeight);
 	int Row = round(((Location.X - GetActorLocation().X) / GridWidth()) * NumberOfRows);
 	int Column = round(((Location.Y - GetActorLocation().Y) / GridHeight()) * NumberOfColumns);
 	for (int x = 0; x < TilesHeight; x++) {
@@ -214,7 +214,7 @@ void AGameGridActor::SetTilesActive(FVector Location, int TilesWidth, int TilesH
 
 void AGameGridActor::SetTilesUnactive(FVector Location, int TilesWidth, int TilesHeight, int Rot)
 {
-	if ((Rot % 180) == 0) Swap(TilesWidth, TilesHeight);
+	if ((Rot % 180) == 0) std::swap(TilesWidth, TilesHeight);
 	int Row = round(((Location.X - GetActorLocation().X) / GridWidth()) * NumberOfRows);
 	int Column = round(((Location.Y - GetActorLocation().Y) / GridHeight()) * NumberOfColumns);
 	for (int x = 0; x <= TilesHeight; x++) {
@@ -231,7 +231,7 @@ void AGameGridActor::SetTilesUnactive(FVector Location, int TilesWidth, int Tile
 bool AGameGridActor::CheckGridLocation(FVector CheckLocation, int BuildingWidth, int BuildingHeight)
 {
     //DrawDebugLine(GetWorld(), CheckLocation, FVector(CheckLocation.X, CheckLocation.Y, 1000), FColor::Red, true, 20, 10, 5);
-	if ((SelectionRotationY % 180) != 0) Swap(BuildingWidth, BuildingHeight);
+	if ((SelectionRotationY % 180) != 0) std::swap(BuildingWidth, BuildingHeight);
 	int Row = round(((CheckLocation.X - GetActorLocation().X) / GridWidth()) * NumberOfRows);
 	int Column = round(((CheckLocation.Y - GetActorLocation().Y) / GridHeight()) * NumberOfColumns);
 	for (int x = 0; x < BuildingHeight; x++) {
