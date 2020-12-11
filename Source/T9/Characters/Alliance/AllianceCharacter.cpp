@@ -6,15 +6,18 @@
 #include "T9/Widgets/HealthBarWidget.h"
 #include "SkeletalMeshMerge.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "T9/AI/AI_Controller.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Engine/SkeletalMesh.h"
 #include "Animation/Skeleton.h"
 #include "DrawDebugHelpers.h"
 #include "T9/Characters/Enemies/EnemyCharacter.h"
+#include "T9/AI/AI_Controller.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
 #include "T9/BlackBoard_Keys.h"
+#include "BrainComponent.h"
+#include "T9/Actors/Resources/ResourceCharacter.h"
+#include "T9/Actors/Resources/ResourceActor.h"
 
 AAllianceCharacter::AAllianceCharacter() {
 	static ConstructorHelpers::FClassFinder<UUserWidget> widget(TEXT("WidgetBlueprint'/Game/UI/AllianceHealthBar.AllianceHealthBar_C'"));
@@ -64,42 +67,6 @@ void AAllianceCharacter::MeshInit() {
 		}
 	}
 }
-
-
-
-//static void ToMergeParams(const TArray<FSkelMeshMergeSectionMapping_BP>& InSectionMappings, TArray<FSkelMeshMergeSectionMapping>& OutSectionMappings)
-//{
-//    if (InSectionMappings.Num() > 0)
-//    {
-//        OutSectionMappings.AddUninitialized(InSectionMappings.Num());
-//        for (int32 i = 0; i < InSectionMappings.Num(); ++i)
-//        {
-//            OutSectionMappings[i].SectionIDs = InSectionMappings[i].SectionIDs;
-//        }
-//    }
-//};
-//static void ToMergeParams(const TArray<FSkelMeshMergeUVTransformMapping>& InUVTransformsPerMesh, TArray<FSkelMeshMergeUVTransforms>& OutUVTransformsPerMesh)
-//{
-//    if (InUVTransformsPerMesh.Num() > 0)
-//    {
-//        OutUVTransformsPerMesh.Empty();
-//        OutUVTransformsPerMesh.AddUninitialized(InUVTransformsPerMesh.Num());
-//        for (int32 i = 0; i < InUVTransformsPerMesh.Num(); ++i)
-//        {
-//            TArray<TArray<FTransform>>& OutUVTransforms = OutUVTransformsPerMesh[i].UVTransformsPerMesh;
-//            const TArray<FSkelMeshMergeUVTransform>& InUVTransforms = InUVTransformsPerMesh[i].UVTransformsPerMesh;
-//            if (InUVTransforms.Num() > 0)
-//            {
-//                OutUVTransforms.Empty();
-//                OutUVTransforms.AddUninitialized(InUVTransforms.Num());
-//                for (int32 j = 0; j < InUVTransforms.Num(); j++)
-//                {
-//                    OutUVTransforms[i] = InUVTransforms[i].UVTransforms;
-//                }
-//            }
-//        }
-//    }
-//};
 
 
 USkeletalMesh* AAllianceCharacter::MergeMeshes(const FSkeletalMeshMergeParams& Params)
@@ -190,13 +157,18 @@ void AAllianceCharacter::Command(FHitResult Hit)
     CommandEnemyTarget = Cast<AEnemyCharacter>(Hit.Actor);
     CommandAllianceTarget = Cast<AAllianceCharacter>(Hit.Actor);
     CommandBuildingTarget = Cast<ABuildingActor>(Hit.Actor);
-    if (!CommandEnemyTarget && !CommandAllianceTarget && !CommandBuildingTarget) CommandLocation = FVector(Hit.Location.X, Hit.Location.Y, 10);
-    DrawDebugLine(GetWorld(), CommandLocation, FVector(CommandLocation.X, CommandLocation.Y, 3000), FColor::Blue, false, 20, 0, 10);
+    CommandedResourceActor = Cast<AResourceActor>(Hit.Actor);
+    CommandedResourceCharacter = Cast<AResourceCharacter>(Hit.Actor);
     if (Cont) {
-        Cont->GetBlackboard()->SetValueAsVector(bb_keys::command_location, CommandLocation);
-        Cont->Reset();
+        if (!CommandEnemyTarget && !CommandAllianceTarget && !CommandBuildingTarget && !CommandedResourceActor && !CommandedResourceCharacter) {
+            CommandLocation = FVector(Hit.Location.X, Hit.Location.Y, 10);
+            Cont->GetBlackboard()->SetValueAsVector(bb_keys::command_location, CommandLocation);
+            DrawDebugLine(GetWorld(), CommandLocation, FVector(CommandLocation.X, CommandLocation.Y, 3000), FColor::Blue, false, 20, 0, 10);
+        }
+        else Cont->GetBlackboard()->ClearValue(bb_keys::command_location);
+        Cont->BrainComponent->RestartLogic();
+        
     }
-
 }
 
 FVector AAllianceCharacter::GetCommandLocation() {
@@ -206,5 +178,5 @@ FVector AAllianceCharacter::GetCommandLocation() {
 void AAllianceCharacter::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invuln, bool SpawnController)
 {
     Super::SpawnInit(BuildingSpawn, SpawnLevel, Invuln, SpawnController);
-    Cont = Cast<AAI_Controller>(GetController());
+    //Cont = Cast<AAI_Controller>(GetController());
 }

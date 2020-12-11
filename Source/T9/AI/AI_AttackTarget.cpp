@@ -15,13 +15,13 @@ EBTNodeResult::Type UAI_AttackTarget::ExecuteTask(UBehaviorTreeComponent& OwnerC
 {
 	auto const Cont = Cast<AAI_Controller>(OwnerComp.GetAIOwner());
 	auto const NPC = Cast<ACharacterActor>(Cont->GetPawn());
-	UObject* Target = Cont->GetBlackboard()->GetValueAsObject(bb_keys::target_actor);
+	UObject* Target = Cont->GetBlackboard()->GetValueAsObject(bb_keys::combat_target);
 	if (Target != nullptr && Target->IsValidLowLevel() && !NPC->IsDead) {
 		Cont->GetBlackboard()->SetValueAsFloat(bb_keys::attack_interval, NPC->GetAttackInterval());
 		AActor* TargetActor = (AActor*)Target;
 		if (ABuildingActor* Building = Cast<ABuildingActor>(TargetActor)) {
 			if (Building->GetDisabled()) {
-				Cont->GetBlackboard()->SetValueAsObject(bb_keys::target_actor, nullptr);
+				Cont->GetBlackboard()->SetValueAsObject(bb_keys::combat_target, nullptr);
 				FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 				return EBTNodeResult::Succeeded;
 			}

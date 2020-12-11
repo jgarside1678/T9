@@ -33,7 +33,7 @@ EBTNodeResult::Type UAI_FindTarget::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	//Clear Last Target incase animations still playing
 	NPC->CurrentTarget = nullptr;
 	if (!NPC->IsDead) {
-		AActor* Target = Cast<AActor>(Cont->GetBlackboard()->GetValueAsObject(bb_keys::target_actor));
+		AActor* Target = Cast<AActor>(Cont->GetBlackboard()->GetValueAsObject(bb_keys::combat_target));
 		FVector const Origin = NPC->GetActorLocation();
 		if (Target == nullptr || Target->IsPendingKill()) {
 			//Locate nearest Building
@@ -114,14 +114,14 @@ EBTNodeResult::Type UAI_FindTarget::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 				FVector Max = FVector(ClosestBuildingOrigin.X + ClosestBuildingBounds.X + 50 + NPC->GetAttackRange(), ClosestBuildingOrigin.Y + ClosestBuildingBounds.Y + 50 + NPC->GetAttackRange(), 1);
 				FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(Origin, Min, Max);
 				//DrawDebugLine(GetWorld(), ClampedVector, FVector(ClampedVector.X, ClampedVector.Y, 3000), FColor::Red, false, 20, 0, 10);
-				Cont->GetBlackboard()->SetValueAsObject(bb_keys::target_actor, (UObject*)ClosestBuilding);
+				Cont->GetBlackboard()->SetValueAsObject(bb_keys::combat_target, (UObject*)ClosestBuilding);
 				Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
 			}
 		}
 		else if (CurrentType == Character) {
 			ACharacterActor* ClosestCharacter = Cast<ACharacterActor>(ClosestActor);
 			if (ClosestCharacter != nullptr) {
-				Cont->GetBlackboard()->SetValueAsObject(bb_keys::target_actor, (UObject*)ClosestCharacter);
+				Cont->GetBlackboard()->SetValueAsObject(bb_keys::combat_target, (UObject*)ClosestCharacter);
 				//FVector MoveVector = ClosestCharacter->GetActorLocation() + ClosestCharacter->CapsuleRadius;
 				FVector ClosestCharacterOrigin = ClosestCharacter->GetActorLocation();
 				FVector Min = FVector(ClosestCharacterOrigin.X - ClosestCharacter->CapsuleRadius - 50 - NPC->GetAttackRange(), ClosestCharacterOrigin.Y - ClosestCharacter->CapsuleRadius - 50 - NPC->GetAttackRange(), 1);
