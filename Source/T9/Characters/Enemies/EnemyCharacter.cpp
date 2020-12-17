@@ -13,6 +13,7 @@ AEnemyCharacter::AEnemyCharacter() {
 		WidgetClass = widget.Class;
 	}
 	TypeOfDamage = Enemy;
+	GetMesh()->SetCustomDepthStencilValue(1);
 }
 
 void AEnemyCharacter::BeginPlay() {

@@ -13,6 +13,11 @@
 #include "UObject/ConstructorHelpers.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+#include "T9/AI/AI_Controller.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
+#include "T9/BlackBoard_Keys.h"
+
 // Sets default values
 ACharacterActor::ACharacterActor() :
 	WidgetComponent(CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar")))
@@ -39,7 +44,7 @@ ACharacterActor::ACharacterActor() :
 	OffHandItem->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 	//MainHandItemMesh->SetupAttachment(GetMesh());
 	MovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
-
+	ResetHealth();
 }
 
 
@@ -105,13 +110,15 @@ void ACharacterActor::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invu
 	ResetHealth();
 	NeedsController = SpawnController;
 	if (!GetController() && NeedsController) {
-		FTimerHandle ControllerTimerHandle;
-		GetWorldTimerManager().SetTimer(ControllerTimerHandle, this, &ACharacterActor::SpawnDefaultController, 2, false, 2);
+		SpawnDefaultController();
 	}
 	else {
 		WidgetComponent->SetVisibility(false);
 	}
 	Invulnerable = Invuln;
+
+	Cont = Cast<AAI_Controller>(GetController());
+
 }
 
 AActor* ACharacterActor::GetSpawnBuilding() {
@@ -174,11 +181,17 @@ void ACharacterActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, D
 {
 	int ScaledDamage = UKismetMathLibrary::FCeil(AmountOfDamage * ArmourDamageTakenMultiplier);
 	if ((!IsDead && TypeDamage == All) || (!IsDead && TypeDamage == TypeOfDamage)) {
+		if (!CurrentTarget || !CurrentTarget->IsValidLowLevel()) {
+			CurrentTarget = AttackingActor;
+			Cont->GetBlackboard()->SetValueAsObject(bb_keys::combat_target, CurrentTarget);
+			Cont->Reset();
+		}
 		CurrentHealth -= ScaledDamage;
 		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 		if (CurrentHealth <= 0) {
 			DeathInit();
 		}
+		else if (CurrentHealth > MaxHealth) CurrentHealth = MaxHealth;
 	}
 }
 
@@ -418,4 +431,14 @@ FCharacterLevels ACharacterActor::GetUpgradeBaseStats()
 	if (Levels.Contains(Level+1)) return Levels[Level+1];
 	else if (Levels.Contains(Level)) return Levels[Level];
 	return FCharacterLevels();
+}
+
+void ACharacterActor::SetSelected()
+{
+	if (GetMesh()) GetMesh()->SetRenderCustomDepth(true);
+}
+
+void ACharacterActor::SetUnSelected()
+{
+	if (GetMesh()) GetMesh()->SetRenderCustomDepth(false);
 }

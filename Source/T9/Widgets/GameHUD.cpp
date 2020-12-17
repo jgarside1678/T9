@@ -19,6 +19,8 @@
 #include "T9/Actors/Resources/ResourceCharacter.h"
 #include "T9/Actors/Resources/ResourceActor.h"
 //#include "Blueprint/WidgetLayoutLibrary.h"
+#include "T9/Characters/Enemies/EnemyCharacter.h"
+#include "T9/Characters/Alliance/AllianceCharacter.h"
 #include "LevelUp.h"
 #include "ShowItems.h"
 #include "PlayerAlert.h"
@@ -210,6 +212,9 @@ void AGameHUD::SetGameObjectSelected(FHitResult Hit)
 	if (HitActor)
 	{
 		SelectedObject = HitActor;
+		SelectedBuilding = Cast<ABuildingActor>(SelectedObject);
+		SelectedEnemyCharacter = Cast<AEnemyCharacter>(SelectedObject);
+		SelectedAllianceCharacter = Cast<AAllianceCharacter>(SelectedObject);
 		if (ISelectInterface* Select = Cast<ISelectInterface>(HitActor)) Select->SetSelected();
 	}
 }

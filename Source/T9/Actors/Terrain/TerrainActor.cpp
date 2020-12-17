@@ -10,6 +10,13 @@ ATerrainActor::ATerrainActor()
 	PrimaryActorTick.bCanEverTick = true;
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	RootComponent = StaticMeshComponent;
+	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
+	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+	if (StaticMeshComponent) {
+		StaticMeshComponent->SetCustomDepthStencilValue(1);
+		StaticMeshComponent->SetRenderCustomDepth(false);
+		StaticMeshComponent->SetGenerateOverlapEvents(true);
+	}
 
 	TerrainCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
 	TerrainCollider->SetupAttachment(RootComponent);
@@ -21,6 +28,7 @@ ATerrainActor::ATerrainActor()
 // Called when the game starts or when spawned
 void ATerrainActor::BeginPlay()
 {
+	TerrainCollider->SetBoxExtent(StaticMeshComponent->GetStaticMesh()->GetBounds().BoxExtent);
 	Super::BeginPlay();
 	
 }

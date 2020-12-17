@@ -32,7 +32,7 @@ ABuilding_HuntersLodge::ABuilding_HuntersLodge(const FObjectInitializer& ObjectI
 	SpawnComponent->SpawnMethod = PointSpawn;
 	SpawnComponent->SpawnLocation = FVector(250, 0, 50);
 	SpawnComponent->MaxSpawnRange = 500;
-	SpawnComponent->GetInventoryComponent()->AddInventorySlot(FSlot{ 1, Tool });
+	SpawnComponent->GetInventoryComponent()->AddInventorySlot(FSlot{ 1, AnyType });
 	SpawnComponent->GetInventoryComponent()->AddInventorySlot(FSlot{ 1, Armour });
 	SpawnComponent->GetInventoryComponent()->AddInventorySlot(FSlot{ 1, Armour });
 }

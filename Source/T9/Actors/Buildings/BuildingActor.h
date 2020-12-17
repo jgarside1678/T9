@@ -167,10 +167,12 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
-	    virtual void SetTarget();
+	    virtual void SetTarget(AActor* NewTarget = nullptr);
 
 	UPROPERTY()
 		class AActor* Target;
+
+	class IDamageInterface* TargetInterface;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		int Level = 1;
@@ -247,7 +249,7 @@ protected:
 		int BuildingDetectionRange = 3;
 
 	UPROPERTY()
-		int OutlineColour = 2;
+		int OutlineColour = 0;
 
 	//Audio
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
@@ -318,6 +320,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		int GridRotation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
+		bool Upgrading = false;
+
 	UPROPERTY()
 		FVector BuildingCenterLocation;
 
@@ -360,6 +365,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void ResetHealth();
 
+	UFUNCTION(BlueprintCallable)
+		class AActor* GetTarget();
 
 	UFUNCTION()
 		virtual void SetSelected();
@@ -427,7 +434,7 @@ public:
 		void CalculateAttackRange();
 
 	UFUNCTION()
-		void CalculateAttackSpeed();
+		virtual void CalculateAttackSpeed();
 
 	UFUNCTION()
 		void CalculateMaxHealth();

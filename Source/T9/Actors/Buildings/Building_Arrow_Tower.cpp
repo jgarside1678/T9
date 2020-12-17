@@ -25,7 +25,7 @@ ABuilding_Arrow_Tower::ABuilding_Arrow_Tower(const FObjectInitializer& ObjectIni
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1B.Tower_Base1B'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh3(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1C.Tower_Base1C'"));
 	static ConstructorHelpers::FObjectFinder<UTexture2D> ImageLevel1(TEXT("Texture2D'/Game/UI/Assets/Sprites/WatchTowerImage.WatchTowerImage'"));
-	static ConstructorHelpers::FObjectFinder<UAnimSequence> AnimationMont(TEXT("AnimSequence'/Game/AI/Alliance/StylizedHumanMale/Animations/WizardTowerAttack.WizardTowerAttack'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> AnimationMont(TEXT("AnimMontage'/Game/AI/Alliance/StylizedHumanFemale/Animations/Alliance_Wizard_TowerFemale_Attack.Alliance_Wizard_TowerFemale_Attack'"));
 	if (AnimationMont.Succeeded()) DefenderAttackAnimation = AnimationMont.Object;
 	if (BaseMesh1.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(BaseMesh1.Object);

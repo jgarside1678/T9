@@ -87,7 +87,7 @@ protected:
 		TMap<TEnumAsByte<Tiers>, FResourceTierStats> ResourceTiers;
 
 	UPROPERTY()
-		int OutlineColour = 1;
+		int OutlineColour = 3;
 
 	UPROPERTY()
 		FVector BoxExtentMultiplier = FVector(1);

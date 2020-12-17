@@ -34,10 +34,10 @@ AAlliance_Wizard::AAlliance_Wizard() {
 	//}
 
 
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Alliance/StylizedHumanMale/Animations/Alliance_LumberJack_AnimBP.Alliance_LumberJack_AnimBP_C'"));
-	if (AnimationAsset.Succeeded()) {
-		GetMesh()->AnimClass = AnimationAsset.Class;
-	}
+	//static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Alliance/StylizedHumanMale/Animations/Alliance_LumberJack_AnimBP.Alliance_LumberJack_AnimBP_C'"));
+	//if (AnimationAsset.Succeeded()) {
+	//	GetMesh()->AnimClass = AnimationAsset.Class;
+	//}
 }
 
 void AAlliance_Wizard::BeginPlay() {

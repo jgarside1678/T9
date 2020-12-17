@@ -18,7 +18,7 @@ EBTNodeResult::Type UAI_FaceTarget::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	auto const Cont = Cast<AAI_Controller>(OwnerComp.GetAIOwner());
 	auto const NPC = Cast<ACharacterActor>(Cont->GetPawn());
 	FVector const Origin = NPC->GetActorLocation();
-	UObject* Target = Cont->GetBlackboard()->GetValueAsObject(bb_keys::target_actor);
+	UObject* Target = Cont->GetBlackboard()->GetValueAsObject(bb_keys::combat_target);
 
 	if (Target != nullptr && Target->IsValidLowLevel()) {
 		FVector TargetBounds, TargetOrigin;

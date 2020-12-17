@@ -46,8 +46,6 @@ public:
 protected:
 	ADefensiveBuildingActor();
 
-	class IDamageInterface* TargetInterface;
-
 	virtual void BeginPlay() override;
 
 	FTimerHandle AttackTimerHandle;
@@ -58,10 +56,13 @@ protected:
 	UPROPERTY()
 		TEnumAsByte<TargetPiority> AttackPiority = Closest;
 
-	virtual void SetTarget() override;
+	virtual void SetTarget(AActor* NewTarget = nullptr) override;
 
 	UFUNCTION()
 	   virtual void AttackTarget();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
+		int AttackStreak = 0;
 
 	UPROPERTY()
 		FRotator ProjectileSpawnRotation = FRotator(0, 0, 0);
@@ -83,7 +84,9 @@ protected:
 		class USceneComponent* DefenderDisplacement;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
-		class UAnimationAsset* DefenderAttackAnimation;
+		class UAnimMontage* DefenderAttackAnimation;
+
+	virtual void CalculateAttackSpeed() override;
 
 };
 

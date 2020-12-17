@@ -32,7 +32,7 @@ EBTNodeResult::Type UAI_FindSpawnBuilding::ExecuteTask(UBehaviorTreeComponent& O
 		SpawnBuilding = Cast<ABuildingActor>(NPC->GetSpawnBuilding());
 		if (SpawnBuilding != nullptr) {
 			Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, NPC->InitalLocation);
-			Cont->GetBlackboard()->SetValueAsObject(bb_keys::target_actor, (UObject*)SpawnBuilding);
+			Cont->GetBlackboard()->SetValueAsObject(bb_keys::utility_target, (UObject*)SpawnBuilding);
 		}
 
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);

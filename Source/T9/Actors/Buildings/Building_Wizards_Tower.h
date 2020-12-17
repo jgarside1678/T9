@@ -24,4 +24,11 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void Upgrade() override;
+
+	UPROPERTY()
+		TArray<class UMaterialInstance*> HairColours1;
+
+	UPROPERTY()
+		TArray<class UMaterialInstance*> HairColours2;
+
 };

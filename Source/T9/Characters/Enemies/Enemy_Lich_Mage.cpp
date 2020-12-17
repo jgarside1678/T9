@@ -12,17 +12,17 @@
 
 AEnemy_Lich_Mage::AEnemy_Lich_Mage(const FObjectInitializer& ObjectInitializer) {
 	Projectile = AProjectile_Magic_DeathsDecay::StaticClass();
-	Levels.Add(1, FCharacterLevels{ 100, 150, 500, 30000, 0, 1000 });
-	Levels.Add(2, FCharacterLevels{ 300, 150, 500, 400, 0, 1000 });
-	Levels.Add(3, FCharacterLevels{ 300, 150, 500, 500, 0, 1000 });
-	Levels.Add(4, FCharacterLevels{ 300, 150, 500, 600, 0, 1000 });
-	Levels.Add(5, FCharacterLevels{ 300, 150, 500, 700, 0, 1000 });
-	Levels.Add(6, FCharacterLevels{ 300, 150, 500, 800, 0, 1000 });
-	Levels.Add(7, FCharacterLevels{ 300, 150, 500, 900, 0, 1000 });
-	Levels.Add(8, FCharacterLevels{ 300, 150, 500, 1000, 0, 1000 });
-	Levels.Add(9, FCharacterLevels{ 300, 150, 500, 1100, 0, 1000 });
-	Levels.Add(10, FCharacterLevels{ 300, 150, 500, 1200, 0, 1000 });
-	Levels.Add(11, FCharacterLevels{ 300, 150, 500, 1300, 0, 1000 });
+	Levels.Add(1, FCharacterLevels{ 100, 150, 500, 1500, 0, 100, 50 });
+	Levels.Add(2, FCharacterLevels{ 300, 150, 500, 400, 0, 100, 50 });
+	Levels.Add(3, FCharacterLevels{ 300, 150, 500, 500, 0, 100, 50 });
+	Levels.Add(4, FCharacterLevels{ 300, 150, 500, 600, 0, 100, 50 });
+	Levels.Add(5, FCharacterLevels{ 300, 150, 500, 700, 0, 100, 50 });
+	Levels.Add(6, FCharacterLevels{ 300, 150, 500, 800, 0, 100, 50 });
+	Levels.Add(7, FCharacterLevels{ 300, 150, 500, 900, 0, 100, 50 });
+	Levels.Add(8, FCharacterLevels{ 300, 150, 500, 1000, 0, 100, 50 });
+	Levels.Add(9, FCharacterLevels{ 300, 150, 500, 1100, 0, 100, 50 });
+	Levels.Add(10, FCharacterLevels{ 300, 150, 500, 1200, 0, 100, 50 });
+	Levels.Add(11, FCharacterLevels{ 300, 150, 500, 1300, 0, 100, 50 });
 	DeathTime = 1.8;
 	AwarenessDistance = 2000;
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/Enemies/Lich/Meshes/OneMeshCharacter/SK_Lich.SK_Lich'"));
@@ -68,9 +68,14 @@ void AEnemy_Lich_Mage::CalculateDamage(int BaseAdditionalDamage, float Additiona
 
 void AEnemy_Lich_Mage::TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage)
 {
-	Super::TakeDamage(AttackingActor, AmountOfDamage, TypeDamage);
-	if (CurrentPhase == LichMagePhase::Normal) { if (FMath::RandRange(0, 10) == 0) ChangePhase(1); }
-	else if (FMath::RandRange(0, 3) == 0) { ChangePhase(0); }
+	if (CurrentPhase == LichMagePhase::Etheral) {
+		if (FMath::RandRange(0, 20) == 0) ChangePhase(0);
+		Super::TakeDamage(AttackingActor, AmountOfDamage * -1, TypeDamage);
+	}
+	else{ 
+		if (FMath::RandRange(0, 20) == 0) ChangePhase(1);
+		Super::TakeDamage(AttackingActor, AmountOfDamage, TypeDamage);
+	}
 }
 
 void AEnemy_Lich_Mage::ChangePhase(int NewPhase)
@@ -86,4 +91,10 @@ void AEnemy_Lich_Mage::ChangePhase(int NewPhase)
 		break;
 	}
 	GetMesh()->SetMaterial(0, PhaseMaterials[(int)CurrentPhase]);
+}
+
+
+void AEnemy_Lich_Mage::SetSelected() {
+	Super::SetSelected();
+	if (CurrentPhase == LichMagePhase::Etheral) ChangePhase(0);
 }

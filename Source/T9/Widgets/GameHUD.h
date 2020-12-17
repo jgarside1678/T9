@@ -88,6 +88,15 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Game Selection")
 		class AActor* SelectedObject;
 
+	UPROPERTY(VisibleAnywhere, Category = "Game Selection")
+		class ABuildingActor* SelectedBuilding;
+
+	UPROPERTY(VisibleAnywhere, Category = "Game Selection")
+		class AAllianceCharacter* SelectedAllianceCharacter;
+
+	UPROPERTY(VisibleAnywhere, Category = "Game Selection")
+		class AEnemyCharacter* SelectedEnemyCharacter;
+
 	UPROPERTY(VisibleAnywhere, Category = "Menu Selection")
 		class UInventorySlot* SelectedSlot;
 

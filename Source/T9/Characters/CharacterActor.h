@@ -65,7 +65,7 @@ struct T9_API FCharacterEquipment {
 
 
 UCLASS()
-class T9_API ACharacterActor : public ACharacter, public IDamageInterface
+class T9_API ACharacterActor : public ACharacter, public IDamageInterface, public ISelectInterface
 {
 	GENERATED_BODY()
 
@@ -79,6 +79,9 @@ private:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
+		class AAI_Controller* Cont;
 
 	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
 		int Level = 1;
@@ -232,7 +235,7 @@ public:
 
 
 	UFUNCTION()
-		void SpawnInit(AActor* BuildingSpawn, int SpawnLevel = 1, bool Invuln = false, bool SpawnController = true);
+		virtual void SpawnInit(AActor* BuildingSpawn, int SpawnLevel = 1, bool Invuln = false, bool SpawnController = true);
 
 	UFUNCTION()
 		class AActor* GetSpawnBuilding();
@@ -301,7 +304,7 @@ public:
 	UFUNCTION()
 		float GetAttackInterval();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		virtual bool CheckIfDead();
 
 	UFUNCTION()
@@ -322,11 +325,20 @@ public:
 	UFUNCTION()
 		void ToggleInvulnerable(bool Input);
 
+	//UI Functions ---------------------------------
 
 	UFUNCTION(BlueprintCallable)
 		FCharacterLevels GetCurrentBaseStats();
 
 	UFUNCTION(BlueprintCallable)
 		FCharacterLevels GetUpgradeBaseStats();
+
+	//Select Interface Functions ---------------------------------
+
+	UFUNCTION()
+		virtual void SetSelected();
+
+	UFUNCTION()
+		virtual void SetUnSelected();
 
 };
