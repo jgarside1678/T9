@@ -9,7 +9,7 @@ AItem_Iron_PickAxe::AItem_Iron_PickAxe() {
 	ItemName = "Iron PickAxe";
 	ItemType = Tool;
 	ItemSubType = Axe;
-	ItemRarity = Legendary;
+	ItemRarity = Rare;
 	ItemEquipedTransform = FTransform(FRotator(76.811546, -275.199890, -35.352055), FVector(-9.757370, 15.685856, -2.384092), FVector(0.4));// (Pitch = 62.345627, Yaw = 183.599503, Roll = 58.273315)
 	ItemSheathedTransform = FTransform(FRotator(0.000000, 269.999237, 53.999889), FVector(-44.610828, 18.124989,-22.864485), FVector(0.4));
 	static ConstructorHelpers::FObjectFinder<UTexture2D> Sprite(TEXT("Texture2D'/Game/UI/Assets/Sprites/IronTwoHandedHammerImage.IronTwoHandedHammerImage'"));

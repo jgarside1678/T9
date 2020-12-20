@@ -19,12 +19,13 @@ AItemActor::AItemActor()
 	BoxCollider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	BoxCollider->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
 	BoxCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Block);
-	//BoxCollider->SetHiddenInGame(false);
-	BoxCollider->SetCanEverAffectNavigation(false);	
+	BoxCollider->SetCanEverAffectNavigation(false);
+	BoxCollider->SetMassOverrideInKg(NAME_None, 10);
 
 	RootComponent = BoxCollider;
 	ItemAnchor = CreateDefaultSubobject<USceneComponent>(TEXT("Anchor"));
 	ItemAnchor->SetupAttachment(RootComponent);
+	ItemAnchor->SetShouldUpdatePhysicsVolume(false);
 	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMesh"));
 	ItemMesh->SetupAttachment(ItemAnchor);
 	ItemMesh->SetCanEverAffectNavigation(false);
@@ -39,6 +40,7 @@ AItemActor::AItemActor()
 		Primitive->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		Primitive->SetSimulatePhysics(true);
 		Primitive->BodyInstance.bLockYRotation = true;
+		Primitive->BodyInstance.bLockXRotation = true;
 	}
 
 
@@ -94,7 +96,6 @@ void AItemActor::BeginPlay()
 		ItemPickUp = Cast<UItemPickUpWidget>(WidgetComponent->GetUserWidgetObject());
 		if(ItemPickUp)ItemPickUp->ItemMenuInit(this);
 	}
-	BoxCollider->SetMassOverrideInKg(NAME_None, 10);
 	BoxCollider->BodyInstance.bLockXRotation = true;
 	BoxCollider->BodyInstance.bLockYRotation = true;
 	BoxCollider->BodyInstance.bLockZRotation = true;

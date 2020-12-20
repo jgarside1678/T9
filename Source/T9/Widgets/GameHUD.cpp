@@ -69,8 +69,7 @@ void AGameHUD::BeginPlay()
 	Super::BeginPlay();
 	PC = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	if (HUDMenuWidget) {
-
-		HUDMenuWidget->AddToViewport();
+		ShowMainHUD();
 	}
 
 }
@@ -90,6 +89,18 @@ void AGameHUD::SetSelectedBuildMenuObject(FBuildingMenuSlot Selection) {
 void AGameHUD::RotateSelectedBuilding(float RotationAmount)
 {
 	GameGrid->RotatePreviewObject(RotationAmount);
+}
+
+void AGameHUD::HideMainHUD()
+{
+	HUDMenuWidget->RemoveFromViewport();
+	HUDState = false;
+}
+
+void AGameHUD::ShowMainHUD()
+{
+	HUDMenuWidget->AddToViewport();
+	HUDState = true;
 }
 
 void AGameHUD::ShowBuildMenu()

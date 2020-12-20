@@ -38,7 +38,7 @@ ABuildingActor::ABuildingActor() :
 	BuildingRangeCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Ignore);
 	BuildingRangeCollider->SetCanEverAffectNavigation(false);
 	RootComponent = BuildingRangeCollider;
-	//Needed Because all the meshs are made for a right handed cartesian graph ffs.
+	//Needed Because all the meshs are made for a right handed cartesian graph.
 	MeshDisplacement = CreateDefaultSubobject<USceneComponent>(TEXT("MeshDisplacement"));
 	MeshDisplacement->SetupAttachment(RootComponent);
 	MeshDisplacement->SetRelativeRotation(FRotator(0, -90, 0));
@@ -65,14 +65,9 @@ ABuildingActor::ABuildingActor() :
 			GridSpace->SetMaterial(0, PlaneColour.Object);
 		}
 	}
-
-	//static ConstructorHelpers::FObjectFinder<USoundBase> UpgradeSound(TEXT("SoundCue'/Game/Ultimate_SFX_Bundle/Pirate_Sounds_Pro/Cues/Reparing_ship/Reparing_ship_6_Cue.Reparing_ship_6_Cue'"));
- //   UpgradeAudio = UGameplayStatics::SpawnSound2D(this, UpgradeSound.Object, 0.2);
-	//if(UpgradeAudio) UpgradeAudio->SetActive(false);
-
+	//Initalize Inventory Component At Capacity 3
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 	InventoryComponent->SetCapacity(3);
-
 	InventoryComponent->AddInventorySlot(FSlot{});
 	InventoryComponent->AddInventorySlot(FSlot{});
 	InventoryComponent->AddInventorySlot(FSlot{});
@@ -117,7 +112,6 @@ void ABuildingActor::BeginPlay()
 		BuildingRangeCollider->OnComponentBeginOverlap.AddDynamic(this, &ABuildingActor::BeginOverlap);
 		BuildingRangeCollider->OnComponentEndOverlap.AddDynamic(this, &ABuildingActor::EndOverlap);
 		BuildingRangeCollider->ShapeColor = FColor::White;
-
 		//DrawDebugBox(GetWorld(), GetActorLocation(), BuildingExtent, FQuat(GetActorRotation()), FColor::Red, true, -1, 0, 10);
 		//DrawDebugBox(GetWorld(), GetActorLocation(), (BuildingRangeCollider->GetScaledBoxExtent()), FQuat(GetActorRotation()), FColor::Yellow, true, -1, 0, 10);
 	}
@@ -226,13 +220,6 @@ AActor* ABuildingActor::GetTarget()
 {
 	return Target;
 }
-
-// Called every frame
-//void ABuildingActor::Tick(float DeltaTime)
-//{
-//	Super::Tick(DeltaTime);
-//
-//}
 
 
 

@@ -27,6 +27,12 @@ public:
 	void RotateSelectedBuilding(float RotationAmount);
 
 	UFUNCTION(BlueprintCallable)
+		void HideMainHUD();
+
+	UFUNCTION(BlueprintCallable)
+		void ShowMainHUD();
+
+	UFUNCTION(BlueprintCallable)
 	void ShowBuildMenu();
 
 	UFUNCTION(BlueprintCallable)
@@ -69,6 +75,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetSelectedBuildMenuObject(FBuildingMenuSlot Selection);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Game Menus")
+		bool HUDState = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Game Menus")
 		bool BuildMenuState = false;

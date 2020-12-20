@@ -63,7 +63,7 @@ EBTNodeResult::Type UAI_FindClosestResourceCharacter::ExecuteTask(UBehaviorTreeC
 				FVector Min = FVector(ClosestResourceCharacterOrigin.X - ClosestResourceCharacterBounds, ClosestResourceCharacterOrigin.Y - ClosestResourceCharacterBounds, 1);
 				FVector Max = FVector(ClosestResourceCharacterOrigin.X + ClosestResourceCharacterBounds, ClosestResourceCharacterOrigin.Y + ClosestResourceCharacterBounds, 1);
 				FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(Origin, Min - NPC->CapsuleRadius - NPC->GetAttackRange(), Max + NPC->CapsuleRadius + NPC->GetAttackRange());
-				DrawDebugLine(GetWorld(), ClampedVector, FVector(ClampedVector.X, ClampedVector.Y, 3000), FColor::Blue, false, 20, 0, 10);
+				//DrawDebugLine(GetWorld(), ClampedVector, FVector(ClampedVector.X, ClampedVector.Y, 3000), FColor::Blue, false, 20, 0, 10);
 				Cont->GetBlackboard()->SetValueAsObject(bb_keys::combat_target, (UObject*)TargetCharacter);
 				Cont->GetBlackboard()->SetValueAsBool(bb_keys::target_is_dead, false);
 				Cont->GetBlackboard()->SetValueAsObject(bb_keys::hunt, (UObject*)TargetCharacter);

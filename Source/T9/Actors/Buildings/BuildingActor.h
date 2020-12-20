@@ -1,6 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -166,39 +164,36 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintCallable)
-	    virtual void SetTarget(AActor* NewTarget = nullptr);
+	class IDamageInterface* TargetInterface;
 
 	UPROPERTY()
 		class AActor* Target;
 
-	class IDamageInterface* TargetInterface;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Stats")
 		int Level = 1;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Stats")
 		float Damage;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Stats", Meta = (AllowPrivateAccess = "true"))
 		float CurrentHealth;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Stats", Meta = (AllowPrivateAccess = "true"))
 		float MaxHealth;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Stats", Meta = (AllowPrivateAccess = "true"))
 		float Defence;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Stats", Meta = (AllowPrivateAccess = "true"))
 		float DefenceDamageTakenMultiplier = 1;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Stats", Meta = (AllowPrivateAccess = "true"))
 		float AttackRange;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Stats", Meta = (AllowPrivateAccess = "true"))
 		float AttackSpeed;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Stats", Meta = (AllowPrivateAccess = "true"))
 		float AttackInterval = 3;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
@@ -231,27 +226,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
 		class AMainPlayerState* PS;
 
-	UFUNCTION()
-		virtual void BeginOverlap(UPrimitiveComponent* OverlappedComponent,
-			AActor* OtherActor,
-			UPrimitiveComponent* OtherComp,
-			int32 OtherBodyIndex,
-			bool bFromSweep,
-			const FHitResult& SweepResult);
-
-	UFUNCTION()
-		virtual void EndOverlap(UPrimitiveComponent* OverlappedComponent,
-			AActor* OtherActor,
-			UPrimitiveComponent* OtherComp,
-			int32 OtherBodyIndex);
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		int BuildingDetectionRange = 3;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		int OutlineColour = 0;
 
-	//Audio
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		class UAudioComponent* UpgradeAudio;
 
@@ -297,12 +277,50 @@ protected:
 
 	TArray<UActorComponent*> InstancedStaticMeshArray;
 
+	UFUNCTION(BlueprintCallable)
+		virtual void SetTarget(AActor* NewTarget = nullptr);
+
+	UFUNCTION()
+		virtual void BeginOverlap(UPrimitiveComponent* OverlappedComponent,
+			AActor* OtherActor,
+			UPrimitiveComponent* OtherComp,
+			int32 OtherBodyIndex,
+			bool bFromSweep,
+			const FHitResult& SweepResult);
+
+	UFUNCTION()
+		virtual void EndOverlap(UPrimitiveComponent* OverlappedComponent,
+			AActor* OtherActor,
+			UPrimitiveComponent* OtherComp,
+			int32 OtherBodyIndex);
+
 
 public:
-	// Called every frame
-	//virtual void Tick(float DeltaTime) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		FVector BuildingExtent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
+		int GridRotation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
+		bool Upgrading = false;
+
+	UPROPERTY()
+		bool IsDead = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* GridSpace;
+
+	UPROPERTY()
+		FVector BuildingCenterLocation;
+
+	UPROPERTY()
+		FVector BuildingCornerLocation;
+
+	UPROPERTY()
+		FVector2D GridLength = FVector2D(1);
+
 
 	UFUNCTION(Category = "Building Basics")
 		int GetBuildingCount();
@@ -316,21 +334,6 @@ public:
 	//For initalising spawn arguments
 	UFUNCTION()
 		virtual void BuildingInit(AGameGridActor* BuildingGrid, FVector PivotLocation, FVector CornerLocation, int Rotation);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
-		int GridRotation;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
-		bool Upgrading = false;
-
-	UPROPERTY()
-		FVector BuildingCenterLocation;
-
-	UPROPERTY()
-		FVector BuildingCornerLocation;
-
-	UPROPERTY()
-		FVector2D GridLength = FVector2D(1);
 
 	UFUNCTION(BlueprintCallable)
 		void GetBuildingRangeCollider(FVector& Origin, FVector& BoxExtent);
@@ -407,11 +410,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		class UTexture2D* GetImage();
 
-	UPROPERTY()
-		bool IsDead = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* GridSpace;
 
 	//Disable Building
 

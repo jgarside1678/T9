@@ -28,6 +28,8 @@ public:
 
 	void ToggleInventory();
 
+	void ToggleHUD();
+
 	AGameHUD* HUDPointer;
 
 

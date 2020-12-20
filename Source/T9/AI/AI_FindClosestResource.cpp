@@ -59,7 +59,7 @@ EBTNodeResult::Type UAI_FindClosestResource::ExecuteTask(UBehaviorTreeComponent&
 			FVector Min = FVector(ClosestResourceOrigin.X - ClosestResourceBounds.X, ClosestResourceOrigin.Y - ClosestResourceBounds.Y, 1);
 			FVector Max = FVector(ClosestResourceOrigin.X + ClosestResourceBounds.X, ClosestResourceOrigin.Y + ClosestResourceBounds.Y, 1);
 			FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(Origin, Min - NPC->CapsuleRadius, Max + NPC->CapsuleRadius);
-			DrawDebugLine(GetWorld(), ClampedVector, FVector(ClampedVector.X, ClampedVector.Y, 3000), FColor::Blue, false, 20, 0, 10);
+			//DrawDebugLine(GetWorld(), ClampedVector, FVector(ClampedVector.X, ClampedVector.Y, 3000), FColor::Blue, false, 20, 0, 10);
 			Cont->GetBlackboard()->SetValueAsObject(bb_keys::utility_target, (UObject*)ClosestResource);
 			Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
 		}

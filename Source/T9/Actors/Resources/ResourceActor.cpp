@@ -91,7 +91,7 @@ void AResourceActor::GetClosestStaticMesh(FVector Location, FVector& ClosestMesh
 	}
 	ClosestMeshBounds = ClosestInstanceBounds;
 	//ClosestMeshBounds = FVector(CollectionDistance.X * ClosestTransform.GetScale3D().X, CollectionDistance.Y * ClosestTransform.GetScale3D().Y, CollectionDistance.Z * ClosestTransform.GetScale3D().Z);
-	DrawDebugBox(GetWorld(), ClosestMeshLocation, ClosestInstanceBounds, FColor::Red, true, -1, 0, 10);
+	//DrawDebugBox(GetWorld(), ClosestMeshLocation, ClosestInstanceBounds, FColor::Red, true, -1, 0, 10);
 }
 
 void AResourceActor::GetClosestSpawnedCharacter(FVector Location, AResourceCharacter*& ClosestCharacter)

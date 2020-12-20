@@ -56,6 +56,8 @@ void AMainPlayerController::SetupInputComponent()
 
 	InputComponent->BindAction("Tab", IE_Pressed, this, &AMainPlayerController::ToggleInventory);
 
+	InputComponent->BindAction("Key_P", IE_Pressed, this, &AMainPlayerController::ToggleHUD);
+
 	InputComponent->BindAction("MiddleMouse", IE_Pressed, this, &AMainPlayerController::MiddleMouseButtonPressed);
 	InputComponent->BindAction("MiddleMouse", IE_Released, this, &AMainPlayerController::MiddleMouseButtonReleased);
 
@@ -85,6 +87,14 @@ void AMainPlayerController::ToggleInventory()
 		HUDPointer->HideInventory();
 	}
 	else HUDPointer->ShowInventory();
+}
+
+void AMainPlayerController::ToggleHUD()
+{
+	if (HUDPointer->HUDState) {
+		HUDPointer->HideMainHUD();
+	}
+	else HUDPointer->ShowMainHUD();
 }
 
 void AMainPlayerController::SelectPressed() {

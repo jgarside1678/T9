@@ -23,43 +23,43 @@ class T9_API ADefensiveBuildingActor : public ABuildingActor
 
 public:
 
+	ADefensiveBuildingActor();
+
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY()
 		class USceneComponent* ProjectileSpawn;
 
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics")
 		FRotator TurretRotation;
 
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics")
 		TEnumAsByte<TowerType> Type = Default;
-
-
-    UFUNCTION(BlueprintCallable, Category = "Mesh Merge", meta = (UnsafeDuringActorConstruction = "true"))
-        static class USkeletalMesh* MergeMeshes(const FSkeletalMeshMergeParams& Params);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		class USkeletalMeshComponent* BuildingDefender;
 
+    UFUNCTION(BlueprintCallable, Category = "Mesh Merge", meta = (UnsafeDuringActorConstruction = "true"))
+        static class USkeletalMesh* MergeMeshes(const FSkeletalMeshMergeParams& Params);
+
+
 protected:
-	ADefensiveBuildingActor();
+
+	FTimerHandle AttackTimerHandle;
 
 	virtual void BeginPlay() override;
 
-	FTimerHandle AttackTimerHandle;
+	virtual void SetTarget(AActor* NewTarget = nullptr) override;
+
+	virtual void CalculateAttackSpeed() override;
 
 	UPROPERTY()
 	   TSubclassOf<AProjectile> Projectile;
 
 	UPROPERTY()
 		TEnumAsByte<TargetPiority> AttackPiority = Closest;
-
-	virtual void SetTarget(AActor* NewTarget = nullptr) override;
-
-	UFUNCTION()
-	   virtual void AttackTarget();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
 		int AttackStreak = 0;
@@ -73,12 +73,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building Basics", Meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* TurretStaticMeshComponent;
 
-
-    UPROPERTY(EditAnywhere)
-        TArray<USkeletalMesh*> MeshPeices;
-
-    UFUNCTION()
-        void MeshInit();
+	UPROPERTY(EditAnywhere)
+		TArray<USkeletalMesh*> MeshPeices;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		class USceneComponent* DefenderDisplacement;
@@ -86,7 +82,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Basics")
 		class UAnimMontage* DefenderAttackAnimation;
 
-	virtual void CalculateAttackSpeed() override;
+	UFUNCTION()
+	   virtual void AttackTarget();
+
+    UFUNCTION()
+        void MeshInit();
+
 
 };
 
