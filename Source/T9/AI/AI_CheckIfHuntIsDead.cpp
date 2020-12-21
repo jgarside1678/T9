@@ -23,7 +23,11 @@ EBTNodeResult::Type UAI_CheckIfHuntIsDead::ExecuteTask(UBehaviorTreeComponent& O
 
 	if (HuntTarget != nullptr && HuntTarget->IsValidLowLevel()) {
 		IDamageInterface* Enemy = Cast<IDamageInterface>(HuntTarget);
-		if (Enemy != nullptr) Cont->GetBlackboard()->SetValueAsBool(bb_keys::target_is_dead, Enemy->CheckIfDead());
+		if (Enemy != nullptr) {
+			bool Dead = Enemy->CheckIfDead();
+			Cont->GetBlackboard()->SetValueAsBool(bb_keys::target_is_dead, Dead);
+			if (Dead) Cont->GetBlackboard()->SetValueAsObject(bb_keys::utility_target, HuntTarget);
+		}
 	}
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

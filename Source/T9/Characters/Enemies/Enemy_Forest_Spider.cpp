@@ -19,17 +19,17 @@ AEnemy_Forest_Spider::AEnemy_Forest_Spider(const FObjectInitializer& ObjectIniti
 	Levels.Add(11, FCharacterLevels{ 200, 200, 0, 1300, 50, 60 , 25 });
 	DeathTime = 4;
 	AwarenessDistance = 1200;
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/Enemies/StylizedFantasyForestCreatures/Meshes/SK_Spider.SK_Spider'"));
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Enemies/StylizedFantasyForestCreatures/Animations/Spider_Animation_BP.Spider_Animation_BP_C'"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMont(TEXT("AnimMontage'/Game/AI/Enemies/StylizedFantasyForestCreatures/Animations/Spider_Attack_Montage.Spider_Attack_Montage'"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpecialMont(TEXT("AnimMontage'/Game/AI/Enemies/StylizedFantasyForestCreatures/Animations/Spider_Special_Montage.Spider_Special_Montage'"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh1Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Spider_Green.MI_Spider_Green'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/Units/Enemies/StylizedFantasyForestCreatures/Meshes/SK_Spider.SK_Spider'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/Units/Enemies/StylizedFantasyForestCreatures/Animations/Spider_Animation_BP.Spider_Animation_BP_C'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMont(TEXT("AnimMontage'/Game/Units/Enemies/StylizedFantasyForestCreatures/Animations/Spider_Attack_Montage.Spider_Attack_Montage'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpecialMont(TEXT("AnimMontage'/Game/Units/Enemies/StylizedFantasyForestCreatures/Animations/Spider_Special_Montage.Spider_Special_Montage'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh1Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Spider_Green.MI_Spider_Green'"));
 	if (Mesh1Material.Succeeded()) MeshMaterials.Add(Mesh1Material.Object);
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh2Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Spider_Orange.MI_Spider_Orange'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh2Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Spider_Orange.MI_Spider_Orange'"));
 	if (Mesh2Material.Succeeded()) MeshMaterials.Add(Mesh2Material.Object);
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh3Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Spider_Purple.MI_Spider_Purple'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh3Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Spider_Purple.MI_Spider_Purple'"));
 	if (Mesh3Material.Succeeded()) MeshMaterials.Add(Mesh3Material.Object);
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh4Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Spider_Brown.MI_Spider_Brown'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh4Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Spider_Brown.MI_Spider_Brown'"));
 	if (Mesh4Material.Succeeded()) MeshMaterials.Add(Mesh4Material.Object);
 	if (MeshAsset.Succeeded()) {
 		GetMesh()->SkeletalMesh = MeshAsset.Object;

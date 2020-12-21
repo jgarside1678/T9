@@ -10,7 +10,7 @@ ABuilding_HuntersLodge::ABuilding_HuntersLodge(const FObjectInitializer& ObjectI
 	HealthBarHeight = 1000;
 	OutlineColour = 1;
 	GridLength = FVector2D(5, 6);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh(TEXT("StaticMesh'/Game/Assets/Pirate_Town_Set/Meshes/House.House'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh(TEXT("StaticMesh'/Game/World/Pirate_Town_Set/Meshes/House.House'"));
 	static ConstructorHelpers::FObjectFinder<UTexture2D> ImageLevel1(TEXT("Texture2D'/Game/UI/Assets/Sprites/WatchTowerImage.WatchTowerImage'"));
 	//static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Pirate_Town_Set/Meshes/Town_Hall_2.Town_Hall_2'"));
 	//static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1C.Tower_Base1C'"));

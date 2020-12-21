@@ -6,7 +6,7 @@
 #include "T9/Characters/Enemies/Enemy_Forest_Spider.h"
 
 ASnowPortalSpawnActor::ASnowPortalSpawnActor() {
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Assets/snowy_landscape/mesh/ruins/SM_sacrifices_plate.SM_sacrifices_plate'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/World/snowy_landscape/mesh/ruins/SM_sacrifices_plate.SM_sacrifices_plate'"));
 	if (Mesh.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(Mesh.Object);
 		StaticMeshComponent->SetWorldScale3D(FVector(1));

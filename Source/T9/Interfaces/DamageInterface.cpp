@@ -5,9 +5,6 @@
 
 // Add default functionality here for any ITakeDamageInterface functions that are not pure virtual.
 
-void IDamageInterface::DamageEnemy(AActor* Actor, float AmountOfDamage)
-{
-}
 
 void IDamageInterface::TakeDamage(AActor* Actor, float AmountOfDamage, DamageType TypeOfDamage)
 {

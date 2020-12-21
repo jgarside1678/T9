@@ -5,7 +5,7 @@
 #include "Components/PointLightComponent.h"
 
 ALightTerrainActor::ALightTerrainActor() {
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Props/Lantern1.Lantern1'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Props/Lantern1.Lantern1'"));
 	if (Mesh.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(Mesh.Object);
 		//StaticMeshComponent->SetWorldScale3D(FVector(6,6,4));

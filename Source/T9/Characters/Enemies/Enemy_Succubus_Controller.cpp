@@ -8,7 +8,7 @@
 
 AEnemy_Succubus_Controller::AEnemy_Succubus_Controller(FObjectInitializer const& object_initializer) {
 
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> Obj(TEXT("BehaviorTree'/Game/AI/Enemies/ModularCharacterSuccubus/Succubus_BT.Succubus_BT'"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> Obj(TEXT("BehaviorTree'/Game/Units/Enemies/ModularCharacterSuccubus/Succubus_BT.Succubus_BT'"));
 	if (Obj.Succeeded()) {
 		BTree = Obj.Object;
 	}

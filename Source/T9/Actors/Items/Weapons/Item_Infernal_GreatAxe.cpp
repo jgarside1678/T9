@@ -17,7 +17,7 @@ AItem_Infernal_GreatAxe::AItem_Infernal_GreatAxe() {
 	if (Sprite.Succeeded()) {
 		ItemImage = Sprite.Object;
 	}
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Assets/FantasyWeapons/meshes/SM_axe3.SM_axe3'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/World/FantasyWeapons/meshes/SM_axe3.SM_axe3'"));
 	if (Mesh.Succeeded()) {
 		ItemMesh->SetWorldScale3D(FVector(0.8));
 		ItemMesh->SetStaticMesh(Mesh.Object);

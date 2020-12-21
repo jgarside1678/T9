@@ -5,7 +5,7 @@
 #include "T9/Characters/Enemies/Enemy_wolf.h"
 
 AWolfCaveSpawnActor::AWolfCaveSpawnActor() {
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Assets/Pirate_Town_Set/Meshes/Stone_Mine.Stone_Mine'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/World/Pirate_Town_Set/Meshes/Stone_Mine.Stone_Mine'"));
 	if (Mesh.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(Mesh.Object);
 		//StaticMeshComponent->SetWorldScale3D(FVector(6,6,4));

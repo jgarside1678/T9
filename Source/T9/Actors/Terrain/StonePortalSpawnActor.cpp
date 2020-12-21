@@ -6,7 +6,7 @@
 #include "T9/Characters/Enemies/Enemy_Lava_Elemental.h"
 
 AStonePortalSpawnActor::AStonePortalSpawnActor() {
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Props/stones/Stone_Jar2B.Stone_Jar2B'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Props/stones/Stone_Jar2B.Stone_Jar2B'"));
 	if (Mesh.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(Mesh.Object);
 		StaticMeshComponent->SetWorldScale3D(FVector(8));

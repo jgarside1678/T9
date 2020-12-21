@@ -19,17 +19,17 @@ AEnemy_Wasp::AEnemy_Wasp(const FObjectInitializer& ObjectInitializer) {
 	Levels.Add(11, FCharacterLevels{ 200, 200, 0, 1300, 50, 60 , 25 });
 	DeathTime = 4;
 	AwarenessDistance = 1200;
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/Enemies/StylizedFantasyForestCreatures/Meshes/SK_Wasp.SK_Wasp'"));
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Enemies/StylizedFantasyForestCreatures/Animations/Wasp_Animation_BP.Wasp_Animation_BP_C'"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMont(TEXT("AnimMontage'/Game/AI/Enemies/StylizedFantasyForestCreatures/Animations/Wasp_Attack_Montage.Wasp_Attack_Montage'"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpecialMont(TEXT("AnimMontage'/Game/AI/Enemies/StylizedFantasyForestCreatures/Animations/Wasp_Special_Montage.Wasp_Special_Montage'"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh1Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Wasp_Blue.MI_Wasp_Blue'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/Units/Enemies/StylizedFantasyForestCreatures/Meshes/SK_Wasp.SK_Wasp'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/Units/Enemies/StylizedFantasyForestCreatures/Animations/Wasp_Animation_BP.Wasp_Animation_BP_C'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMont(TEXT("AnimMontage'/Game/Units/Enemies/StylizedFantasyForestCreatures/Animations/Wasp_Attack_Montage.Wasp_Attack_Montage'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpecialMont(TEXT("AnimMontage'/Game/Units/Enemies/StylizedFantasyForestCreatures/Animations/Wasp_Special_Montage.Wasp_Special_Montage'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh1Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Wasp_Blue.MI_Wasp_Blue'"));
 	if (Mesh1Material.Succeeded()) MeshMaterials.Add(Mesh1Material.Object);
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh2Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Wasp_Green.MI_Wasp_Green'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh2Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Wasp_Green.MI_Wasp_Green'"));
 	if (Mesh2Material.Succeeded()) MeshMaterials.Add(Mesh2Material.Object);
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh3Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Wasp_Purple.MI_Wasp_Purple'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh3Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Wasp_Purple.MI_Wasp_Purple'"));
 	if (Mesh3Material.Succeeded()) MeshMaterials.Add(Mesh3Material.Object);
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh4Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Wasp_Yellow.MI_Wasp_Yellow'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh4Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Wasp_Yellow.MI_Wasp_Yellow'"));
 	if (Mesh4Material.Succeeded()) MeshMaterials.Add(Mesh4Material.Object);
 	if (MeshAsset.Succeeded()) {
 		GetMesh()->SkeletalMesh = MeshAsset.Object;

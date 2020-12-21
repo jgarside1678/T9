@@ -72,16 +72,19 @@ void AResourceCharacter::TakeDamage(AActor* AttackingActor, float AmountOfDamage
 			Controller->UnPossess();
 			GetWorldTimerManager().SetTimer(DeathTimerHandle, this, &AResourceCharacter::DeathInit, DecayDuration, false, DecayDuration);
 		}
+		else if(!Target) {
+			Target = AttackingActor;
+			TargetInterface = Cast<IDamageInterface>(Target);
+		}
 	}
-}
-
-void AResourceCharacter::DamageEnemy(AActor* Actor, float AmountOfDamage)
-{
-	IDamageInterface* Enemy = Cast<IDamageInterface>(Actor);
-	if (Enemy != nullptr) Enemy->TakeDamage(this, AmountOfDamage);
 }
 
 void AResourceCharacter::DeathInit() {
 	Destroy();
 	ParentResource->ReduceCurrentSpawnCount(1);
+}
+
+void AResourceCharacter::Attack() {
+	if (TargetInterface) TargetInterface->TakeDamage(this, Damage, DamageType::All);
+	if(AttackMontage) PlayAnimMontage(AttackMontage, 1);
 }

@@ -345,9 +345,6 @@ public:
 		virtual void TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage = All);
 
 	UFUNCTION()
-		virtual void DamageEnemy(AActor* Actor, float AmountOfDamage);
-
-	UFUNCTION()
 		virtual DamageType GetDamageType();
 
 	UFUNCTION()

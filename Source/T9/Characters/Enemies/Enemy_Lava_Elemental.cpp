@@ -25,19 +25,19 @@ AEnemy_Lava_Elemental::AEnemy_Lava_Elemental(const FObjectInitializer& ObjectIni
 	Levels.Add(11, FCharacterLevels{ 300, 200, 200, 13000, 50, 1000, 250 });
 	DeathTime = 4;
 	AwarenessDistance = 2000;
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/Enemies/StylizedLavaElemental/Meshes/SK_LavaElemental.SK_LavaElemental'"));
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Enemies/StylizedLavaElemental/Animations/LavaElementalAnimation_BP.LavaElementalAnimation_BP_C'"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMont(TEXT("AnimMontage'/Game/AI/Enemies/StylizedLavaElemental/Animations/LavaElemental_Attack_Montage.LavaElemental_Attack_Montage'"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpecialMont(TEXT("AnimMontage'/Game/AI/Enemies/StylizedLavaElemental/Animations/LavaElemental_Special_Montage.LavaElemental_Special_Montage'"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Phase1Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/StylizedLavaElemental/Materials/Instances/MI_LavaElemental_Red.MI_LavaElemental_Red'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/Units/Enemies/StylizedLavaElemental/Meshes/SK_LavaElemental.SK_LavaElemental'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/Units/Enemies/StylizedLavaElemental/Animations/LavaElementalAnimation_BP.LavaElementalAnimation_BP_C'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMont(TEXT("AnimMontage'/Game/Units/Enemies/StylizedLavaElemental/Animations/LavaElemental_Attack_Montage.LavaElemental_Attack_Montage'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpecialMont(TEXT("AnimMontage'/Game/Units/Enemies/StylizedLavaElemental/Animations/LavaElemental_Special_Montage.LavaElemental_Special_Montage'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Phase1Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedLavaElemental/Materials/Instances/MI_LavaElemental_Red.MI_LavaElemental_Red'"));
 	if (Phase1Material.Succeeded()) PhaseMaterials.Add(Phase1Material.Object);
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Phase2Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/StylizedLavaElemental/Materials/Instances/MI_LavaElemental_Cyan.MI_LavaElemental_Cyan'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Phase2Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedLavaElemental/Materials/Instances/MI_LavaElemental_Cyan.MI_LavaElemental_Cyan'"));
 	if (Phase2Material.Succeeded()) PhaseMaterials.Add(Phase2Material.Object);
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Phase3Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/StylizedLavaElemental/Materials/Instances/MI_LavaElemental_Gold.MI_LavaElemental_Gold'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Phase3Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedLavaElemental/Materials/Instances/MI_LavaElemental_Gold.MI_LavaElemental_Gold'"));
 	if (Phase3Material.Succeeded()) PhaseMaterials.Add(Phase3Material.Object);
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Phase4Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/StylizedLavaElemental/Materials/Instances/MI_LavaElemental_Green.MI_LavaElemental_Green'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Phase4Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedLavaElemental/Materials/Instances/MI_LavaElemental_Green.MI_LavaElemental_Green'"));
 	if (Phase4Material.Succeeded()) PhaseMaterials.Add(Phase4Material.Object);
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Phase5Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/StylizedLavaElemental/Materials/Instances/MI_LavaElemental_Purple.MI_LavaElemental_Purple'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Phase5Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedLavaElemental/Materials/Instances/MI_LavaElemental_Purple.MI_LavaElemental_Purple'"));
 	if (Phase5Material.Succeeded()) PhaseMaterials.Add(Phase5Material.Object);
 	if (MeshAsset.Succeeded()) {
 		GetMesh()->SkeletalMesh = MeshAsset.Object;

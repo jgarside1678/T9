@@ -181,10 +181,8 @@ void ACharacterActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, D
 {
 	int ScaledDamage = UKismetMathLibrary::FCeil(AmountOfDamage * ArmourDamageTakenMultiplier);
 	if ((!IsDead && TypeDamage == All) || (!IsDead && TypeDamage == TypeOfDamage)) {
-		if (!CurrentTarget || !CurrentTarget->IsValidLowLevel()) {
-			CurrentTarget = AttackingActor;
-			Cont->GetBlackboard()->SetValueAsObject(bb_keys::combat_target, CurrentTarget);
-			Cont->Reset();
+		if (!Target || !Target->IsValidLowLevel()) {
+			SetTarget(AttackingActor);
 		}
 		CurrentHealth -= ScaledDamage;
 		if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
@@ -286,11 +284,6 @@ void ACharacterActor::DeathInit() {
 	}
 }
 
-void ACharacterActor::DamageEnemy(AActor* Actor, float AmountOfDamage)
-{
-	IDamageInterface* Enemy = Cast<IDamageInterface>(Actor);
-	if (Enemy != nullptr) Enemy->TakeDamage(this, AmountOfDamage);
-}
 
 DamageType ACharacterActor::GetDamageType()
 {
@@ -317,14 +310,12 @@ float ACharacterActor::GetAttackInterval()
 	return AttackInterval;
 }
 
-void ACharacterActor::Attack(AActor* Target)
+void ACharacterActor::Attack()
 {
 	EquipMainHand();
 	if (AttackStreak >= AttackStreakForSpecial) SpecialAttack(Target);
 	else {
 		CalculateDamage();
-		if (Target != CurrentTarget) AttackStreak = 0;
-		CurrentTarget = Target;
 		if (Projectile) {
 			FActorSpawnParameters SpawnParams;
 			AProjectile* SpawnedActorRef = GetWorld()->SpawnActor<AProjectile>(Projectile, GetActorLocation(), FRotator(0), SpawnParams);
@@ -333,7 +324,7 @@ void ACharacterActor::Attack(AActor* Target)
 			else if (TypeOfDamage == Enemy) ProjectileDamage = Alliance;
 			SpawnedActorRef->ProjectileInnit(Target, Damage, this, 0, ProjectileDamage);
 		}
-		else DamageEnemy(Target, Damage);
+		else if (TargetInterface) TargetInterface->TakeDamage(this, Damage, TypeOfDamage);
 		if(AttackMontage) PlayAnimMontage(AttackMontage, 1, AttackMontage->GetSectionName(AttackStreak));
 		AttackStreak++;
 	}
@@ -341,15 +332,22 @@ void ACharacterActor::Attack(AActor* Target)
 
 void ACharacterActor::SpecialAttack(AActor* Target)
 {
-	CurrentTarget = Target;
-	DamageEnemy(Target, Damage);
-	if(SpecialAttackMontage) PlayAnimMontage(SpecialAttackMontage);
 	AttackStreak = 0;
+	if (TargetInterface) TargetInterface->TakeDamage(this, Damage, TypeOfDamage);
+	if(SpecialAttackMontage) PlayAnimMontage(SpecialAttackMontage);
 }
 
 void ACharacterActor::ChangePhase(int NewPhase)
 {
 	//Needs to be overrided in characters which phases
+}
+
+void ACharacterActor::SetTarget(AActor* NewTarget)
+{
+	Target = NewTarget;
+	TargetInterface = Cast<IDamageInterface>(Target);
+	Cont->GetBlackboard()->SetValueAsObject(bb_keys::combat_target, Target);
+	Cont->Reset();
 }
 
 bool ACharacterActor::CheckIfDead() {

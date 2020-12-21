@@ -9,9 +9,9 @@ AResource_Wood::AResource_Wood() {
 	ResourceType = Wood;
 	CollectionDistance = FVector(50);
 	BoxExtentMultiplier = FVector(10);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Tier1Mesh(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Props/trees/Fol_Tree_06.Fol_Tree_06'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Tier2Mesh(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Props/trees/Fol_Tree_07.Fol_Tree_07'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Tier3Mesh(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Props/trees/Fol_Tree_09.Fol_Tree_09'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Tier1Mesh(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Props/trees/Fol_Tree_06.Fol_Tree_06'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Tier2Mesh(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Props/trees/Fol_Tree_07.Fol_Tree_07'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Tier3Mesh(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Props/trees/Fol_Tree_09.Fol_Tree_09'"));
 	ResourceTiers.Add(Tier1, FResourceTierStats{ "Chestnut Oak Forest", Tier1Mesh.Object,nullptr, 1});
 	ResourceTiers.Add(Tier2, FResourceTierStats{ "Scarlet Oak Forest", Tier2Mesh.Object, nullptr, 1.25});
 	ResourceTiers.Add(Tier3, FResourceTierStats{ "Pink Cherry Forest",Tier3Mesh.Object, nullptr, 1.5});

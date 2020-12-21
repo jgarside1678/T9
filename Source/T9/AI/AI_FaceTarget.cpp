@@ -17,16 +17,17 @@ EBTNodeResult::Type UAI_FaceTarget::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 {
 	auto const Cont = Cast<AAI_Controller>(OwnerComp.GetAIOwner());
 	auto const NPC = Cast<ACharacterActor>(Cont->GetPawn());
+
 	FVector const Origin = NPC->GetActorLocation();
-	UObject* Target = Cont->GetBlackboard()->GetValueAsObject(bb_keys::combat_target);
+	UObject* Target = Cont->GetBlackboard()->GetValueAsObject(BlackboardKey.SelectedKeyName);
 
 	if (Target != nullptr && Target->IsValidLowLevel()) {
 		FVector TargetBounds, TargetOrigin;
 		AActor* TargetActor = (AActor*)Target;
 		TargetActor->GetActorBounds(false, TargetOrigin, TargetBounds, false);
 		FVector Forward = TargetOrigin - Origin;
-		FRotator Rot = UKismetMathLibrary::MakeRotFromXZ(Forward, FVector(0, 0, 0));
-		NPC->SetActorRotation(FRotator(0, Rot.Yaw, 0));
+		FRotator Rotation = UKismetMathLibrary::MakeRotFromXZ(Forward, FVector(0, 0, 0));
+		NPC->SetActorRotation(FRotator(0, Rotation.Yaw, 0));
 	}
 
 

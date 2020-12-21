@@ -13,7 +13,7 @@ AProjectile_Mortar::AProjectile_Mortar(const FObjectInitializer& ObjectInitializ
 	if (Explosion.Succeeded()) ExplosionEffect = Explosion.Object;
 
 	ProjectileSpeed = 1.2;
-	const ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Assets/SiegeWeaponsPackFullPack/Resources/Projectiles/projectile02.projectile02'"));
+	const ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/World/SiegeWeaponsPackFullPack/Resources/Projectiles/projectile02.projectile02'"));
 	if (Mesh.Succeeded()) {
 		StaticMeshComp->SetStaticMesh(Mesh.Object);
 		FVector BoxExtent = StaticMeshComp->GetStaticMesh()->GetBoundingBox().GetExtent();

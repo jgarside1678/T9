@@ -7,7 +7,9 @@
 #include "GameFramework/Pawn.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "UObject/UObjectGlobals.h"
+#include "BehaviorTree/BlackboardData.h"
 #include "AI_FaceTarget.generated.h"
+
 
 /**
  * 
@@ -20,4 +22,5 @@ public:
 
 	UAI_FaceTarget(FObjectInitializer const& ObjectInitializer);
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory);
+
 };

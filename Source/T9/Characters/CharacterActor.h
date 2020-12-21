@@ -208,7 +208,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(Category = "Character Combat")
-		virtual void Attack(AActor* Target);
+		virtual void Attack();
 
 	UFUNCTION(Category = "Character Combat")
 		virtual void SpecialAttack(AActor* Target);
@@ -216,9 +216,14 @@ public:
 	UFUNCTION(Category = "Character Combat")
 		virtual void ChangePhase(int NewPhase = -1);
 
+	UFUNCTION(Category = "Character Combat")
+		virtual void SetTarget(AActor* NewTarget);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		AActor* CurrentTarget;
+		class AActor* Target;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class IDamageInterface* TargetInterface;
 
 	UPROPERTY()
 		class UAnimMontage* AttackMontage;
@@ -282,9 +287,6 @@ public:
 
 	UFUNCTION()
 		virtual void TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage);
-
-	UFUNCTION()
-		virtual void DamageEnemy(AActor* Actor, float AmountOfDamage);
 
 	UFUNCTION()
 	    virtual DamageType GetDamageType();

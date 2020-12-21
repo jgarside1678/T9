@@ -7,7 +7,7 @@
 AProjectile_Cannonball::AProjectile_Cannonball(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer) {
 
 	ProjectileSpeed = 2.5;
-	const ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Assets/SiegeWeaponsPackFullPack/Resources/Projectiles/projectile01.projectile01'"));
+	const ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/World/SiegeWeaponsPackFullPack/Resources/Projectiles/projectile01.projectile01'"));
 	if (Mesh.Succeeded()) {
 		StaticMeshComp->SetStaticMesh(Mesh.Object);
 		FVector BoxExtent = StaticMeshComp->GetStaticMesh()->GetBoundingBox().GetExtent();

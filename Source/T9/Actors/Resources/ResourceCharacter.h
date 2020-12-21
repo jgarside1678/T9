@@ -21,6 +21,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
+		float Damage = 5;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
+		AActor* Target;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
+		IDamageInterface* TargetInterface;
+
 	FTimerHandle DeathTimerHandle;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
@@ -36,16 +46,13 @@ protected:
 		bool Dead = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
-		ACharacter* CombatTarget = nullptr;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
 		float DecayDuration = 30;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
 	    TArray<class UMaterialInstance*> Materials;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
-	     class UAnimMontage* IdleMontage;
+	     class UAnimMontage* AttackMontage;
 
 public:	
 	// Called every frame
@@ -74,7 +81,7 @@ public:
 
 
 	UFUNCTION()
-		virtual void DamageEnemy(AActor* Actor, float AmountOfDamage);
+		virtual void Attack();
 
 
 	UFUNCTION(BlueprintCallable)

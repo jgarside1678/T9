@@ -23,11 +23,11 @@ ABuilding_Wizards_Tower::ABuilding_Wizards_Tower(const FObjectInitializer& Objec
 	DefenderDisplacement->SetRelativeRotation(FRotator(0,0,0));
 	BuildingDefender = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Building Defender"));
 	BuildingDefender->SetupAttachment(DefenderDisplacement);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1A.Tower_Base1A'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1B.Tower_Base1B'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh3(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1C.Tower_Base1C'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Tower_Base1A.Tower_Base1A'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Tower_Base1B.Tower_Base1B'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh3(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Tower_Base1C.Tower_Base1C'"));
 	static ConstructorHelpers::FObjectFinder<UTexture2D> ImageLevel1(TEXT("Texture2D'/Game/UI/Assets/Sprites/WatchTowerImage.WatchTowerImage'"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> AnimationMont(TEXT("AnimMontage'/Game/AI/Alliance/StylizedHumanFemale/Animations/Alliance_Wizard_TowerFemale_Attack.Alliance_Wizard_TowerFemale_Attack'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> AnimationMont(TEXT("AnimMontage'/Game/Units/Alliance/StylizedHumanFemale/Animations/Alliance_Wizard_TowerFemale_Attack.Alliance_Wizard_TowerFemale_Attack'"));
 	if (AnimationMont.Succeeded()) DefenderAttackAnimation = AnimationMont.Object;
 	if (BaseMesh1.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(BaseMesh1.Object);
@@ -40,21 +40,21 @@ ABuilding_Wizards_Tower::ABuilding_Wizards_Tower(const FObjectInitializer& Objec
 	ResetHealth();
 	BuildingName = "Wizards Tower";
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> BodyMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanFemale/Meshes/SK_Body.SK_Body'"));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> BeltMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanFemale/Meshes/ModularParts/Peasant/SK_Peasant_Belt.SK_Peasant_Belt'"));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> BootsMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanFemale/Meshes/ModularParts/Peasant/SK_Peasant_Boots.SK_Peasant_Boots'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> BodyMesh(TEXT("SkeletalMesh'/Game/Units/Alliance/StylizedHumanFemale/Meshes/SK_Body.SK_Body'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> BeltMesh(TEXT("SkeletalMesh'/Game/Units/Alliance/StylizedHumanFemale/Meshes/ModularParts/Peasant/SK_Peasant_Belt.SK_Peasant_Belt'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> BootsMesh(TEXT("SkeletalMesh'/Game/Units/Alliance/StylizedHumanFemale/Meshes/ModularParts/Peasant/SK_Peasant_Boots.SK_Peasant_Boots'"));
 	//static ConstructorHelpers::FObjectFinder<USkeletalMesh> BrowsMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanMale/Meshes/ModularParts/SK_Brows_02.SK_Brows_02'"));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> HairMesh1(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanFemale/Meshes/ModularParts/Hairstyles/SK_Hair_01.SK_Hair_01'"));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> HairMesh2(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanFemale/Meshes/ModularParts/Hairstyles/SK_Hair_04.SK_Hair_04'"));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> HairMesh3(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanFemale/Meshes/ModularParts/Hairstyles/SK_Hair_05.SK_Hair_05'"));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> HairMesh4(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanFemale/Meshes/ModularParts/Hairstyles/SK_Hair_06.SK_Hair_06'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> HairMesh1(TEXT("SkeletalMesh'/Game/Units/Alliance/StylizedHumanFemale/Meshes/ModularParts/Hairstyles/SK_Hair_01.SK_Hair_01'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> HairMesh2(TEXT("SkeletalMesh'/Game/Units/Alliance/StylizedHumanFemale/Meshes/ModularParts/Hairstyles/SK_Hair_04.SK_Hair_04'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> HairMesh3(TEXT("SkeletalMesh'/Game/Units/Alliance/StylizedHumanFemale/Meshes/ModularParts/Hairstyles/SK_Hair_05.SK_Hair_05'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> HairMesh4(TEXT("SkeletalMesh'/Game/Units/Alliance/StylizedHumanFemale/Meshes/ModularParts/Hairstyles/SK_Hair_06.SK_Hair_06'"));
 	TArray<USkeletalMesh*> HairMeshes;
 	HairMeshes.Add(HairMesh1.Object);
 	HairMeshes.Add(HairMesh2.Object);
 	HairMeshes.Add(HairMesh3.Object);
 	HairMeshes.Add(HairMesh4.Object);
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> LowerBodyMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanFemale/Meshes/ModularParts/Peasant/SK_Peasant_Pants.SK_Peasant_Pants'"));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> UpperBodyMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanFemale/Meshes/ModularParts/Peasant/SK_Peasant_Shirt_NoSleeves.SK_Peasant_Shirt_NoSleeves'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> LowerBodyMesh(TEXT("SkeletalMesh'/Game/Units/Alliance/StylizedHumanFemale/Meshes/ModularParts/Peasant/SK_Peasant_Pants.SK_Peasant_Pants'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> UpperBodyMesh(TEXT("SkeletalMesh'/Game/Units/Alliance/StylizedHumanFemale/Meshes/ModularParts/Peasant/SK_Peasant_Shirt_NoSleeves.SK_Peasant_Shirt_NoSleeves'"));
 	//static ConstructorHelpers::FObjectFinder<USkeletalMesh> BeardMesh(TEXT("SkeletalMesh'/Game/AI/Alliance/StylizedHumanMale/Meshes/ModularParts/SK_Beard_02.SK_Beard_02'"));
 	//static ConstructorHelpers::FObjectFinder<UStaticMesh> ItemMesh(TEXT("StaticMesh'/Game/Meshes/Weapons/Pickaxe.Pickaxe'"));
 	if (BodyMesh.Succeeded())MeshPeices.Add(BodyMesh.Object);

@@ -16,7 +16,7 @@ AItem_Iron_PickAxe::AItem_Iron_PickAxe() {
 	if (Sprite.Succeeded()) {
 		ItemImage = Sprite.Object;
 	}
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Assets/StylizedWeaponKIt/Weapons/Models/SM_BattleHammer.SM_BattleHammer'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/World/StylizedWeaponKIt/Weapons/Models/SM_BattleHammer.SM_BattleHammer'"));
 	if (Mesh.Succeeded()) {
 		ItemMesh->SetWorldScale3D(FVector(0.5));
 		ItemMesh->SetStaticMesh(Mesh.Object);

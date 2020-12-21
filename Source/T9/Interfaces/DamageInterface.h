@@ -34,11 +34,6 @@ public:
 	UFUNCTION()
 	   virtual void TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeOfDamage = All);
 
-
-	UFUNCTION()
-		virtual void DamageEnemy(AActor* Actor, float AmountOfDamage);
-
-
 	UFUNCTION()
 		virtual bool CheckIfDead();
 

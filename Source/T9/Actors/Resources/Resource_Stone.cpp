@@ -9,9 +9,9 @@ AResource_Stone::AResource_Stone() {
 	ResourceType = Stone;
 	CollectionDistance = FVector(50);
 	BoxExtentMultiplier = FVector(6);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Tier1Mesh(TEXT("StaticMesh'/Game/Assets/Fantasy_Village/meshes/stones/SM_stone_a.SM_stone_a'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Tier2Mesh(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Props/stones/Stone_Block2.Stone_Block2'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Tier3Mesh(TEXT("StaticMesh'/Game/Assets/Stylized_Vegetation/Geometry/Rocks/Rocks_Large/SM_Rock_Large_01.SM_Rock_Large_01'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Tier1Mesh(TEXT("StaticMesh'/Game/World/Fantasy_Village/meshes/stones/SM_stone_a.SM_stone_a'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Tier2Mesh(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Props/stones/Stone_Block2.Stone_Block2'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Tier3Mesh(TEXT("StaticMesh'/Game/World/Stylized_Vegetation/Geometry/Rocks/Rocks_Large/SM_Rock_Large_01.SM_Rock_Large_01'"));
 	ResourceTiers.Add(Tier1, FResourceTierStats{ "Stone Quarry", Tier1Mesh.Object, nullptr, 1 });
 	ResourceTiers.Add(Tier2, FResourceTierStats{ "Basalt Quarry", Tier2Mesh.Object, nullptr, 1.25 });
 	ResourceTiers.Add(Tier3, FResourceTierStats{ "Granite Quarry",Tier3Mesh.Object, nullptr, 1.5 });

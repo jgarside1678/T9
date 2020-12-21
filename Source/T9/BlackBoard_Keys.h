@@ -17,6 +17,7 @@ namespace bb_keys
 	TCHAR const* const target_is_in_range = TEXT("TargetIsInRange");
 	TCHAR const* const target_is_dead = TEXT("TargetIsDead");
 	//Alliance Specific
+	TCHAR const* const second_move_location = TEXT("SecondaryMoveToLocation");
 	TCHAR const* const inventory_is_full = TEXT("FullInventory");
 	TCHAR const* const command_location = TEXT("CommandLocation");
 }

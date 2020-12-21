@@ -19,15 +19,15 @@ AEnemy_Wolf::AEnemy_Wolf(const FObjectInitializer& ObjectInitializer) {
 	Levels.Add(11, FCharacterLevels{ 200, 200, 0, 1300, 50, 60 , 25 });
 	DeathTime = 4;
 	AwarenessDistance = 1200;
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/Neutral/StylizedWildAnimals/Meshes/Wolf/SK_Wolf.SK_Wolf'"));
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Neutral/StylizedWildAnimals/Animations/Wolf/WolfAnimation_BP.WolfAnimation_BP_C'"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMont(TEXT("AnimMontage'/Game/AI/Neutral/StylizedWildAnimals/Animations/Wolf/Wolf_Attack_Montage.Wolf_Attack_Montage'"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpecialMont(TEXT("AnimMontage'/Game/AI/Neutral/StylizedWildAnimals/Animations/Wolf/Wolf_SpecialAttack_Montage.Wolf_SpecialAttack_Montage'"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh1Material(TEXT("MaterialInstanceConstant'/Game/AI/Neutral/StylizedWildAnimals/Materials/Instances/Wolf/MI_Wolf_Black.MI_Wolf_Black'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/Units/Neutral/StylizedWildAnimals/Meshes/Wolf/SK_Wolf.SK_Wolf'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/Units/Neutral/StylizedWildAnimals/Animations/Wolf/WolfAnimation_BP.WolfAnimation_BP_C'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMont(TEXT("AnimMontage'/Game/Units/Neutral/StylizedWildAnimals/Animations/Wolf/Wolf_Attack_Montage.Wolf_Attack_Montage'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpecialMont(TEXT("AnimMontage'/Game/Units/Neutral/StylizedWildAnimals/Animations/Wolf/Wolf_SpecialAttack_Montage.Wolf_SpecialAttack_Montage'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh1Material(TEXT("MaterialInstanceConstant'/Game/Units/Neutral/StylizedWildAnimals/Materials/Instances/Wolf/MI_Wolf_Black.MI_Wolf_Black'"));
 	if (Mesh1Material.Succeeded()) MeshMaterials.Add(Mesh1Material.Object);
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh2Material(TEXT("MaterialInstanceConstant'/Game/AI/Neutral/StylizedWildAnimals/Materials/Instances/Wolf/MI_Wolf_Blue.MI_Wolf_Blue'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh2Material(TEXT("MaterialInstanceConstant'/Game/Units/Neutral/StylizedWildAnimals/Materials/Instances/Wolf/MI_Wolf_Blue.MI_Wolf_Blue'"));
 	if (Mesh2Material.Succeeded()) MeshMaterials.Add(Mesh2Material.Object);
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh3Material(TEXT("MaterialInstanceConstant'/Game/AI/Neutral/StylizedWildAnimals/Materials/Instances/Wolf/MI_Wolf_Red.MI_Wolf_Red'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh3Material(TEXT("MaterialInstanceConstant'/Game/Units/Neutral/StylizedWildAnimals/Materials/Instances/Wolf/MI_Wolf_Red.MI_Wolf_Red'"));
 	if (Mesh3Material.Succeeded()) MeshMaterials.Add(Mesh3Material.Object);
 	if (MeshAsset.Succeeded()) {
 		GetMesh()->SkeletalMesh = MeshAsset.Object;

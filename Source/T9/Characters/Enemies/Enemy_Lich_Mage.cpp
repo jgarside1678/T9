@@ -25,13 +25,13 @@ AEnemy_Lich_Mage::AEnemy_Lich_Mage(const FObjectInitializer& ObjectInitializer) 
 	Levels.Add(11, FCharacterLevels{ 300, 150, 500, 1300, 0, 100, 50 });
 	DeathTime = 1.8;
 	AwarenessDistance = 2000;
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/AI/Enemies/Lich/Meshes/OneMeshCharacter/SK_Lich.SK_Lich'"));
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Enemies/Lich/Animations/Lich_Mage_Animation_BP.Lich_Mage_Animation_BP_C'"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMont(TEXT("AnimMontage'/Game/AI/Enemies/Lich/Animations/Lich_Mage_Attack_Montage.Lich_Mage_Attack_Montage'"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpecialMont(TEXT("AnimMontage'/Game/AI/Enemies/Lich/Animations/Lich_Mage_Special_Montage.Lich_Mage_Special_Montage'"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Phase1Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/Lich/Materials/Instances/MI_Lich_Purple.MI_Lich_Purple'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/Units/Enemies/Lich/Meshes/OneMeshCharacter/SK_Lich.SK_Lich'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/Units/Enemies/Lich/Animations/Lich_Mage_Animation_BP.Lich_Mage_Animation_BP_C'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMont(TEXT("AnimMontage'/Game/Units/Enemies/Lich/Animations/Lich_Mage_Attack_Montage.Lich_Mage_Attack_Montage'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpecialMont(TEXT("AnimMontage'/Game/Units/Enemies/Lich/Animations/Lich_Mage_Special_Montage.Lich_Mage_Special_Montage'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Phase1Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/Lich/Materials/Instances/MI_Lich_Purple.MI_Lich_Purple'"));
 	if (Phase1Material.Succeeded()) PhaseMaterials.Add(Phase1Material.Object);
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Phase2Material(TEXT("MaterialInstanceConstant'/Game/AI/Enemies/Lich/Materials/Instances/MI_Lich_Ghost.MI_Lich_Ghost'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Phase2Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/Lich/Materials/Instances/MI_Lich_Ghost.MI_Lich_Ghost'"));
 	if (Phase2Material.Succeeded()) PhaseMaterials.Add(Phase2Material.Object);
 	if (MeshAsset.Succeeded()) {
 		GetMesh()->SkeletalMesh = MeshAsset.Object;

@@ -18,13 +18,13 @@ ABuilding_Mortar_Tower::ABuilding_Mortar_Tower(const FObjectInitializer& ObjectI
 	ProjectileSpawn->SetupAttachment(TurretStaticMeshComponent);
 	ProjectileSpawn->SetRelativeLocation(FVector(0.0f, 10.0f, 20.0f));
 	ProjectileDelay = 0.5f;
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1A.Tower_Base1A'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1B.Tower_Base1B'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh3(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1C.Tower_Base1C'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh1(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Turret_Mortar1.Turret_Mortar1'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Turret_Mortar2.Turret_Mortar2'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh3(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Turret_Mortar3.Turret_Mortar3'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh4(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Turret_Mortar4.Turret_Mortar4'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Tower_Base1A.Tower_Base1A'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Tower_Base1B.Tower_Base1B'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh3(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Tower_Base1C.Tower_Base1C'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh1(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Turret_Mortar1.Turret_Mortar1'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh2(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Turret_Mortar2.Turret_Mortar2'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh3(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Turret_Mortar3.Turret_Mortar3'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh4(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Turret_Mortar4.Turret_Mortar4'"));
 	static ConstructorHelpers::FObjectFinder<UTexture2D> ImageLevel1(TEXT("Texture2D'/Game/UI/Assets/Sprites/WatchTowerImage.WatchTowerImage'"));
 	if (BaseMesh1.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(BaseMesh1.Object);

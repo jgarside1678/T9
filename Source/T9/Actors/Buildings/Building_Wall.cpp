@@ -13,8 +13,8 @@ ABuilding_Wall::ABuilding_Wall()
 	OutlineColour = 1;
 	GridLength = FVector2D(2);
 	MeshDisplacement->SetRelativeLocation(FVector(-30,0, 0));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMeshNode(TEXT("StaticMesh'/Game/Assets/Pirate_Town_Set/Meshes/Wall_Join.Wall_Join'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMeshConnection(TEXT("StaticMesh'/Game/Assets/Pirate_Town_Set/Meshes/Wall_Connection.Wall_Connection'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMeshNode(TEXT("StaticMesh'/Game/World/Pirate_Town_Set/Meshes/Wall_Join.Wall_Join'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMeshConnection(TEXT("StaticMesh'/Game/World/Pirate_Town_Set/Meshes/Wall_Connection.Wall_Connection'"));
 	static ConstructorHelpers::FObjectFinder<UTexture2D> ImageLevel1(TEXT("Texture2D'/Game/UI/Assets/Sprites/TownHallImage.TownHallImage'"));
 	//static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh1(TEXT("StaticMesh'/Game/Assets/Pirate_Town_Set/Meshes/Town_Hall_2.Town_Hall_2'"));
 	//static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseMesh2(TEXT("StaticMesh'/Game/Assets/Tower_Defence/Models/Towers/Tower_Base1C.Tower_Base1C'"));

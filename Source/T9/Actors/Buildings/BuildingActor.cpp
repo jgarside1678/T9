@@ -259,10 +259,6 @@ void ABuildingActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, Da
 }
 
 
-void ABuildingActor::DamageEnemy(AActor* Actor, float AmountOfDamage)
-{
-}
-
 DamageType ABuildingActor::GetDamageType()
 {
 	return TypeOfDamage;
