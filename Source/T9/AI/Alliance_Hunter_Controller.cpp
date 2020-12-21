@@ -8,7 +8,7 @@
 
 AAlliance_Hunter_Controller::AAlliance_Hunter_Controller(FObjectInitializer const& object_initializer) {
 
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> Obj(TEXT("BehaviorTree'/Game/AI/Alliance/AllianceGatherer/Alliance_Hunting_BT.Alliance_Hunting_BT'"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> Obj(TEXT("BehaviorTree'/Game/Units/Alliance/AllianceGatherer/Alliance_Hunting_BT.Alliance_Hunting_BT'"));
 	if (Obj.Succeeded()) {
 		BTree = Obj.Object;
 	}

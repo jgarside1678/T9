@@ -25,7 +25,7 @@ ABuilding_Cannon_Tower::ABuilding_Cannon_Tower(const FObjectInitializer& ObjectI
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh2(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Turret_Cannon21.Turret_Cannon21'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh3(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Turret_Cannon31.Turret_Cannon31'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh4(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Turret_Cannon41.Turret_Cannon41'"));
-	static ConstructorHelpers::FObjectFinder<UTexture2D> ImageLevel1(TEXT("Texture2D'/Game/UI/World/Sprites/WatchTowerImage.WatchTowerImage'"));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> ImageLevel1(TEXT("Texture2D'/Game/UI/Assets/Sprites/WatchTowerImage.WatchTowerImage'"));
 	if (BaseMesh1.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(BaseMesh1.Object);
 	}

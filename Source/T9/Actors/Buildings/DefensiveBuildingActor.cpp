@@ -82,9 +82,9 @@ void ADefensiveBuildingActor::AttackTarget()
 				FRotator Rotation = ProjectileSpawn->GetRelativeRotation();
 				if (Projectile && RecentlyRendered) {
 					AProjectile* SpawnedActorRef = GetWorld()->SpawnActor<AProjectile>(Projectile, Location, Rotation, SpawnParams);
-					SpawnedActorRef->ProjectileInnit(Target, GetDamage(), this, ProjectileDelay, Enemy);
+					SpawnedActorRef->ProjectileInnit(Target, GetDamage(), this, ProjectileDelay, TypeOfDamage);
 				}
-				else TargetInterface->TakeDamage(this, GetDamage(), Enemy);
+				else TargetInterface->TakeDamage(this, GetDamage(), TypeOfDamage);
 			}
 			GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ADefensiveBuildingActor::AttackTarget, AttackInterval, false, AttackInterval);
 		}

@@ -24,7 +24,7 @@ ABuilding_Ballista_Tower::ABuilding_Ballista_Tower(const FObjectInitializer& Obj
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh1(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Turret_Crossbow1_Turret.Turret_Crossbow1_Turret'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh2(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Turret_Crossbow2_Turret.Turret_Crossbow2_Turret'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> TurretMesh3(TEXT("StaticMesh'/Game/World/Tower_Defence/Models/Towers/Turret_Crossbow3_Turret.Turret_Crossbow3_Turret'"));
-	static ConstructorHelpers::FObjectFinder<UTexture2D> ImageLevel1(TEXT("Texture2D'/Game/UI/World/Sprites/WatchTowerImage.WatchTowerImage'"));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> ImageLevel1(TEXT("Texture2D'/Game/UI/Assets/Sprites/WatchTowerImage.WatchTowerImage'"));
 	if (BaseMesh1.Succeeded()) {
 		StaticMeshComponent->SetStaticMesh(BaseMesh1.Object);
 	}

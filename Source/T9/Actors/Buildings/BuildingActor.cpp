@@ -247,7 +247,7 @@ UStaticMeshComponent* ABuildingActor::GetStaticMeshComp()
 void ABuildingActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage)
 {
 	int ScaledDamage = UKismetMathLibrary::FCeil(AmountOfDamage * DefenceDamageTakenMultiplier);
-	if((!Disabled && TypeDamage == All) || (!Disabled && TypeDamage == TypeOfDamage)) {
+	if((!Disabled && TypeDamage == All) || (!Disabled && TypeDamage != TypeOfDamage)) {
 		if (!Target || TargetInterface && TargetInterface->CheckIfDead()) SetTarget(AttackingActor);
 		CurrentHealth -= ScaledDamage;
 		if (CurrentHealth <= 0) {
@@ -314,7 +314,6 @@ void ABuildingActor::EndOverlap(UPrimitiveComponent* OverlappedComponent,
 {
 	if (AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(OtherActor)) {
 		if (Target == OtherActor) Target = nullptr;
-		UE_LOG(LogTemp, Warning, TEXT("OverLap Ended"));
 	}
 }
 

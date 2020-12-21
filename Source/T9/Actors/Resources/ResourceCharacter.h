@@ -28,8 +28,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
 		AActor* Target;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
-		IDamageInterface* TargetInterface;
+	class IDamageInterface* TargetInterface;
 
 	FTimerHandle DeathTimerHandle;
 

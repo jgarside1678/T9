@@ -32,9 +32,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Phase")
 		TArray<class UMaterialInstance*> PhaseMaterials;
 
-	virtual void Attack(AActor* Target) override;
-
-	virtual void SpecialAttack(AActor* Target) override;
+	virtual void SpecialAttack() override;
 
 	virtual void CalculateDamage(int BaseAdditionalDamage = 0, float AdditionalDamageMultiplier = 1) override;
 

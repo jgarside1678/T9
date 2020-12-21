@@ -71,10 +71,10 @@ AItemActor::AItemActor()
 		}
 	}
 
-	static ConstructorHelpers::FObjectFinder<USkeleton> MaleSkeleton(TEXT("Skeleton'/Game/AI/Alliance/StylizedHumanMale/Meshes/SK_HumanMale_Base_Skeleton.SK_HumanMale_Base_Skeleton'"));
+	static ConstructorHelpers::FObjectFinder<USkeleton> MaleSkeleton(TEXT("Skeleton'/Game/Units/Alliance/StylizedHumanMale/Meshes/SK_HumanMale_Base_Skeleton.SK_HumanMale_Base_Skeleton'"));
 	if (MaleSkeleton.Succeeded()) HumanMale = MaleSkeleton.Object;
 
-	static ConstructorHelpers::FObjectFinder<USkeleton> FemaleSkeleton(TEXT("Skeleton'/Game/AI/Alliance/StylizedHumanFemale/Meshes/SK_Body_Skeleton.SK_Body_Skeleton'"));
+	static ConstructorHelpers::FObjectFinder<USkeleton> FemaleSkeleton(TEXT("Skeleton'/Game/Units/Alliance/StylizedHumanFemale/Meshes/SK_Body_Skeleton.SK_Body_Skeleton'"));
 	if (FemaleSkeleton.Succeeded()) HumanFemale = FemaleSkeleton.Object;
 
 

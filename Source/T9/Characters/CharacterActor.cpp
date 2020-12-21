@@ -16,6 +16,7 @@
 #include "T9/AI/AI_Controller.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
+#include "BrainComponent.h"
 #include "T9/BlackBoard_Keys.h"
 
 // Sets default values
@@ -180,7 +181,7 @@ float ACharacterActor::GetArmour()
 void ACharacterActor::TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage)
 {
 	int ScaledDamage = UKismetMathLibrary::FCeil(AmountOfDamage * ArmourDamageTakenMultiplier);
-	if ((!IsDead && TypeDamage == All) || (!IsDead && TypeDamage == TypeOfDamage)) {
+	if ((!IsDead && TypeDamage == All) || (!IsDead && TypeDamage != TypeOfDamage)) {
 		if (!Target || !Target->IsValidLowLevel()) {
 			SetTarget(AttackingActor);
 		}
@@ -313,7 +314,7 @@ float ACharacterActor::GetAttackInterval()
 void ACharacterActor::Attack()
 {
 	EquipMainHand();
-	if (AttackStreak >= AttackStreakForSpecial) SpecialAttack(Target);
+	if (AttackStreak >= AttackStreakForSpecial) SpecialAttack();
 	else {
 		CalculateDamage();
 		if (Projectile) {
@@ -330,7 +331,7 @@ void ACharacterActor::Attack()
 	}
 }
 
-void ACharacterActor::SpecialAttack(AActor* Target)
+void ACharacterActor::SpecialAttack()
 {
 	AttackStreak = 0;
 	if (TargetInterface) TargetInterface->TakeDamage(this, Damage, TypeOfDamage);
@@ -347,7 +348,7 @@ void ACharacterActor::SetTarget(AActor* NewTarget)
 	Target = NewTarget;
 	TargetInterface = Cast<IDamageInterface>(Target);
 	Cont->GetBlackboard()->SetValueAsObject(bb_keys::combat_target, Target);
-	Cont->Reset();
+	if(Target) Cont->BrainComponent->RestartLogic();
 }
 
 bool ACharacterActor::CheckIfDead() {

@@ -3,7 +3,7 @@
 
 #include "Enemy_Lava_Elemental.h"
 #include "Components/CapsuleComponent.h"
-#include "T9/AI/Enemy_Lich_Controller.h"
+#include "T9/AI/Basic_Enemy_Controller.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "UObject/ConstructorHelpers.h"
 #include "T9/Actors/Projectiles/Projectile_Magic_DeathsDecay.h"
@@ -51,7 +51,7 @@ AEnemy_Lava_Elemental::AEnemy_Lava_Elemental(const FObjectInitializer& ObjectIni
 			SpecialAttackMontage = SpecialMont.Object;
 		}
 	}
-	AIControllerClass = AEnemy_Lich_Controller::StaticClass();
+	AIControllerClass = ABasic_Enemy_Controller::StaticClass();
 	SetActorScale3D(FVector(3));
 	//DropTable.Add(FLoot{ 1, AItem_Wooden_Pickaxe::StaticClass() });
 	//DropTable.Add(FLoot{ 10, nullptr });
@@ -63,15 +63,11 @@ TEnumAsByte<LavaElementalPhase> AEnemy_Lava_Elemental::GetCurrentPhase()
 	return CurrentPhase;
 }
 
-void AEnemy_Lava_Elemental::Attack(AActor* Target)
-{
-	Super::Attack(Target);
-}
 
-void AEnemy_Lava_Elemental::SpecialAttack(AActor* Target)
+void AEnemy_Lava_Elemental::SpecialAttack()
 {
 	Heal(0.3);
-	Super::SpecialAttack(Target);
+	Super::SpecialAttack();
 }
 
 void AEnemy_Lava_Elemental::TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage)

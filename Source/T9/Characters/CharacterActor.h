@@ -211,7 +211,7 @@ public:
 		virtual void Attack();
 
 	UFUNCTION(Category = "Character Combat")
-		virtual void SpecialAttack(AActor* Target);
+		virtual void SpecialAttack();
 
 	UFUNCTION(Category = "Character Combat")
 		virtual void ChangePhase(int NewPhase = -1);
@@ -222,8 +222,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class AActor* Target;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		class IDamageInterface* TargetInterface;
+	class IDamageInterface* TargetInterface;
 
 	UPROPERTY()
 		class UAnimMontage* AttackMontage;

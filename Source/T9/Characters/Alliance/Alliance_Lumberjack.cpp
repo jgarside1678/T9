@@ -42,7 +42,7 @@ AAlliance_Lumberjack::AAlliance_Lumberjack() {
 	Equipment.DefaultMainHandTransformSheathed = FTransform(FRotator(349.199066, 32.399937, 262.799347), FVector(18.000000, 20.000000, -15.000000), FVector(0.4));
 	Equipment.DefaultMainHandTransformEquiped = FTransform(FRotator(-20, -30, 7), FVector(32, -40, 7), FVector(0.5));
 
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Alliance/StylizedHumanMale/Animations/AllianceLumberJackAnimation_BP.AllianceLumberJackAnimation_BP_C'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/Units/Alliance/StylizedHumanMale/Animations/AllianceLumberJackAnimation_BP.AllianceLumberJackAnimation_BP_C'"));
 	if (AnimationAsset.Succeeded()) {
 		GetMesh()->AnimClass = AnimationAsset.Class;
 	}

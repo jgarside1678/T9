@@ -3,7 +3,7 @@
 
 #include "Enemy_Lich_Mage.h"
 #include "Components/CapsuleComponent.h"
-#include "T9/AI/Enemy_Lich_Controller.h"
+#include "T9/AI/Basic_Enemy_Controller.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "UObject/ConstructorHelpers.h"
 #include "T9/Actors/Projectiles/Projectile_Magic_DeathsDecay.h"
@@ -45,21 +45,17 @@ AEnemy_Lich_Mage::AEnemy_Lich_Mage(const FObjectInitializer& ObjectInitializer) 
 			SpecialAttackMontage = SpecialMont.Object;
 		}
 	}
-	AIControllerClass = AEnemy_Lich_Controller::StaticClass();
+	AIControllerClass = ABasic_Enemy_Controller::StaticClass();
 	SetActorScale3D(FVector(3));
 	//DropTable.Add(FLoot{ 1, AItem_Wooden_Pickaxe::StaticClass() });
 	DropTable.Add(FLoot{ 10, nullptr });
 }
 
-void AEnemy_Lich_Mage::Attack(AActor* Target)
-{
-	Super::Attack(Target);
-}
 
-void AEnemy_Lich_Mage::SpecialAttack(AActor* Target)
+void AEnemy_Lich_Mage::SpecialAttack()
 {
 	Heal(0.3);
-	Super::SpecialAttack(Target);
+	Super::SpecialAttack();
 }
 
 void AEnemy_Lich_Mage::CalculateDamage(int BaseAdditionalDamage, float AdditionalDamageMultiplier) {

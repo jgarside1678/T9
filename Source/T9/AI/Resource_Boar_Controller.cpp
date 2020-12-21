@@ -8,7 +8,7 @@
 
 AResource_Boar_Controller::AResource_Boar_Controller(FObjectInitializer const& object_initializer) {
 
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> Obj(TEXT("BehaviorTree'/Game/AI/Neutral/Neutral_Boar_BT.Neutral_Boar_BT'"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> Obj(TEXT("BehaviorTree'/Game/Units/Neutral/Neutral_Boar_BT.Neutral_Boar_BT'"));
 	if (Obj.Succeeded()) {
 		BTree = Obj.Object;
 	}

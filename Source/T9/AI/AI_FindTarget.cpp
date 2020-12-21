@@ -100,36 +100,7 @@ EBTNodeResult::Type UAI_FindTarget::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 			}
 		}
 		else ClosestActor = Target;
-
-
-		if (CurrentType == Building) {
-			ABuildingActor* ClosestBuilding = Cast<ABuildingActor>(ClosestActor);
-			if ((ClosestBuilding != nullptr) && (Target != ClosestBuilding)) {
-				FVector ClosestBuildingBounds, ClosestBuildingOrigin;
-				ClosestBuildingBounds = ClosestBuilding->BuildingExtent;
-				ClosestBuildingOrigin = ClosestBuilding->GetActorLocation();
-				FVector Direction = (Origin - ClosestBuildingOrigin).GetSafeNormal();
-				FVector TargetLocation = ClosestBuildingOrigin;
-				FVector Min = FVector(ClosestBuildingOrigin.X - ClosestBuildingBounds.X - 50 - NPC->GetAttackRange(), ClosestBuildingOrigin.Y - ClosestBuildingBounds.Y- 50 - NPC->GetAttackRange(), 1);
-				FVector Max = FVector(ClosestBuildingOrigin.X + ClosestBuildingBounds.X + 50 + NPC->GetAttackRange(), ClosestBuildingOrigin.Y + ClosestBuildingBounds.Y + 50 + NPC->GetAttackRange(), 1);
-				FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(Origin, Min, Max);
-				//DrawDebugLine(GetWorld(), ClampedVector, FVector(ClampedVector.X, ClampedVector.Y, 3000), FColor::Red, false, 20, 0, 10);
-				NPC->SetTarget(ClosestBuilding);
-				Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
-			}
-		}
-		else if (CurrentType == Character) {
-			ACharacterActor* ClosestCharacter = Cast<ACharacterActor>(ClosestActor);
-			if (ClosestCharacter != nullptr) {
-				NPC->SetTarget(ClosestCharacter);
-				FVector ClosestCharacterOrigin = ClosestCharacter->GetActorLocation();
-				FVector Min = FVector(ClosestCharacterOrigin.X - ClosestCharacter->CapsuleRadius - 50 - NPC->GetAttackRange(), ClosestCharacterOrigin.Y - ClosestCharacter->CapsuleRadius - 50 - NPC->GetAttackRange(), 1);
-				FVector Max = FVector(ClosestCharacterOrigin.X + ClosestCharacter->CapsuleRadius + 50 + NPC->GetAttackRange(), ClosestCharacterOrigin.Y + ClosestCharacter->CapsuleRadius + 50 + NPC->GetAttackRange(), 1);
-				FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(Origin, Min, Max);
-				Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
-			}
-		}
-
+		NPC->SetTarget(ClosestActor);
 
 	}
 

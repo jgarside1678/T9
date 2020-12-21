@@ -19,13 +19,11 @@
 
 UAI_UpdateTargetLocation::UAI_UpdateTargetLocation(FObjectInitializer const& ObjectInitializer) {
 	bNotifyBecomeRelevant = true;
-	UE_LOG(LogTemp, Warning, TEXT("Constructed"));
 
 }
 
 void UAI_UpdateTargetLocation::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Relevant"));
 	Cont = Cast<AAI_Controller>(OwnerComp.GetAIOwner());
 	NPC = Cast<ACharacterActor>(Cont->GetPawn());
 

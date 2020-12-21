@@ -79,7 +79,7 @@ ABuilding_Wizards_Tower::ABuilding_Wizards_Tower(const FObjectInitializer& Objec
 	//}
 
 
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Alliance/StylizedHumanFemale/Animations/Alliance_Wizard_Tower_Female_AnimBP.Alliance_Wizard_Tower_Female_AnimBP_C'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/Units/Alliance/StylizedHumanFemale/Animations/Alliance_Wizard_Tower_Female_AnimBP.Alliance_Wizard_Tower_Female_AnimBP_C'"));
 	if (AnimationAsset.Succeeded()) {
 		BuildingDefender->AnimClass = AnimationAsset.Class;
 	}
@@ -87,22 +87,22 @@ ABuilding_Wizards_Tower::ABuilding_Wizards_Tower(const FObjectInitializer& Objec
 
 	//----------------- Material Appearence Variation -----------------------//
 
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> HairBrown2(TEXT("MaterialInstanceConstant'/Game/AI/Alliance/StylizedHumanFemale/Materials/Instances/Hair/MI_HumanFemale_Hair_02_Brown.MI_HumanFemale_Hair_02_Brown'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> HairBrown2(TEXT("MaterialInstanceConstant'/Game/Units/Alliance/StylizedHumanFemale/Materials/Instances/Hair/MI_HumanFemale_Hair_02_Brown.MI_HumanFemale_Hair_02_Brown'"));
 	if (HairBrown2.Succeeded()) HairColours2.Add(HairBrown2.Object);
 
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> HairBlonde2(TEXT("MaterialInstanceConstant'/Game/AI/Alliance/StylizedHumanFemale/Materials/Instances/Hair/MI_HumanFemale_Hair_02_Blond.MI_HumanFemale_Hair_02_Blond'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> HairBlonde2(TEXT("MaterialInstanceConstant'/Game/Units/Alliance/StylizedHumanFemale/Materials/Instances/Hair/MI_HumanFemale_Hair_02_Blond.MI_HumanFemale_Hair_02_Blond'"));
 	if (HairBlonde2.Succeeded()) HairColours2.Add(HairBlonde2.Object);
 
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> HairBlack2(TEXT("MaterialInstanceConstant'/Game/AI/Alliance/StylizedHumanFemale/Materials/Instances/Hair/MI_HumanFemale_Hair_02_Black.MI_HumanFemale_Hair_02_Black'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> HairBlack2(TEXT("MaterialInstanceConstant'/Game/Units/Alliance/StylizedHumanFemale/Materials/Instances/Hair/MI_HumanFemale_Hair_02_Black.MI_HumanFemale_Hair_02_Black'"));
 	if (HairBlack2.Succeeded()) HairColours2.Add(HairBlack2.Object);
 
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> HairBrown1(TEXT("MaterialInstanceConstant'/Game/AI/Alliance/StylizedHumanFemale/Materials/Instances/Hair/MI_HumanFemale_Hair_01_Brown.MI_HumanFemale_Hair_01_Brown'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> HairBrown1(TEXT("MaterialInstanceConstant'/Game/Units/Alliance/StylizedHumanFemale/Materials/Instances/Hair/MI_HumanFemale_Hair_01_Brown.MI_HumanFemale_Hair_01_Brown'"));
 	if (HairBrown1.Succeeded()) HairColours1.Add(HairBrown1.Object);
 
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> HairBlonde1(TEXT("MaterialInstanceConstant'/Game/AI/Alliance/StylizedHumanFemale/Materials/Instances/Hair/MI_HumanFemale_Hair_01_Blond.MI_HumanFemale_Hair_01_Blond'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> HairBlonde1(TEXT("MaterialInstanceConstant'/Game/Units/Alliance/StylizedHumanFemale/Materials/Instances/Hair/MI_HumanFemale_Hair_01_Blond.MI_HumanFemale_Hair_01_Blond'"));
 	if (HairBlonde1.Succeeded()) HairColours1.Add(HairBlonde1.Object);
 
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> HairBlack1(TEXT("MaterialInstanceConstant'/Game/AI/Alliance/StylizedHumanFemale/Materials/Instances/Hair/MI_HumanFemale_Hair_01_Black.MI_HumanFemale_Hair_01_Black'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> HairBlack1(TEXT("MaterialInstanceConstant'/Game/Units/Alliance/StylizedHumanFemale/Materials/Instances/Hair/MI_HumanFemale_Hair_01_Black.MI_HumanFemale_Hair_01_Black'"));
 	if (HairBlack1.Succeeded()) HairColours1.Add(HairBlack1.Object);
 
 	if (HairStyleID < 2) {

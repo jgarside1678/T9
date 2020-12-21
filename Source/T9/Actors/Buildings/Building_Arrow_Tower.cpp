@@ -65,7 +65,7 @@ ABuilding_Arrow_Tower::ABuilding_Arrow_Tower(const FObjectInitializer& ObjectIni
 	//}
 
 
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/AI/Alliance/StylizedHumanFemale/Animations/ThirdPerson_AnimBP.ThirdPerson_AnimBP_C'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/Units/Alliance/StylizedHumanFemale/Animations/ThirdPerson_AnimBP.ThirdPerson_AnimBP_C'"));
 	if (AnimationAsset.Succeeded()) {
 		BuildingDefender->AnimClass = AnimationAsset.Class;
 	}

@@ -3,7 +3,7 @@
 
 #include "Enemy_Succubus.h"
 #include "Components/CapsuleComponent.h"
-#include "Enemy_Succubus_Controller.h"
+#include "T9/AI/Basic_Enemy_Controller.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "UObject/ConstructorHelpers.h"
 #include "T9/Actors/Items/Tools/Item_Wooden_Pickaxe.h"
@@ -35,21 +35,17 @@ AEnemy_Succubus::AEnemy_Succubus(const FObjectInitializer& ObjectInitializer) {
 			AttackMontage = AnimationMont.Object;
 		}
 	}
-	AIControllerClass = AEnemy_Succubus_Controller::StaticClass();
+	AIControllerClass = ABasic_Enemy_Controller::StaticClass();
 	SetActorScale3D(FVector(2));
 	DropTable.Add(FLoot{ 1, AItem_Wooden_Pickaxe::StaticClass() });
 	DropTable.Add(FLoot{ 10, nullptr });
 }
 
 
-void AEnemy_Succubus::Attack(AActor* Target) {
-	Super::Attack(Target);
-}
 
-
-void AEnemy_Succubus::SpecialAttack(AActor* Target) {
+void AEnemy_Succubus::SpecialAttack() {
 	CalculateDamage(50);
-	Super::SpecialAttack(Target);
+	Super::SpecialAttack();
 }
 
 void AEnemy_Succubus::CalculateDamage(int BaseAdditionalDamage, float AdditionalDamageMultiplier) {
@@ -65,47 +61,3 @@ void AEnemy_Succubus::FlyingHeal()
 		GetWorldTimerManager().SetTimer(FlyingHealHandle, this, &AEnemy_Succubus::FlyingHeal, 0.5, false);
 	}
 }
-
-
-//void AEnemy_Succubus::Attack(AActor* Target, int Number) {
-//	if (Target != CurrentTarget) {
-//		AttackStreak = 0;
-//		CurrentPhase = Normal;
-//		CalculateDamage();
-//	}
-//	if (AttackStreak < 2) {
-//		if (CurrentPhase != Channelling) {
-//			CurrentMontage = AttackMontage;
-//			PlayAnimMontage(CurrentMontage);
-//		}
-//		Super::Attack(Target);
-//	}
-//	else {
-//		AttackStreak = 0;
-//		SpecialAttack(Target, Number);
-//	}
-//}
-//
-//
-//void AEnemy_Succubus::SpecialAttack(AActor* Target, int Number) {
-//	if (Number == 0) Number = UKismetMathLibrary::RandomInteger64InRange(1, 2);
-//	switch (Number) {
-//	case 1:
-//		if (CurrentPhase == Flying) CurrentPhase = Normal;
-//		else {
-//			CurrentPhase = Flying;
-//			FlyingHeal();
-//		}
-//		break;
-//	case 2:
-//		if (CurrentPhase == Flying)	PlayAnimMontage(CurrentMontage);
-//		else if (CurrentPhase == Channelling) CurrentPhase = Normal;
-//		else CurrentPhase = Channelling;
-//		break;
-//	default:
-//		break;
-//
-//	}
-//	CalculateDamage();
-//	DamageEnemy(Target, Damage);
-//}

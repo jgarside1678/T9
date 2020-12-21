@@ -16,11 +16,10 @@ EBTNodeResult::Type UAI_SpecialAttack::ExecuteTask(UBehaviorTreeComponent& Owner
 {
 	auto const Cont = Cast<AAI_Controller>(OwnerComp.GetAIOwner());
 	auto const NPC = Cast<ACharacterActor>(Cont->GetPawn());
-	UObject* Target = Cont->GetBlackboard()->GetValueAsObject(bb_keys::combat_target);
+	AActor* Target = NPC->Target;
 
 	if (Target != nullptr && Target->IsValidLowLevel()) {
-		AActor* TargetActor = (AActor*)Target;
-		NPC->SpecialAttack(TargetActor);
+		NPC->SpecialAttack();
 	}
 
 
