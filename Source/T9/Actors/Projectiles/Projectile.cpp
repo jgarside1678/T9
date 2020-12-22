@@ -38,10 +38,10 @@ AProjectile::AProjectile() :
 }
 
 
-void AProjectile::ProjectileInnit(AActor* TargetActor, float AttackDamage, AActor* SpawnActor, float ProjectileDelay, DamageType DamageActors) {
+void AProjectile::ProjectileInnit(AActor* TargetActor, float AttackDamage, AActor* SpawnActor, float ProjectileDelay, DamageType Type) {
 	Target = TargetActor;
 	Damage = AttackDamage;
-	DamageActorsOfType = DamageActors;
+	TypeOfDamage = Type;
 	Spawner = SpawnActor;
 	ProjectileMovementDelay = ProjectileDelay;
 	BuildingSpawn = Cast<ADefensiveBuildingActor>(Spawner);
@@ -66,7 +66,7 @@ void AProjectile::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 {
 	if (Active && OtherActor == Target) {
 		IDamageInterface* Enemy = Cast<IDamageInterface>(Target);
-		if(Enemy != nullptr) Enemy->TakeDamage(Spawner, Damage, DamageActorsOfType);
+		if(Enemy != nullptr) Enemy->TakeDamage(Spawner, Damage, TypeOfDamage);
 		ProjectileDestroy();
 	}
 }

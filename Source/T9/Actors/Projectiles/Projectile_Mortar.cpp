@@ -29,9 +29,9 @@ void AProjectile_Mortar::Tick(float DeltaTime)
 	ClimbingDirection.Z -= 1100 / TargetDistance * ProjectileSpeed * DeltaTime;
 }
 
-void AProjectile_Mortar::ProjectileInnit(AActor* TargetActor, float AttackDamage, AActor* SpawnActor, float ProjectileDelay, DamageType DamageActors)
+void AProjectile_Mortar::ProjectileInnit(AActor* TargetActor, float AttackDamage, AActor* SpawnActor, float ProjectileDelay, DamageType Type)
 {
-	Super::ProjectileInnit(TargetActor, AttackDamage, SpawnActor, ProjectileDelay, DamageActors);
+	Super::ProjectileInnit(TargetActor, AttackDamage, SpawnActor, ProjectileDelay, Type);
 }
 
 void AProjectile_Mortar::CalculateTrajectory(AActor* TargetActor)
@@ -52,7 +52,7 @@ void AProjectile_Mortar::BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 {
 	if (Active) {
 		IDamageInterface* Enemy = Cast<IDamageInterface>(OtherActor);
-		if (Enemy != nullptr) Enemy->TakeDamage(Spawner, Damage, DamageActorsOfType);
+		if (Enemy != nullptr) Enemy->TakeDamage(Spawner, Damage, TypeOfDamage);
 		if (OtherActor != Spawner && !Exploded) {
 			Exploded = true;
 			this->SetActorScale3D(FVector(10));

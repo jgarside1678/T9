@@ -8,22 +8,20 @@
 #include "UObject/ConstructorHelpers.h"
 
 AResourceCharacter_Goat::AResourceCharacter_Goat() {
-	Health = 100;
+	//Base Damage, Attack Speed, AttackRange, MaxHealth, Armour, KillXP, KillGold
+	Levels.Add(1, FCharacterLevels{ 5, 160, 0, 150, 5, 1, 0 });
 	DecayDuration = 30;
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("SkeletalMesh'/Game/Units/Neutral/StylizedWildAnimals/Meshes/Goat/SK_Goat.SK_Goat'"));
 	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/Units/Neutral/StylizedWildAnimals/Animations/Goat/GoatAnimation_BP.GoatAnimation_BP_C'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material1(TEXT("MaterialInstanceConstant'/Game/Units/Neutral/StylizedWildAnimals/Materials/Instances/Goat/MI_Goat_Black.MI_Goat_Black'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material2(TEXT("MaterialInstanceConstant'/Game/Units/Neutral/StylizedWildAnimals/Materials/Instances/Goat/MI_Goat_Brown.MI_Goat_Brown'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Material3(TEXT("MaterialInstanceConstant'/Game/Units/Neutral/StylizedWildAnimals/Materials/Instances/Goat/MI_Goat_White.MI_Goat_White'"));
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> AnimationMont(TEXT("AnimMontage'/Game/Units/Neutral/StylizedWildAnimals/Animations/Goat/Goat_Idle_Montage.Goat_Idle_Montage'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> AnimationMont(TEXT("AnimMontage'/Game/Units/Neutral/StylizedWildAnimals/Animations/Goat/Goat_Attack_Montage.Goat_Attack_Montage'"));
 	if (Material1.Succeeded()) Materials.Add(Material1.Object);
 	if (Material2.Succeeded()) Materials.Add(Material2.Object);
 	if (Material3.Succeeded()) Materials.Add(Material3.Object);
 	if (MeshAsset.Succeeded()) {
 		GetMesh()->SkeletalMesh = MeshAsset.Object;
-		float Height = GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
-		GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -Height));
-		GetMesh()->AddLocalRotation(FRotator(0, -90, 0));
 		if (AnimationAsset.Succeeded()) {
 			GetMesh()->AnimClass = AnimationAsset.Class;
 		}

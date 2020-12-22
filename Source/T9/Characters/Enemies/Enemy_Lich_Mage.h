@@ -41,4 +41,20 @@ protected:
 	virtual void ChangePhase(int NewPhase = -1) override;
 
 	virtual void SetSelected() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Minions")
+		TArray<ACharacterActor*> SpawnedMinions;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Minions")
+		int MaxMinionSpawns = 3;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Minions")
+		TArray<TSubclassOf<ACharacterActor>> MinionTypes;
+
+	UFUNCTION()
+	    void SpawnMinions(int Number);
+
+	UFUNCTION()
+		void ResupplyMinions();
 };

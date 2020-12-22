@@ -23,7 +23,7 @@ AProjectile_Magic_Water::AProjectile_Magic_Water(const FObjectInitializer& Objec
 void AProjectile_Magic_Water::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	IDamageInterface* Enemy = Cast<IDamageInterface>(OtherActor);
-	if (Enemy != nullptr) Enemy->TakeDamage(Spawner, Damage, DamageActorsOfType);
+	if (Enemy != nullptr) Enemy->TakeDamage(Spawner, Damage, TypeOfDamage);
 	if (OtherActor == Target) {
 		this->SetActorScale3D(FVector(10));
 		ProjectileExplode();

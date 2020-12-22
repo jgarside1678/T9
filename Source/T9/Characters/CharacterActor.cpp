@@ -93,7 +93,6 @@ void ACharacterActor::BeginPlay()
 void ACharacterActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (GetActorLocation().Z < -100) this->Destroy();
 }
 
 // Called to bind functionality to input
@@ -320,12 +319,11 @@ void ACharacterActor::Attack()
 		if (Projectile) {
 			FActorSpawnParameters SpawnParams;
 			AProjectile* SpawnedActorRef = GetWorld()->SpawnActor<AProjectile>(Projectile, GetActorLocation(), FRotator(0), SpawnParams);
-			DamageType ProjectileDamage = All;
-			if (TypeOfDamage == Alliance) ProjectileDamage = Enemy;
-			else if (TypeOfDamage == Enemy) ProjectileDamage = Alliance;
-			SpawnedActorRef->ProjectileInnit(Target, Damage, this, 0, ProjectileDamage);
+			SpawnedActorRef->ProjectileInnit(Target, Damage, this, 0, TypeOfDamage);
 		}
-		else if (TargetInterface) TargetInterface->TakeDamage(this, Damage, TypeOfDamage);
+		else if (TargetInterface) {
+			TargetInterface->TakeDamage(this, Damage, TypeOfDamage);
+		}
 		if(AttackMontage) PlayAnimMontage(AttackMontage, 1, AttackMontage->GetSectionName(AttackStreak));
 		AttackStreak++;
 	}

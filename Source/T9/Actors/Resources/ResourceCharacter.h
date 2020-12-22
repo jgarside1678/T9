@@ -6,10 +6,11 @@
 #include "GameFramework/Character.h"
 #include "T9/Interfaces/SelectInterface.h"
 #include "T9/Interfaces/DamageInterface.h"
+#include "T9/Characters/CharacterActor.h"
 #include "ResourceCharacter.generated.h"
 
 UCLASS()
-class T9_API AResourceCharacter : public ACharacter, public ISelectInterface, public IDamageInterface
+class T9_API AResourceCharacter : public ACharacterActor
 {
 	GENERATED_BODY()
 
@@ -21,17 +22,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
-		float Damage = 5;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
-		AActor* Target;
-
-	class IDamageInterface* TargetInterface;
-
-	FTimerHandle DeathTimerHandle;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
 		AResourceActor* ParentResource;
 
@@ -39,26 +29,14 @@ protected:
 		FVector InitialLocation;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
-		float Health;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
-		bool Dead = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
 		float DecayDuration = 30;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
 	    TArray<class UMaterialInstance*> Materials;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basics", Meta = (AllowPrivateAccess = "true"))
-	     class UAnimMontage* AttackMontage;
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
 		void Init(AResourceActor* OwningResource, FVector SpawnLocation);
@@ -66,28 +44,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 		AResourceActor* GetParentResource();
 
-	UFUNCTION()
-		virtual void SetSelected();
+		virtual void SetSelected() override;
 
-	UFUNCTION()
-		virtual void SetUnSelected();
+		virtual void SetUnSelected() override;
 
-	UPROPERTY()
-		float CapsuleRadius = 50;
+		virtual void TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeOfDamage = All) override;
 
-	UFUNCTION()
-		virtual void TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeOfDamage = All);
+		virtual void Attack() override;
 
-
-	UFUNCTION()
-		virtual void Attack();
-
-
-	UFUNCTION(BlueprintCallable)
-		virtual bool CheckIfDead();
-
-	UFUNCTION()
-		void DeathInit();
+		virtual void DeathInit() override;
 
 
 };

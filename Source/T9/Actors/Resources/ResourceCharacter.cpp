@@ -3,20 +3,20 @@
 
 #include "ResourceCharacter.h"
 #include "ResourceActor.h"
+#include "T9/AI/AI_Controller.h"
 
 // Sets default values
 AResourceCharacter::AResourceCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	TypeOfDamage = DamageType::All;
 }
 
 // Called when the game starts or when spawned
 void AResourceCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -26,26 +26,21 @@ void AResourceCharacter::Tick(float DeltaTime)
 
 }
 
-// Called to bind functionality to input
-void AResourceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
 
 void AResourceCharacter::Init(AResourceActor* OwningResource, FVector SpawnLocation)
 {
 	ParentResource = OwningResource;
 	InitialLocation = SpawnLocation;
-	if (!GetController()) {
-		FTimerHandle ControllerTimerHandle;
-		GetWorldTimerManager().SetTimer(ControllerTimerHandle, this, &AResourceCharacter::SpawnDefaultController, 2, false, 2);
-	}
+	Level = 1;
+	BaseCalculate();
+	ResetHealth();
+	if (!GetController()) SpawnDefaultController();
+	Invulnerable = false;
+
+	Cont = Cast<AAI_Controller>(GetController());
 }
 
-bool AResourceCharacter::CheckIfDead() {
-	return Dead;
-}
+
 
 
 AResourceActor* AResourceCharacter::GetParentResource()
@@ -55,33 +50,33 @@ AResourceActor* AResourceCharacter::GetParentResource()
 
 void AResourceCharacter::SetSelected()
 {
-	ParentResource->SetSelected();
+	if (ParentResource)ParentResource->SetSelected();
 }
 
 void AResourceCharacter::SetUnSelected()
 {
-	ParentResource->SetUnSelected();
+	if (ParentResource) ParentResource->SetUnSelected();
 }
 
 void AResourceCharacter::TakeDamage(AActor* AttackingActor, float AmountOfDamage, DamageType TypeDamage)
 {
-	if (!Dead) {
-		Health -= AmountOfDamage;
-		if (Health <= 0) {
-			Dead = true;
+	UE_LOG(LogTemp, Warning, TEXT("Take Damage"));
+	if (!IsDead) {
+		CurrentHealth -= AmountOfDamage;
+		if (CurrentHealth <= 0) {
+			IsDead = true;
 			Controller->UnPossess();
 			GetWorldTimerManager().SetTimer(DeathTimerHandle, this, &AResourceCharacter::DeathInit, DecayDuration, false, DecayDuration);
 		}
 		else if(!Target) {
-			Target = AttackingActor;
-			TargetInterface = Cast<IDamageInterface>(Target);
+			SetTarget(AttackingActor);
 		}
 	}
 }
 
 void AResourceCharacter::DeathInit() {
 	Destroy();
-	ParentResource->ReduceCurrentSpawnCount(1);
+	if(ParentResource) ParentResource->ReduceCurrentSpawnCount(1);
 }
 
 void AResourceCharacter::Attack() {

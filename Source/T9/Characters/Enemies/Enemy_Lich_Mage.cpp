@@ -54,7 +54,7 @@ AEnemy_Lich_Mage::AEnemy_Lich_Mage(const FObjectInitializer& ObjectInitializer) 
 
 void AEnemy_Lich_Mage::SpecialAttack()
 {
-	Heal(0.3);
+	ResupplyMinions();
 	Super::SpecialAttack();
 }
 
@@ -93,4 +93,29 @@ void AEnemy_Lich_Mage::ChangePhase(int NewPhase)
 void AEnemy_Lich_Mage::SetSelected() {
 	Super::SetSelected();
 	if (CurrentPhase == LichMagePhase::Etheral) ChangePhase(0);
+}
+
+void AEnemy_Lich_Mage::SpawnMinions(int Number)
+{
+	if (MinionTypes.Num() > 0) {
+		for (int i = 0; i < Number; i++) {
+			auto result = FVector2D(FMath::VRand());
+			result.Normalize();
+			result *= FMath::RandRange(0, 200);
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+			ACharacterActor* SpawnedActorRef = GetWorld()->SpawnActor<ACharacterActor>(MinionTypes[FMath::RandRange(0, MinionTypes.Num())], FVector(result.X, result.Y, 10), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		}
+	}
+}
+
+void AEnemy_Lich_Mage::ResupplyMinions()
+{
+	int CurrentMinionsCount = 0;
+	for (int i = 0; i < SpawnedMinions.Num(); i++) {
+		if (SpawnedMinions[i] && !SpawnedMinions[i]->IsPendingKill()) {
+			CurrentMinionsCount++;
+		}
+	}
+	SpawnMinions(MaxMinionSpawns - CurrentMinionsCount);
 }

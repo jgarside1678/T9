@@ -33,7 +33,7 @@ protected:
 	FTimerHandle ProjectileLifeTimeHandle;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Basics", Meta = (AllowPrivateAccess = "true"))
-		TEnumAsByte<DamageType> DamageActorsOfType;
+		TEnumAsByte<DamageType> TypeOfDamage;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Particles", Meta = (AllowPrivateAccess = "true"))
 		class UNiagaraSystem* ParticleEffect;
