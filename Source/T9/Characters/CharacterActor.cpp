@@ -3,6 +3,9 @@
 #include "CharacterActor.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "SkeletalMeshMerge.h"
+#include "Engine/SkeletalMeshSocket.h"
+#include "Engine/SkeletalMesh.h"
 #include "Components/WidgetComponent.h"
 #include "T9/Widgets/HealthBarWidget.h"
 #include "T9/Actors/Projectiles/Projectile.h"
@@ -18,6 +21,7 @@
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
 #include "BrainComponent.h"
 #include "T9/BlackBoard_Keys.h"
+
 
 // Sets default values
 ACharacterActor::ACharacterActor() :
@@ -57,7 +61,8 @@ void ACharacterActor::BeginPlay()
 	if (Levels.Num() == 0) Levels.Add(1, FCharacterLevels{});
 	PC = (AMainPlayerController*)GetWorld()->GetFirstPlayerController();
 	PS = (AMainPlayerState*)PC->PlayerState;
-
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel3, ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel4, ECollisionResponse::ECR_Ignore);
 	//HealthBar
 	if (WidgetComponent) {
 		if (WidgetClass != nullptr) {
@@ -74,18 +79,20 @@ void ACharacterActor::BeginPlay()
 	if (HealthBar != nullptr) HealthBar->SetHealthPercent(CurrentHealth, MaxHealth);
 	//Used to for Spacing between characters and other objects
 	if (GetCapsuleComponent()) {
+		FVector Scale = GetMesh()->GetRelativeScale3D();
+		FVector Bounds = GetMesh()->Bounds.BoxExtent;
+		const float NewRadius = FMath::Max(Bounds.X, Bounds.Y) * 0.5f * FMath::Max(Scale.X, Scale.Y) ;
+		GetCapsuleComponent()->SetCapsuleRadius(NewRadius * CapsuleRadiusMultiplier);
 		CapsuleRadius = GetCapsuleComponent()->GetScaledCapsuleRadius();
 		CapsuleHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();// *GetActorScale3D().Z;
 		GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -CapsuleHeight));
 		GetMesh()->AddLocalRotation(FRotator(0, -90, 0));
 	}
 	if (GetActorScale3D().Z > 1) SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, CapsuleHeight));
-
-	if (MovementComponent) {
-		MovementComponent->SetAvoidanceEnabled(true);
-		MovementComponent->AvoidanceConsiderationRadius = CapsuleRadius * 2.3;
+	if (!GetController() && NeedsController) {
+		SpawnDefaultController();
 	}
-
+	Cont = Cast<AAI_Controller>(GetController());
 	SheathMainHand();
 }
 
@@ -102,22 +109,13 @@ void ACharacterActor::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 }
 
-void ACharacterActor::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invuln, bool SpawnController)
+void ACharacterActor::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invuln)
 {
 	SpawnBuilding = BuildingSpawn;
 	Level = SpawnLevel;
 	BaseCalculate();
 	ResetHealth();
-	NeedsController = SpawnController;
-	if (!GetController() && NeedsController) {
-		SpawnDefaultController();
-	}
-	else {
-		WidgetComponent->SetVisibility(false);
-	}
 	Invulnerable = Invuln;
-
-	Cont = Cast<AAI_Controller>(GetController());
 
 }
 
@@ -263,6 +261,7 @@ void ACharacterActor::CalculateAttackSpeed(int BaseAdditionalAttackSpeed, float 
 
 void ACharacterActor::DeathInit() {
 	IsDead = true;
+	GetCapsuleComponent()->SetCanEverAffectNavigation(true);
 	if (Levels.Contains(Level)) {
 		PS->AddCurrentXP(Levels[Level].KillXP);
 		PS->AddGold(Levels[Level].KillGold);
@@ -282,6 +281,11 @@ void ACharacterActor::DeathInit() {
 			SpawnComponent->Respawn();
 		}
 	}
+}
+
+void ACharacterActor::ChangeMovementSpeed(float NewSpeed)
+{
+	MovementComponent->MaxWalkSpeed = NewSpeed;
 }
 
 
@@ -318,8 +322,8 @@ void ACharacterActor::Attack()
 		CalculateDamage();
 		if (Projectile) {
 			FActorSpawnParameters SpawnParams;
-			AProjectile* SpawnedActorRef = GetWorld()->SpawnActor<AProjectile>(Projectile, GetActorLocation(), FRotator(0), SpawnParams);
-			SpawnedActorRef->ProjectileInnit(Target, Damage, this, 0, TypeOfDamage);
+			AProjectile* SpawnedActorRef = GetWorld()->SpawnActor<AProjectile>(Projectile, GetActorLocation() + RelativeProjectileSpawnLocation, FRotator(0), SpawnParams);
+			SpawnedActorRef->ProjectileInnit(Target, Damage, this, ProjectileDelay, TypeOfDamage);
 		}
 		else if (TargetInterface) {
 			TargetInterface->TakeDamage(this, Damage, TypeOfDamage);
@@ -345,8 +349,10 @@ void ACharacterActor::SetTarget(AActor* NewTarget)
 {
 	Target = NewTarget;
 	TargetInterface = Cast<IDamageInterface>(Target);
-	Cont->GetBlackboard()->SetValueAsObject(bb_keys::combat_target, Target);
-	if(Target) Cont->BrainComponent->RestartLogic();
+	if (Cont) {
+		Cont->GetBlackboard()->SetValueAsObject(bb_keys::combat_target, Target);
+		if (Target) Cont->BrainComponent->RestartLogic();
+	}
 }
 
 bool ACharacterActor::CheckIfDead() {
@@ -438,4 +444,83 @@ void ACharacterActor::SetSelected()
 void ACharacterActor::SetUnSelected()
 {
 	if (GetMesh()) GetMesh()->SetRenderCustomDepth(false);
+}
+
+
+USkeletalMesh* ACharacterActor::MergeMeshes(const FSkeletalMeshMergeParams& Params)
+{
+	TArray<USkeletalMesh*> MeshesToMergeCopy = Params.MeshesToMerge;
+	MeshesToMergeCopy.RemoveAll([](USkeletalMesh* InMesh)
+		{
+			return InMesh == nullptr;
+		});
+	if (MeshesToMergeCopy.Num() <= 1)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Must provide multiple valid Skeletal Meshes in order to perform a merge."));
+		return nullptr;
+	}
+	EMeshBufferAccess BufferAccess = Params.bNeedsCpuAccess ?
+		EMeshBufferAccess::ForceCPUAndGPU :
+		EMeshBufferAccess::Default;
+	TArray<FSkelMeshMergeSectionMapping> SectionMappings;
+	//TArray<FSkelMeshMergeUVTransforms> UvTransforms;
+	//ToMergeParams(Params.MeshSectionMappings, SectionMappings);
+	//ToMergeParams(Params.UVTransformsPerMesh, UvTransforms);
+	bool bRunDuplicateCheck = false;
+	USkeletalMesh* BaseMesh = NewObject<USkeletalMesh>();
+	if (Params.Skeleton && Params.bSkeletonBefore)
+	{
+		BaseMesh->Skeleton = Params.Skeleton;
+		bRunDuplicateCheck = true;
+		for (USkeletalMeshSocket* Socket : BaseMesh->GetMeshOnlySocketList())
+		{
+			if (Socket)
+			{
+			}
+		}
+		for (USkeletalMeshSocket* Socket : BaseMesh->Skeleton->Sockets)
+		{
+			if (Socket)
+			{
+			}
+		}
+	}
+	FSkeletalMeshMerge Merger(BaseMesh, MeshesToMergeCopy, SectionMappings, Params.StripTopLODS, BufferAccess);
+	if (!Merger.DoMerge())
+	{
+		return nullptr;
+	}
+	if (Params.Skeleton && !Params.bSkeletonBefore)
+	{
+		BaseMesh->Skeleton = Params.Skeleton;
+	}
+	if (bRunDuplicateCheck)
+	{
+		TArray<FName> SkelMeshSockets;
+		TArray<FName> SkelSockets;
+		for (USkeletalMeshSocket* Socket : BaseMesh->GetMeshOnlySocketList())
+		{
+			if (Socket)
+			{
+				SkelMeshSockets.Add(Socket->GetFName());
+			}
+		}
+		for (USkeletalMeshSocket* Socket : BaseMesh->Skeleton->Sockets)
+		{
+			if (Socket)
+			{
+				SkelSockets.Add(Socket->GetFName());
+			}
+		}
+		TSet<FName> UniqueSkelMeshSockets;
+		TSet<FName> UniqueSkelSockets;
+		UniqueSkelMeshSockets.Append(SkelMeshSockets);
+		UniqueSkelSockets.Append(SkelSockets);
+		int32 Total = SkelSockets.Num() + SkelMeshSockets.Num();
+		int32 UniqueTotal = UniqueSkelMeshSockets.Num() + UniqueSkelSockets.Num();
+		UE_LOG(LogTemp, Warning, TEXT("SkelMeshSocketCount: %d | SkelSocketCount: %d | Combined: %d"), SkelMeshSockets.Num(), SkelSockets.Num(), Total);
+		UE_LOG(LogTemp, Warning, TEXT("SkelMeshSocketCount: %d | SkelSocketCount: %d | Combined: %d"), UniqueSkelMeshSockets.Num(), UniqueSkelSockets.Num(), UniqueTotal);
+		UE_LOG(LogTemp, Warning, TEXT("Found Duplicates: %s"), *((Total != UniqueTotal) ? FString("True") : FString("False")));
+	}
+	return BaseMesh;
 }

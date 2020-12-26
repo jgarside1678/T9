@@ -22,7 +22,12 @@ public:
 
 	class UBlackboardComponent* GetBlackboard() const;
 
+	class UCrowdFollowingComponent* GetCrowdManager() const;
+
 protected:
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI", Meta = (AllowPrivateAccess = "true"))
+		class UCrowdFollowingComponent* CrowdManager;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI", Meta = (AllowPrivateAccess = "true"))
 		class UBehaviorTreeComponent* BTreeComponent;

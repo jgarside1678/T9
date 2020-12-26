@@ -24,9 +24,13 @@ AResourceActor::AResourceActor() :	ResourceQuickSelectComponent(CreateDefaultSub
 	BoxCollider->SetupAttachment(RootComponent);
 	BoxCollider->SetCollisionProfileName("Trigger");
 	BoxCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Ignore);
+	BoxCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel3, ECollisionResponse::ECR_Ignore);
+	BoxCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel4, ECollisionResponse::ECR_Ignore);
 	RootComponent = BoxCollider;
 	StaticMeshComponent = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Static Mesh Component"));
 	StaticMeshComponent->SetupAttachment(RootComponent);
+	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel4, ECollisionResponse::ECR_Ignore);
+	//StaticMeshComponent->SetCanEverAffectNavigation(false);
 	GridSpace = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GridSpace"));
 	GridSpace->SetupAttachment(RootComponent);
 	GridSpace->SetCollisionProfileName("NoCollision");

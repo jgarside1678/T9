@@ -6,6 +6,7 @@
 
 AEnemy_Forest_Spider::AEnemy_Forest_Spider(const FObjectInitializer& ObjectInitializer) {
 	HealthBarHeight = 200;
+	//FCharacterLevels:	Base Damage / AttackSpeed / AttackRange / MaxHealth / Armour / KillXP / KillGold
 	Levels.Add(1, FCharacterLevels{ 50, 160, 0, 300, 50, 10, 25 });
 	Levels.Add(2, FCharacterLevels{ 60, 160, 0, 400, 50, 10 , 25 });
 	Levels.Add(3, FCharacterLevels{ 70, 160, 0, 500, 50, 20, 25 });

@@ -12,6 +12,7 @@
 
 AEnemy_Lava_Elemental::AEnemy_Lava_Elemental(const FObjectInitializer& ObjectInitializer) {
 	HealthBarHeight = 400;
+	//FCharacterLevels:	Base Damage / AttackSpeed / AttackRange / MaxHealth / Armour / KillXP / KillGold
 	Levels.Add(1, FCharacterLevels{ 100, 160, 200, 3000, 50, 1000, 250 });
 	Levels.Add(2, FCharacterLevels{ 300, 160, 200, 4000, 50, 1000, 250 });
 	Levels.Add(3, FCharacterLevels{ 300, 160, 200, 5000, 50, 1000, 250 });

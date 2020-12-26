@@ -30,7 +30,7 @@ AResource_Wood::AResource_Wood() {
 	Sections.Add(FVector2D(FMath::RandRange(-900, -300), FMath::RandRange(300, 900)));
 	Sections.Add(FVector2D(FMath::RandRange(-300, 300), FMath::RandRange(300, 900)));
 	Sections.Add(FVector2D(FMath::RandRange(300, 900), FMath::RandRange(300, 900)));
-
+	StaticMeshComponent->AddInstance(FTransform(FRotator(0, FMath::RandRange(0, 270), 0), FVector(0),FVector(3)));
 	for (int x = 0; x < Sections.Num(); x++) {
 		int Chance = FMath::RandRange(0, 1);
 		if (Chance == 1 || (x == Sections.Num() - 1 && StaticMeshComponent->InstanceBodies.Num() == 0)) {

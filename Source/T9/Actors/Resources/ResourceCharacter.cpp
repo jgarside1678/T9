@@ -5,6 +5,8 @@
 #include "ResourceActor.h"
 #include "T9/AI/AI_Controller.h"
 
+#include "Components/CapsuleComponent.h"
+#include "Navigation/CrowdFollowingComponent.h"
 // Sets default values
 AResourceCharacter::AResourceCharacter()
 {
@@ -17,6 +19,11 @@ AResourceCharacter::AResourceCharacter()
 void AResourceCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	if (Cont) {
+		Cont->GetCrowdManager()->SetAvoidanceGroup(12);
+		Cont->GetCrowdManager()->SetGroupsToAvoid(12);
+		Cont->GetCrowdManager()->SetCrowdCollisionQueryRange(GetCapsuleComponent()->GetScaledCapsuleRadius() + 150);
+	}
 }
 
 // Called every frame

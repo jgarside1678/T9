@@ -4,11 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "T9/Characters/CharacterActor.h"
+#include "AI/Navigation/NavigationAvoidanceTypes.h"
 #include "EnemyCharacter.generated.h"
 
 /**
  * 
  */
+
+
+static FNavAvoidanceMask EnemyGroup;
 
 USTRUCT()
 struct FLoot {

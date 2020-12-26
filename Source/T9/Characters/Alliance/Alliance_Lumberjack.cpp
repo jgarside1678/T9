@@ -25,7 +25,6 @@ AAlliance_Lumberjack::AAlliance_Lumberjack() {
 	if (LowerBodyMesh.Succeeded())MeshPeices.Add(LowerBodyMesh.Object);
 	if (UpperBodyMesh.Succeeded())MeshPeices.Add(UpperBodyMesh.Object);
 	if (BeardMesh.Succeeded())MeshPeices.Add(BeardMesh.Object);
-	//MeshInit();
 	GetMesh()->SetSkeletalMesh(MergeMeshes(FSkeletalMeshMergeParams(MeshPeices, MeshPeices[0]->Skeleton)));
 	if (DefaultMainHandItem.Succeeded()) {
 		Equipment.DefaultMainHand = DefaultMainHandItem.Object;

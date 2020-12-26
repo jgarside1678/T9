@@ -26,8 +26,4 @@ private:
 		//Only Uses this for NPCs not assigned to a spawn building.
 		float MaxWalkDistance = 100.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Search", Meta = (AllowPrivateAccess = "true"))
-		//Only Uses this for NPCs not assigned to a spawn building.
-		bool StayNearSpawnLocation = true;
-
 };

@@ -3,6 +3,7 @@
 
 #include "AI_IsTargetInRange.h"
 #include "AI_Controller.h"
+#include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "T9/Characters/CharacterActor.h"
@@ -19,29 +20,26 @@ EBTNodeResult::Type UAI_IsTargetInRange::ExecuteTask(UBehaviorTreeComponent& Own
 	AAI_Controller* Cont = Cast<AAI_Controller>(OwnerComp.GetAIOwner());
 	ACharacterActor* const NPC = Cast<ACharacterActor>(Cont->GetPawn());
 	FVector const Origin = NPC->GetActorLocation();
-	UObject* Target = Cont->GetBlackboard()->GetValueAsObject(bb_keys::combat_target);
+	AActor* Target = NPC->Target;
+	float AttackRange = NPC->GetAttackRange() + NPC->GetCapsuleComponent()->GetScaledCapsuleRadius() + 100;
 
 	if (Target != nullptr && Target->IsValidLowLevel()) {
 		FVector TargetBounds, TargetOrigin;
-		AActor* TargetActor = (AActor*)Target;
-		if (ABuildingActor* Building = Cast<ABuildingActor>(TargetActor)) {
+		if (ABuildingActor* Building = Cast<ABuildingActor>(Target)) {
 			TargetBounds = Building->BuildingExtent;
 			TargetOrigin = Building->GetActorLocation();
 		}
-		else TargetActor->GetActorBounds(false, TargetOrigin, TargetBounds, false);
-		TargetBounds.X += NPC->GetAttackRange() + NPC->CapsuleRadius * 2 + 50;
-		TargetBounds.Y += NPC->GetAttackRange() + NPC->CapsuleRadius * 2 + 50;
-		TargetBounds.Z += NPC->GetAttackRange() + NPC->CapsuleHeight * 2 + 500;
-		//DrawDebugBox(GetWorld(), TargetOrigin, TargetBounds, FQuat(0, 0, 0, 0), FColor::Red, true, -1, 0, 10);
+		else Target->GetActorBounds(false, TargetOrigin, TargetBounds, false);
+
+		TargetBounds = FVector(TargetBounds + AttackRange);
+
 		if (UKismetMathLibrary::IsPointInBox(Origin, TargetOrigin, TargetBounds)) {
 			Cont->GetBlackboard()->SetValueAsBool(bb_keys::target_is_in_range, true);
 			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 			return EBTNodeResult::Succeeded;
 		}
-		else  Cont->GetBlackboard()->SetValueAsBool(bb_keys::target_is_in_range, false);
+		else  Cont->GetBlackboard()->ClearValue(bb_keys::target_is_in_range);
 	}
-
-
 	FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 	return EBTNodeResult::Failed;
 }

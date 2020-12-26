@@ -3,8 +3,13 @@
 
 #include "EnemyCharacter.h"
 #include "T9/MainPlayerState.h"
+#include "Components/CapsuleComponent.h"
 #include "T9/Actors/Items/ItemActor.h"
 #include "T9/Widgets/HealthBarWidget.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
+#include "T9/AI/AI_Controller.h"
+#include "Navigation/CrowdFollowingComponent.h"
 
 AEnemyCharacter::AEnemyCharacter() {
 	TargetBuildings = true;
@@ -19,6 +24,12 @@ AEnemyCharacter::AEnemyCharacter() {
 void AEnemyCharacter::BeginPlay() {
 	Super::BeginPlay();
 	if (PS) PS->SpawnedEnemyCharacters.Add(this);
+	GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel3);
+	if (Cont) {
+		Cont->GetCrowdManager()->SetAvoidanceGroup(11);
+		Cont->GetCrowdManager()->SetGroupsToAvoid(11);
+		Cont->GetCrowdManager()->SetCrowdCollisionQueryRange(GetCapsuleComponent()->GetScaledCapsuleRadius() + 200);
+	}
 }
 
 void AEnemyCharacter::Tick(float DeltaTime)

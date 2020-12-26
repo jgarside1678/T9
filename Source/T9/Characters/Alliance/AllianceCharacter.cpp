@@ -4,9 +4,9 @@
 #include "AllianceCharacter.h"
 #include "T9/MainPlayerState.h"
 #include "T9/Widgets/HealthBarWidget.h"
-#include "SkeletalMeshMerge.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "Components/CapsuleComponent.h"
 #include "Engine/SkeletalMesh.h"
 #include "Animation/Skeleton.h"
 #include "DrawDebugHelpers.h"
@@ -18,6 +18,9 @@
 #include "BrainComponent.h"
 #include "T9/Actors/Resources/ResourceCharacter.h"
 #include "T9/Actors/Resources/ResourceActor.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
+#include "Navigation/CrowdFollowingComponent.h"
 
 AAllianceCharacter::AAllianceCharacter() {
 	static ConstructorHelpers::FClassFinder<UUserWidget> widget(TEXT("WidgetBlueprint'/Game/UI/AllianceHealthBar.AllianceHealthBar_C'"));
@@ -26,11 +29,22 @@ AAllianceCharacter::AAllianceCharacter() {
 	}
     TypeOfDamage = Alliance;
     GetMesh()->SetCustomDepthStencilValue(2);
+
 }
 
 void AAllianceCharacter::BeginPlay() {
 	Super::BeginPlay();
 	if (PS) PS->SpawnedAllianceCharacters.Add(this);
+    GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel4);
+    if (Cont) {
+        Cont->GetCrowdManager()->SetAvoidanceGroup(10);
+        Cont->GetCrowdManager()->SetGroupsToAvoid(10);
+        //Cont->GetCrowdManager()->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::Low);
+        //Cont->GetCrowdManager()->SetCrowdRotateToVelocity(false);
+        //Cont->GetCrowdManager()->SetCrowdAnticipateTurns(false);
+        //Cont->GetCrowdManager()->SetCrowdSlowdownAtGoal(false);
+        Cont->GetCrowdManager()->SetCrowdCollisionQueryRange(GetCapsuleComponent()->GetScaledCapsuleRadius()+80);
+    }
 }
 
 void AAllianceCharacter::Tick(float DeltaTime)
@@ -39,118 +53,6 @@ void AAllianceCharacter::Tick(float DeltaTime)
 
 }
 
-
-void AAllianceCharacter::MeshInit() {
-	if (MeshPeices.Num() > 0) {
-		TArray<USkeletalMesh*> mergeMeshes;
-		mergeMeshes.Empty(MeshPeices.Num());
-
-		for (int32 i = 0; i < MeshPeices.Num(); i++)
-		{
-			if (MeshPeices[i] == nullptr)
-				continue;
-
-			mergeMeshes.Add(MeshPeices[i]);
-		}
-
-		if (mergeMeshes.Num() > 0)
-		{
-			USkeletalMesh* targetMesh = NewObject<USkeletalMesh>(USkeletalMesh::StaticClass(), USkeletalMesh::StaticClass(), FName("MergedMesh"), RF_Transient);
-			targetMesh->Skeleton = MeshPeices[0]->Skeleton;
-			//targetMesh->SetLODSettings(GetMesh()->SkeletalMesh->LODSettings);
-			TArray<FSkelMeshMergeSectionMapping> sectionMappings;
-			FSkeletalMeshMerge merger(targetMesh, mergeMeshes, sectionMappings, 0);
-			const bool mergeStatus = merger.DoMerge();
-			check(mergeStatus == true);
-
-			GetMesh()->SetSkeletalMesh(targetMesh);
-		}
-	}
-}
-
-
-USkeletalMesh* AAllianceCharacter::MergeMeshes(const FSkeletalMeshMergeParams& Params)
-{
-    TArray<USkeletalMesh*> MeshesToMergeCopy = Params.MeshesToMerge;
-    MeshesToMergeCopy.RemoveAll([](USkeletalMesh* InMesh)
-        {
-            return InMesh == nullptr;
-        });
-    if (MeshesToMergeCopy.Num() <= 1)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Must provide multiple valid Skeletal Meshes in order to perform a merge."));
-        return nullptr;
-    }
-    EMeshBufferAccess BufferAccess = Params.bNeedsCpuAccess ?
-        EMeshBufferAccess::ForceCPUAndGPU :
-        EMeshBufferAccess::Default;
-    TArray<FSkelMeshMergeSectionMapping> SectionMappings;
-    //TArray<FSkelMeshMergeUVTransforms> UvTransforms;
-    //ToMergeParams(Params.MeshSectionMappings, SectionMappings);
-    //ToMergeParams(Params.UVTransformsPerMesh, UvTransforms);
-    bool bRunDuplicateCheck = false;
-    USkeletalMesh* BaseMesh = NewObject<USkeletalMesh>();
-    if (Params.Skeleton && Params.bSkeletonBefore)
-    {
-        BaseMesh->Skeleton = Params.Skeleton;
-        bRunDuplicateCheck = true;
-        for (USkeletalMeshSocket* Socket : BaseMesh->GetMeshOnlySocketList())
-        {
-            if (Socket)
-            {
-                UE_LOG(LogTemp, Warning, TEXT("SkelMeshSocket: %s"), *(Socket->SocketName.ToString()));
-            }
-        }
-        for (USkeletalMeshSocket* Socket : BaseMesh->Skeleton->Sockets)
-        {
-            if (Socket)
-            {
-                UE_LOG(LogTemp, Warning, TEXT("SkelSocket: %s"), *(Socket->SocketName.ToString()));
-            }
-        }
-    }
-    FSkeletalMeshMerge Merger(BaseMesh, MeshesToMergeCopy, SectionMappings, Params.StripTopLODS, BufferAccess);
-    if (!Merger.DoMerge())
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Merge failed!"));
-        return nullptr;
-    }
-    if (Params.Skeleton && !Params.bSkeletonBefore)
-    {
-        BaseMesh->Skeleton = Params.Skeleton;
-    }
-    if (bRunDuplicateCheck)
-    {
-        TArray<FName> SkelMeshSockets;
-        TArray<FName> SkelSockets;
-        for (USkeletalMeshSocket* Socket : BaseMesh->GetMeshOnlySocketList())
-        {
-            if (Socket)
-            {
-                SkelMeshSockets.Add(Socket->GetFName());
-                UE_LOG(LogTemp, Warning, TEXT("SkelMeshSocket: %s"), *(Socket->SocketName.ToString()));
-            }
-        }
-        for (USkeletalMeshSocket* Socket : BaseMesh->Skeleton->Sockets)
-        {
-            if (Socket)
-            {
-                SkelSockets.Add(Socket->GetFName());
-                UE_LOG(LogTemp, Warning, TEXT("SkelSocket: %s"), *(Socket->SocketName.ToString()));
-            }
-        }
-        TSet<FName> UniqueSkelMeshSockets;
-        TSet<FName> UniqueSkelSockets;
-        UniqueSkelMeshSockets.Append(SkelMeshSockets);
-        UniqueSkelSockets.Append(SkelSockets);
-        int32 Total = SkelSockets.Num() + SkelMeshSockets.Num();
-        int32 UniqueTotal = UniqueSkelMeshSockets.Num() + UniqueSkelSockets.Num();
-        UE_LOG(LogTemp, Warning, TEXT("SkelMeshSocketCount: %d | SkelSocketCount: %d | Combined: %d"), SkelMeshSockets.Num(), SkelSockets.Num(), Total);
-        UE_LOG(LogTemp, Warning, TEXT("SkelMeshSocketCount: %d | SkelSocketCount: %d | Combined: %d"), UniqueSkelMeshSockets.Num(), UniqueSkelSockets.Num(), UniqueTotal);
-        UE_LOG(LogTemp, Warning, TEXT("Found Duplicates: %s"), *((Total != UniqueTotal) ? FString("True") : FString("False")));
-    }
-    return BaseMesh;
-}
 
 void AAllianceCharacter::Command(FHitResult Hit)
 {
@@ -175,8 +77,8 @@ FVector AAllianceCharacter::GetCommandLocation() {
     return CommandLocation;
 }
 
-void AAllianceCharacter::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invuln, bool SpawnController)
+void AAllianceCharacter::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invuln)
 {
-    Super::SpawnInit(BuildingSpawn, SpawnLevel, Invuln, SpawnController);
+    Super::SpawnInit(BuildingSpawn, SpawnLevel, Invuln);
     //Cont = Cast<AAI_Controller>(GetController());
 }

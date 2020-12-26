@@ -62,7 +62,51 @@ struct T9_API FCharacterEquipment {
 		FTransform DefaultOffHandTransform;
 };
 
+USTRUCT(BlueprintType)
+struct T9_API FSkeletalMeshMergeParams
+{
+	GENERATED_BODY()
 
+		FSkeletalMeshMergeParams()
+	{
+		StripTopLODS = 0;
+		bNeedsCpuAccess = false;
+		bSkeletonBefore = false;
+		Skeleton = nullptr;
+	}
+
+	FSkeletalMeshMergeParams(TArray<class USkeletalMesh*> Meshes, class USkeleton* Skele)
+	{
+		MeshesToMerge = Meshes;
+		StripTopLODS = 0;
+		bNeedsCpuAccess = false;
+		bSkeletonBefore = false;
+		Skeleton = Skele;
+	}
+	// An optional array to map sections from the source meshes to merged section entries
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//    TArray<FSkelMeshMergeSectionMapping_BP> MeshSectionMappings;
+	//// An optional array to transform the UVs in each mesh
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//    TArray<FSkelMeshMergeUVTransformMapping> UVTransformsPerMesh;
+	// The list of skeletal meshes to merge.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<class USkeletalMesh*> MeshesToMerge;
+	// The number of high LODs to remove from input meshes
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 StripTopLODS;
+	// Whether or not the resulting mesh needs to be accessed by the CPU for any reason (e.g. for spawning particle effects).
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		uint32 bNeedsCpuAccess : 1;
+	// Update skeleton before merge. Otherwise, update after.
+	// Skeleton must also be provided.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		uint32 bSkeletonBefore : 1;
+	// Skeleton that will be used for the merged mesh.
+	// Leave empty if the generated skeleton is OK.
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		class USkeleton* Skeleton;
+};
 
 UCLASS()
 class T9_API ACharacterActor : public ACharacter, public IDamageInterface, public ISelectInterface
@@ -80,8 +124,17 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere)
+		TArray<USkeletalMesh*> MeshPeices;
+
+	UFUNCTION(BlueprintCallable, Category = "Mesh Merge", meta = (UnsafeDuringActorConstruction = "true"))
+		static class USkeletalMesh* MergeMeshes(const FSkeletalMeshMergeParams& Params);
+
 	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
 		class AAI_Controller* Cont;
+
+	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
+		float CapsuleRadiusMultiplier = 1;
 
 	UPROPERTY(VisibleAnywhere, Category = "Character Basics")
 		int Level = 1;
@@ -166,8 +219,15 @@ protected:
 
 	//Combat
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
 		TSubclassOf<class AProjectile> Projectile = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
+		FVector RelativeProjectileSpawnLocation;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
+		float ProjectileDelay = 0.0f;
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
 		TEnumAsByte<DamageType> TypeOfDamage;
@@ -199,6 +259,9 @@ protected:
 	UFUNCTION(Category = "Character Combat", Meta = (AllowPrivateAccess = "true"))
 	    virtual void DeathInit();
 
+
+	UFUNCTION(Category = "Character Movement", Meta = (AllowPrivateAccess = "true"))
+		void ChangeMovementSpeed(float NewSpeed);
 
 public:	
 	// Called every frame
@@ -239,7 +302,7 @@ public:
 
 
 	UFUNCTION()
-		virtual void SpawnInit(AActor* BuildingSpawn, int SpawnLevel = 1, bool Invuln = false, bool SpawnController = true);
+		virtual void SpawnInit(AActor* BuildingSpawn, int SpawnLevel = 1, bool Invuln = false);
 
 	UFUNCTION()
 		class AActor* GetSpawnBuilding();

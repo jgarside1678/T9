@@ -25,6 +25,7 @@ protected:
 
 	virtual void Upgrade() override;
 
+
 	UPROPERTY()
 		TArray<class UMaterialInstance*> HairColours1;
 

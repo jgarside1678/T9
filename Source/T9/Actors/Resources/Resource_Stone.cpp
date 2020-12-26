@@ -31,7 +31,7 @@ AResource_Stone::AResource_Stone() {
 	Sections.Add(FVector2D(FMath::RandRange(-100, 100), FMath::RandRange(300, 100)));
 	Sections.Add(FVector2D(FMath::RandRange(100, 300), FMath::RandRange(300, 100)));
 
-
+	StaticMeshComponent->AddInstance(FTransform(FRotator(0, FMath::RandRange(0, 270), 0), FVector(0), FVector(3)));
 	for (int x = 0; x < Sections.Num(); x++) {
 		int Chance = FMath::RandRange(0, 1);
 		if (Chance == 1 || (x == Sections.Num() - 1 && StaticMeshComponent->InstanceBodies.Num() == 0)) {

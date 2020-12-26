@@ -8,6 +8,8 @@
 #include "UObject/ConstructorHelpers.h"
 #include "T9/Actors/Projectiles/Projectile_Magic_DeathsDecay.h"
 #include "T9/Actors/Items/Tools/Item_Wooden_Pickaxe.h"
+#include "T9/Characters/Enemies/Enemy_Skeleton_Warrior.h"
+#include "T9/Characters/Enemies/Enemy_Skeleton_Archer.h"
 
 
 AEnemy_Lich_Mage::AEnemy_Lich_Mage(const FObjectInitializer& ObjectInitializer) {
@@ -45,10 +47,14 @@ AEnemy_Lich_Mage::AEnemy_Lich_Mage(const FObjectInitializer& ObjectInitializer) 
 			SpecialAttackMontage = SpecialMont.Object;
 		}
 	}
+	MinionTypes.Add(AEnemy_Skeleton_Warrior::StaticClass());
+	MinionTypes.Add(AEnemy_Skeleton_Archer::StaticClass());
 	AIControllerClass = ABasic_Enemy_Controller::StaticClass();
 	SetActorScale3D(FVector(3));
 	//DropTable.Add(FLoot{ 1, AItem_Wooden_Pickaxe::StaticClass() });
 	DropTable.Add(FLoot{ 10, nullptr });
+
+	CapsuleRadiusMultiplier = 0.5f;
 }
 
 
@@ -99,12 +105,15 @@ void AEnemy_Lich_Mage::SpawnMinions(int Number)
 {
 	if (MinionTypes.Num() > 0) {
 		for (int i = 0; i < Number; i++) {
-			auto result = FVector2D(FMath::VRand());
-			result.Normalize();
-			result *= FMath::RandRange(0, 200);
+			auto Vector = FMath::VRand();
+			Vector *= FMath::RandRange(0, 500);
+			Vector += this->GetActorLocation();
+			
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-			ACharacterActor* SpawnedActorRef = GetWorld()->SpawnActor<ACharacterActor>(MinionTypes[FMath::RandRange(0, MinionTypes.Num())], FVector(result.X, result.Y, 10), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+			ACharacterActor* SpawnedActorRef = GetWorld()->SpawnActor<ACharacterActor>(MinionTypes[FMath::RandRange(0, MinionTypes.Num()-1)], FVector(Vector.X, Vector.Y, 150), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+			SpawnedActorRef->SpawnInit(nullptr, Level);
+			SpawnedMinions.Add(SpawnedActorRef);
 		}
 	}
 }

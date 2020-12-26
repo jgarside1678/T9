@@ -7,7 +7,7 @@
 #include "T9/MainPlayerState.h"
 #include "GameFramework/Character.h"
 #include "T9/Characters/Alliance/Alliance_Wizard.h"
-#include "T9/Actors/Projectiles/Projectile_Magic_Fire.h"
+#include "Components/CapsuleComponent.h"
 #include "T9/Actors/Projectiles/Projectile_Magic_Water.h"
 
 
@@ -110,12 +110,22 @@ ABuilding_Wizards_Tower::ABuilding_Wizards_Tower(const FObjectInitializer& Objec
 	}
 	else BuildingDefender->SetMaterial(5, HairColours2[FMath::RandRange(0, HairColours2.Num() - 1)]);
 
+
+
+
+
 }
 
 void ABuilding_Wizards_Tower::BeginPlay()
 {
 	Super::BeginPlay();
-
+	FVector Scale = StaticMeshComponent->GetRelativeScale3D();
+	FVector Bounds = StaticMeshComponent->Bounds.BoxExtent;
+	const float NewRadius = FMath::Max(Bounds.X, Bounds.Y) * 0.5f * FMath::Max(Scale.X, Scale.Y);
+	CapsuleComponent->SetCapsuleRadius(NewRadius * 3.5);
+	CapsuleComponent->SetCapsuleHalfHeight(600);
+	CapsuleComponent->SetCanEverAffectNavigation(false);
+	CapsuleComponent->SetHiddenInGame(false);
 }
 
 void ABuilding_Wizards_Tower::Upgrade()

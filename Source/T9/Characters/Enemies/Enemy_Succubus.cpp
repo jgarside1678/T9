@@ -9,6 +9,7 @@
 #include "T9/Actors/Items/Tools/Item_Wooden_Pickaxe.h"
 
 AEnemy_Succubus::AEnemy_Succubus(const FObjectInitializer& ObjectInitializer) {
+	//FCharacterLevels:	Base Damage / AttackSpeed / AttackRange / MaxHealth / Armour / KillXP / KillGold
 	Levels.Add(1, FCharacterLevels{ 50, 150, 0, 300, 0, 50, 50 });
 	Levels.Add(2, FCharacterLevels{ 50, 150, 0, 400, 0, 50, 50 });
 	Levels.Add(3, FCharacterLevels{ 50, 150, 0, 500, 0, 50, 50 });

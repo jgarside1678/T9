@@ -21,7 +21,7 @@
 #include "T9/Widgets/HealthBarWidget.h"
 #include "Components/WidgetComponent.h"
 #include "T9/Widgets/QuickSelectMenu.h"
-
+#include "Components/CapsuleComponent.h"
 #include "InstancedFoliageActor.h"
 #include "FoliageType.h"
 // Sets default values
@@ -33,19 +33,33 @@ ABuildingActor::ABuildingActor() :
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	SetActorTickInterval(0.025);
+
+
 	BuildingRangeCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("DefenceRangeCollider"));
+	RootComponent = BuildingRangeCollider;
 	BuildingRangeCollider->SetCollisionProfileName("Trigger");
+	BuildingRangeCollider->SetupAttachment(RootComponent);
 	BuildingRangeCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Ignore);
 	BuildingRangeCollider->SetCanEverAffectNavigation(false);
-	RootComponent = BuildingRangeCollider;
+	BuildingRangeCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel3, ECollisionResponse::ECR_Overlap);
+	BuildingRangeCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel4, ECollisionResponse::ECR_Overlap);
 	//Needed Because all the meshs are made for a right handed cartesian graph.
 	MeshDisplacement = CreateDefaultSubobject<USceneComponent>(TEXT("MeshDisplacement"));
 	MeshDisplacement->SetupAttachment(RootComponent);
 	MeshDisplacement->SetRelativeRotation(FRotator(0, -90, 0));
+	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleCollider"));
+	CapsuleComponent->SetupAttachment(MeshDisplacement);
+	CapsuleComponent->SetCollisionProfileName("Pawn");
+	CapsuleComponent->SetupAttachment(MeshDisplacement);
+	CapsuleComponent->SetCanEverAffectNavigation(true);
+	CapsuleComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel4, ECollisionResponse::ECR_Ignore);
+	CapsuleComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECollisionResponse::ECR_Ignore);
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	StaticMeshComponent->SetupAttachment(MeshDisplacement);
 	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
 	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel3, ECollisionResponse::ECR_Ignore);
+	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel4, ECollisionResponse::ECR_Ignore);
 	if (StaticMeshComponent) {
 		StaticMeshComponent->SetCustomDepthStencilValue(OutlineColour);
 		StaticMeshComponent->SetRenderCustomDepth(false);
@@ -104,6 +118,7 @@ ABuildingActor::ABuildingActor() :
 void ABuildingActor::BeginPlay()
 {
 	Super::BeginPlay();
+
 	if (Upgrades.Num() == 0) Upgrades.Add(1, FBuildingUpgrades{ 100.0f, 100 ,100.0f, 0.0f, nullptr, FBuildingCosts{100, 10, 10, 10}, FBuildingAttack{}, FBuildingProduction{0} });
 	if (StaticMeshComponent->GetStaticMesh()) {
 		BuildingDetectionRange = Upgrades[Level].Attack.AttackRangeMultipler;

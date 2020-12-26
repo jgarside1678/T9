@@ -30,7 +30,6 @@ AResourceCharacter_Bear::AResourceCharacter_Bear() {
 			AttackMontage = AnimationMont.Object;
 		}
 	}
-	CapsuleRadius = 100;
 
 	AIControllerClass = AResource_Bear_Controller::StaticClass();
 }

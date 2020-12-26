@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "T9/Actors/Projectiles/Projectile.h"
-#include "BuildingActor.h"
+#include "T9/Actors/Buildings/BuildingActor.h"
 #include "T9/Characters/Alliance/AllianceCharacter.h"
 #include "DefensiveBuildingActor.generated.h"
 
