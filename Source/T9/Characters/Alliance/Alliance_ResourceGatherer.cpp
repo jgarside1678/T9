@@ -2,7 +2,7 @@
 
 
 #include "Alliance_ResourceGatherer.h"
-#include "Alliance_Gatherer_Controller.h"
+#include "T9/AI/Alliance_Gatherer_Controller.h"
 #include "T9/MainPlayerState.h"
 #include "T9/MainPlayerController.h"
 #include "T9/Widgets/HealthBarWidget.h"

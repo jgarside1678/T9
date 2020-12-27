@@ -19,5 +19,11 @@ public:
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Materials")
-		TArray<class UMaterialInstance*> MeshMaterials;
+		TArray<class UMaterialInstance*> MeshMaterialsBody;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Materials")
+		TArray<class UMaterialInstance*> MeshMaterialsArmour;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Materials")
+		TArray<class UMaterialInstance*> MeshMaterialsBow;
 };

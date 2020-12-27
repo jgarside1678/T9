@@ -28,14 +28,27 @@ AEnemy_Skeleton_Archer::AEnemy_Skeleton_Archer(const FObjectInitializer& ObjectI
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpecialMont(TEXT("AnimMontage'/Game/Units/Enemies/StylizedEnemyNPC/Animations/SkeletonArcher/Skeleton_Archer_Special_Attack_Montage.Skeleton_Archer_Special_Attack_Montage'"));
 
 	//Materials
-	//static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh1Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Spider_Green.MI_Spider_Green'"));
-	//if (Mesh1Material.Succeeded()) MeshMaterials.Add(Mesh1Material.Object);
-	//static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh2Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Spider_Orange.MI_Spider_Orange'"));
-	//if (Mesh2Material.Succeeded()) MeshMaterials.Add(Mesh2Material.Object);
-	//static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh3Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Spider_Purple.MI_Spider_Purple'"));
-	//if (Mesh3Material.Succeeded()) MeshMaterials.Add(Mesh3Material.Object);
-	//static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh4Material(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedFantasyForestCreatures/Materials/Instances/MI_Spider_Brown.MI_Spider_Brown'"));
-	//if (Mesh4Material.Succeeded()) MeshMaterials.Add(Mesh4Material.Object);
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh1MaterialArmour(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedEnemyNPC/Materials/Instances/SkeletonArcher/MI_SkeletonArcher_Armor_Black.MI_SkeletonArcher_Armor_Black'"));
+	if (Mesh1MaterialArmour.Succeeded()) MeshMaterialsArmour.Add(Mesh1MaterialArmour.Object);
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh2MaterialArmour(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedEnemyNPC/Materials/Instances/SkeletonArcher/MI_SkeletonArcher_Armor_Green.MI_SkeletonArcher_Armor_Green'"));
+	if (Mesh2MaterialArmour.Succeeded()) MeshMaterialsArmour.Add(Mesh2MaterialArmour.Object);
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh3MaterialArmour(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedEnemyNPC/Materials/Instances/SkeletonArcher/MI_SkeletonArcher_Armor_Yellow.MI_SkeletonArcher_Armor_Yellow'"));
+	if (Mesh3MaterialArmour.Succeeded()) MeshMaterialsArmour.Add(Mesh3MaterialArmour.Object);
+
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh1MaterialBody(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedEnemyNPC/Materials/Instances/SkeletonArcher/MI_SkeletonArcher_Body_Black.MI_SkeletonArcher_Body_Black'"));
+	if (Mesh1MaterialBody.Succeeded()) MeshMaterialsBody.Add(Mesh1MaterialBody.Object);
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh2MaterialBody(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedEnemyNPC/Materials/Instances/SkeletonArcher/MI_SkeletonArcher_Body_Green.MI_SkeletonArcher_Body_Green'"));
+	if (Mesh2MaterialBody.Succeeded()) MeshMaterialsBody.Add(Mesh2MaterialBody.Object);
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh3MaterialBody(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedEnemyNPC/Materials/Instances/SkeletonArcher/MI_SkeletonArcher_Body_Yellow.MI_SkeletonArcher_Body_Yellow'"));
+	if (Mesh3MaterialBody.Succeeded()) MeshMaterialsBody.Add(Mesh3MaterialBody.Object);
+
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh1MaterialBow(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedEnemyNPC/Materials/Instances/SkeletonArcher/MI_SkeletonArcher_Bow_Black.MI_SkeletonArcher_Bow_Black'"));
+	if (Mesh1MaterialBow.Succeeded()) MeshMaterialsBow.Add(Mesh1MaterialBow.Object);
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh2MaterialBow(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedEnemyNPC/Materials/Instances/SkeletonArcher/MI_SkeletonArcher_Bow_Green.MI_SkeletonArcher_Bow_Green'"));
+	if (Mesh2MaterialBow.Succeeded()) MeshMaterialsBow.Add(Mesh2MaterialBow.Object);
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> Mesh3MaterialBow(TEXT("MaterialInstanceConstant'/Game/Units/Enemies/StylizedEnemyNPC/Materials/Instances/SkeletonArcher/MI_SkeletonArcher_Bow_Yellow.MI_SkeletonArcher_Bow_Yellow'"));
+	if (Mesh3MaterialBow.Succeeded()) MeshMaterialsBow.Add(Mesh3MaterialBow.Object);
+
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> WeaponMesh(TEXT("SkeletalMesh'/Game/Units/Enemies/StylizedEnemyNPC/Meshes/SkeletonArcher/Weapons/SK_Bow_v2.SK_Bow_v2'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> BodyMesh(TEXT("SkeletalMesh'/Game/Units/Enemies/StylizedEnemyNPC/Meshes/SkeletonArcher/SK_Skeleton.SK_Skeleton'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> HelmetMesh(TEXT("SkeletalMesh'/Game/Units/Enemies/StylizedEnemyNPC/Meshes/SkeletonArcher/ModularBodyParts/SK_Helm.SK_Helm'"));
@@ -66,7 +79,10 @@ AEnemy_Skeleton_Archer::AEnemy_Skeleton_Archer(const FObjectInitializer& ObjectI
 	if (SpecialMont.Succeeded()) {
 		SpecialAttackMontage = SpecialMont.Object;
 	}
-	if (MeshMaterials.Num() > 0) GetMesh()->SetMaterial(0, MeshMaterials[FMath::RandRange(0, MeshMaterials.Num() - 1)]);
+	int MaterialIndex = FMath::RandRange(0, MeshMaterialsBow.Num() - 1);
+	if (MeshMaterialsBow.Num() > 0 && MaterialIndex <= MeshMaterialsBow.Num()-1) GetMesh()->SetMaterial(0, MeshMaterialsBow[MaterialIndex]);
+	if (MeshMaterialsBody.Num() > 0 && MaterialIndex <= MeshMaterialsBody.Num() - 1) GetMesh()->SetMaterial(1, MeshMaterialsBody[MaterialIndex]);
+	if (MeshMaterialsArmour.Num() > 0 && MaterialIndex <= MeshMaterialsArmour.Num() - 1) GetMesh()->SetMaterial(2, MeshMaterialsArmour[MaterialIndex]);
 	AIControllerClass = ABasic_Enemy_Controller::StaticClass();
 	ChangeMovementSpeed(150);
 }
