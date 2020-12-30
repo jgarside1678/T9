@@ -7,6 +7,12 @@
 #include "T9/MainPlayerController.h"
 #include "T9/Widgets/HealthBarWidget.h"
 
+#include "T9/AI/AI_Controller.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
+#include "BrainComponent.h"
+#include "T9/BlackBoard_Keys.h"
+
 AAlliance_ResourceGatherer::AAlliance_ResourceGatherer() {
 
 	AIControllerClass = AAlliance_Gatherer_Controller::StaticClass();
@@ -74,6 +80,16 @@ FGathererLevels AAlliance_ResourceGatherer::GetGathererUpgradeStats()
 	if (GatheringLevels.Contains(Level+1)) return GatheringLevels[Level+1];
 	else if(GatheringLevels.Contains(Level)) return GatheringLevels[Level];
 	else return FGathererLevels();
+}
+
+void AAlliance_ResourceGatherer::SetHuntTarget(AActor* NewTarget)
+{
+	Target = NewTarget;
+	TargetInterface = Cast<IDamageInterface>(Target);
+	if (Cont) {
+		Cont->GetBlackboard()->SetValueAsObject(bb_keys::hunt, Target);
+		if (Target) Cont->BrainComponent->RestartLogic();
+	}
 }
 
 void AAlliance_ResourceGatherer::CalculateGatherAmount()

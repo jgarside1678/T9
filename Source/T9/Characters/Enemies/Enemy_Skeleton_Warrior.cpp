@@ -42,8 +42,12 @@ AEnemy_Skeleton_Warrior::AEnemy_Skeleton_Warrior(const FObjectInitializer& Objec
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> KneePadsMesh(TEXT("SkeletalMesh'/Game/Units/Enemies/StylizedEnemyNPC/Meshes/SkeletonWarrior/ModularBodyParts/SK_KneePads.SK_KneePads'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> ShoulderPadLMesh(TEXT("SkeletalMesh'/Game/Units/Enemies/StylizedEnemyNPC/Meshes/SkeletonWarrior/ModularBodyParts/SK_ShoulderPad_L_02.SK_ShoulderPad_L_02'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> ShoulderPadRMesh(TEXT("SkeletalMesh'/Game/Units/Enemies/StylizedEnemyNPC/Meshes/SkeletonWarrior/ModularBodyParts/SK_ShoulderPad_R_02.SK_ShoulderPad_R_02'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Weapon(TEXT("SkeletalMesh'/Game/Units/Enemies/StylizedEnemyNPC/Meshes/SkeletonWarrior/Weapons/SkeletonWarriorSword.SkeletonWarriorSword'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> ShieldMesh(TEXT("SkeletalMesh'/Game/Units/Enemies/StylizedEnemyNPC/Meshes/SkeletonWarrior/Weapons/SkeletonShield.SkeletonShield'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> DefaultMainHandItem(TEXT("StaticMesh'/Game/Units/Enemies/StylizedEnemyNPC/Meshes/SkeletonWarrior/Weapons/SM_Sword_1h.SM_Sword_1h'"));
 	if (BodyMesh.Succeeded())MeshPeices.Add(BodyMesh.Object);
+	if (Weapon.Succeeded())MeshPeices.Add(Weapon.Object);
+	if (ShieldMesh.Succeeded())MeshPeices.Add(ShieldMesh.Object);
 	if (HelmetMesh.Succeeded())MeshPeices.Add(HelmetMesh.Object);
 	if (BootsMesh.Succeeded())MeshPeices.Add(BootsMesh.Object);
 	if (ChestClothMesh.Succeeded())MeshPeices.Add(ChestClothMesh.Object);
@@ -63,5 +67,5 @@ AEnemy_Skeleton_Warrior::AEnemy_Skeleton_Warrior(const FObjectInitializer& Objec
 	}
 	if (MeshMaterials.Num() > 0) GetMesh()->SetMaterial(0, MeshMaterials[FMath::RandRange(0, MeshMaterials.Num() - 1)]);
 	AIControllerClass = ABasic_Enemy_Controller::StaticClass();
-	ChangeMovementSpeed(150);
+	ChangeMovementSpeed(250);
 }

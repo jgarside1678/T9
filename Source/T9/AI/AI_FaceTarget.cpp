@@ -22,14 +22,11 @@ EBTNodeResult::Type UAI_FaceTarget::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	UObject* Target = Cont->GetBlackboard()->GetValueAsObject(BlackboardKey.SelectedKeyName);
 
 	if (Target != nullptr && Target->IsValidLowLevel()) {
-		FVector TargetBounds, TargetOrigin;
 		AActor* TargetActor = (AActor*)Target;
-		TargetActor->GetActorBounds(false, TargetOrigin, TargetBounds, false);
-		FVector Forward = TargetOrigin - Origin;
-		FRotator Rotation = UKismetMathLibrary::MakeRotFromXZ(Forward, FVector(0, 0, 0));
+		FVector TargetOrigin = TargetActor->GetActorLocation();
+		FRotator Rotation = UKismetMathLibrary::FindLookAtRotation(Origin, TargetOrigin);
 		NPC->SetActorRotation(FRotator(0, Rotation.Yaw, 0));
 	}
-
 
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

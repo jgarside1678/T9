@@ -386,7 +386,7 @@ void ACharacterActor::AddMainHand(AItemActor* NewMainHand)
 		ItemModifiers += Equipment.MainHand->GetItemModifiers();
 		BaseCalculate();
 		SheathMainHand();
-	}
+	} 
 }
 
 void ACharacterActor::ResetEquipment()
@@ -396,6 +396,7 @@ void ACharacterActor::ResetEquipment()
 		Equipment.MainHand = nullptr;
 		MainHandItem->SetStaticMesh(Equipment.DefaultMainHand);
 		MainHandItem->SetRelativeTransform(Equipment.DefaultMainHandTransformSheathed);
+		AttackMontage = Equipment.DefaultAttackMontage;
 	}
 	else {
 		MainHandItem->SetStaticMesh(NULL);

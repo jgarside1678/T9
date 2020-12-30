@@ -24,6 +24,6 @@ AItem_Iron_PickAxe::AItem_Iron_PickAxe() {
 		ItemMesh->SetRelativeRotation(FRotator(90.000000, -23, 90.000000));
 	}
 	GoldValue = 40;
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> MaleAttackMontage(TEXT("AnimMontage'/Game/Units/Alliance/StylizedHumanMale/Animations/HumanMale_Attack_2Handed_Overhead_Montage.HumanMale_Attack_2Handed_Overhead_Montage'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> MaleAttackMontage(TEXT("AnimMontage'/Game/Units/Alliance/StylizedHumanMale/Animations/Human_Male_2H_Attack_Montage.Human_Male_2H_Attack_Montage'"));
 	if (MaleAttackMontage.Succeeded()) ItemAnimations.Add(HumanMale, MaleAttackMontage.Object);
 }

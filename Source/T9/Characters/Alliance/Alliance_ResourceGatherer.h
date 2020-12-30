@@ -68,6 +68,9 @@ public:
 		FGathererLevels GetGathererUpgradeStats();
 
 	UFUNCTION()
+		void SetHuntTarget(AActor* NewTarget);
+
+	UFUNCTION()
 		void CalculateGatherAmount();
 
 	UFUNCTION()

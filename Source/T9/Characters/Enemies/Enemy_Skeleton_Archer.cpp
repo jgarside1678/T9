@@ -84,5 +84,5 @@ AEnemy_Skeleton_Archer::AEnemy_Skeleton_Archer(const FObjectInitializer& ObjectI
 	if (MeshMaterialsBody.Num() > 0 && MaterialIndex <= MeshMaterialsBody.Num() - 1) GetMesh()->SetMaterial(1, MeshMaterialsBody[MaterialIndex]);
 	if (MeshMaterialsArmour.Num() > 0 && MaterialIndex <= MeshMaterialsArmour.Num() - 1) GetMesh()->SetMaterial(2, MeshMaterialsArmour[MaterialIndex]);
 	AIControllerClass = ABasic_Enemy_Controller::StaticClass();
-	ChangeMovementSpeed(150);
+	ChangeMovementSpeed(250);
 }

@@ -13,6 +13,7 @@ AResourceCharacter::AResourceCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	TypeOfDamage = DamageType::All;
+	CapsuleRadiusMultiplier = 2;
 }
 
 // Called when the game starts or when spawned
@@ -20,9 +21,10 @@ void AResourceCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	if (Cont) {
-		Cont->GetCrowdManager()->SetAvoidanceGroup(12);
-		Cont->GetCrowdManager()->SetGroupsToAvoid(12);
-		Cont->GetCrowdManager()->SetCrowdCollisionQueryRange(GetCapsuleComponent()->GetScaledCapsuleRadius() + 150);
+		Cont->GetCrowdManager()->SetAvoidanceGroup(4);
+		Cont->GetCrowdManager()->SetGroupsToAvoid(6);
+		Cont->GetCrowdManager()->SetGroupsToIgnore(1);
+		Cont->GetCrowdManager()->SetCrowdCollisionQueryRange(GetCapsuleComponent()->GetScaledCapsuleRadius() + 100);
 	}
 }
 

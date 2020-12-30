@@ -21,19 +21,18 @@ EBTNodeResult::Type UAI_IsTargetInRange::ExecuteTask(UBehaviorTreeComponent& Own
 	ACharacterActor* const NPC = Cast<ACharacterActor>(Cont->GetPawn());
 	FVector const Origin = NPC->GetActorLocation();
 	AActor* Target = NPC->Target;
-	float AttackRange = NPC->GetAttackRange() + NPC->GetCapsuleComponent()->GetScaledCapsuleRadius() + 100;
-
+	float AttackRange = NPC->GetAttackRange() + NPC->GetCapsuleComponent()->GetScaledCapsuleRadius() + 25;
+	float Radius;
 	if (Target != nullptr && Target->IsValidLowLevel()) {
-		FVector TargetBounds, TargetOrigin;
+		FVector TargetOrigin = Target->GetActorLocation();
 		if (ABuildingActor* Building = Cast<ABuildingActor>(Target)) {
-			TargetBounds = Building->BuildingExtent;
-			TargetOrigin = Building->GetActorLocation();
+			Radius = Building->GetCapsuleComponent()->GetScaledCapsuleRadius();
 		}
-		else Target->GetActorBounds(false, TargetOrigin, TargetBounds, false);
+		else if (ACharacter* Character = (ACharacter*)Target) Radius = Character->GetCapsuleComponent()->GetScaledCapsuleRadius();
+		float ActualDistance = (Origin - TargetOrigin).Size();
+		float NeededDistance = Radius + AttackRange;
 
-		TargetBounds = FVector(TargetBounds + AttackRange);
-
-		if (UKismetMathLibrary::IsPointInBox(Origin, TargetOrigin, TargetBounds)) {
+		if (ActualDistance <= NeededDistance) {
 			Cont->GetBlackboard()->SetValueAsBool(bb_keys::target_is_in_range, true);
 			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 			return EBTNodeResult::Succeeded;

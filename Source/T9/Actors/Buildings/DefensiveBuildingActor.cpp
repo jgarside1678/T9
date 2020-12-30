@@ -74,7 +74,7 @@ void ADefensiveBuildingActor::AttackTarget()
 				FActorSpawnParameters SpawnParams;
 				if (BuildingDefender) {
 					UE_LOG(LogTemp, Warning, TEXT("Attack2"));
-					ProjectileSpawn->SetWorldLocation(BuildingDefender->GetSocketLocation("hand_r"));
+					ProjectileSpawn->SetWorldLocation(BuildingDefender->GetSocketLocation("middle_03_r"));
 					if (DefenderAttackAnimation)	BuildingDefender->GetAnimInstance()->Montage_Play(DefenderAttackAnimation, 1 / (AttackInterval / DefenderAttackAnimation->CalculateSequenceLength()));
 				//BuildingDefender->GetAnimInstance()->
 				}

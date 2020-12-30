@@ -47,6 +47,9 @@ struct T9_API FCharacterEquipment {
 		class UStaticMesh* DefaultMainHand = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = "Equipment")
+		class UAnimMontage* DefaultAttackMontage = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Equipment")
 		FTransform DefaultMainHandTransformEquiped;
 
 	UPROPERTY(VisibleAnywhere, Category = "Equipment")
@@ -59,7 +62,10 @@ struct T9_API FCharacterEquipment {
 		class UStaticMesh* DefaultOffHand = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = "Equipment")
-		FTransform DefaultOffHandTransform;
+		FTransform DefaultOffHandTransformEquiped;
+
+	UPROPERTY(VisibleAnywhere, Category = "Equipment")
+		FTransform DefaultOffHandTransformSheathed;
 };
 
 USTRUCT(BlueprintType)

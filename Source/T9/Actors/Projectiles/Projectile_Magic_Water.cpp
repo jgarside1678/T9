@@ -25,7 +25,7 @@ void AProjectile_Magic_Water::BeginOverlap(UPrimitiveComponent* OverlappedCompon
 	IDamageInterface* Enemy = Cast<IDamageInterface>(OtherActor);
 	if (Enemy != nullptr) Enemy->TakeDamage(Spawner, Damage, TypeOfDamage);
 	if (OtherActor == Target) {
-		this->SetActorScale3D(FVector(10));
+		this->SetActorScale3D(FVector(5));
 		ProjectileExplode();
 		ProjectileDestroy();
 	}

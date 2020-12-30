@@ -26,9 +26,9 @@ void AEnemyCharacter::BeginPlay() {
 	if (PS) PS->SpawnedEnemyCharacters.Add(this);
 	GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel3);
 	if (Cont) {
-		Cont->GetCrowdManager()->SetAvoidanceGroup(11);
-		Cont->GetCrowdManager()->SetGroupsToAvoid(11);
-		Cont->GetCrowdManager()->SetCrowdCollisionQueryRange(GetCapsuleComponent()->GetScaledCapsuleRadius() + 200);
+		Cont->GetCrowdManager()->SetAvoidanceGroup(2);
+		Cont->GetCrowdManager()->SetGroupsToAvoid(6);
+		Cont->GetCrowdManager()->SetCrowdCollisionQueryRange(GetCapsuleComponent()->GetScaledCapsuleRadius() + 2000);
 	}
 }
 

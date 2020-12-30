@@ -55,20 +55,8 @@ EBTNodeResult::Type UAI_FindClosestResourceCharacter::ExecuteTask(UBehaviorTreeC
 			if (CommandedTarget) TargetCharacter = CommandedTarget;
 			else ClosestResource->GetClosestSpawnedCharacter(Origin, TargetCharacter);
 			if (TargetCharacter) {
-				
-				UE_LOG(LogTemp, Warning, TEXT("Wagwan"));
-				float ClosestResourceCharacterBounds = TargetCharacter->CapsuleRadius;
-				FVector ClosestResourceCharacterOrigin = TargetCharacter->GetActorLocation();
-				FVector Direction = (Origin - ClosestResourceCharacterOrigin).GetSafeNormal();
-				FVector Min = FVector(ClosestResourceCharacterOrigin.X - ClosestResourceCharacterBounds, ClosestResourceCharacterOrigin.Y - ClosestResourceCharacterBounds, 1);
-				FVector Max = FVector(ClosestResourceCharacterOrigin.X + ClosestResourceCharacterBounds, ClosestResourceCharacterOrigin.Y + ClosestResourceCharacterBounds, 1);
-				FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(Origin, Min - NPC->CapsuleRadius - NPC->GetAttackRange(), Max + NPC->CapsuleRadius + NPC->GetAttackRange());
-				//DrawDebugLine(GetWorld(), ClampedVector, FVector(ClampedVector.X, ClampedVector.Y, 3000), FColor::Blue, false, 20, 0, 10);
-				NPC->SetTarget(TargetCharacter);
-				Cont->GetBlackboard()->SetValueAsBool(bb_keys::target_is_dead, false);
-				Cont->GetBlackboard()->SetValueAsObject(bb_keys::hunt, (UObject*)TargetCharacter);
+				NPC->SetHuntTarget(TargetCharacter);
 				Cont->GetBlackboard()->SetValueAsObject(bb_keys::resource, (UObject*)ClosestResource);
-				Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
 				FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 				return EBTNodeResult::Succeeded;
 			}

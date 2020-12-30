@@ -35,16 +35,22 @@ AAlliance_Miner::AAlliance_Miner() {
 	GatheringLevels.Add(2, FGathererLevels{ 50, 420 });
 	GatheringLevels.Add(3, FGathererLevels{ 50, 620 });
 
-	Levels.Add(1, FCharacterLevels{ 10, 150, 0, 100, 20 });
-	Levels.Add(2, FCharacterLevels{ 20, 150, 0, 300, 50 });
-	Levels.Add(3, FCharacterLevels{ 30, 150, 0, 500, 100 });
+	Levels.Add(1, FCharacterLevels{ 10, 150, 0, 1000, 20 });
+	Levels.Add(2, FCharacterLevels{ 20, 150, 0, 3000, 50 });
+	Levels.Add(3, FCharacterLevels{ 30, 150, 0, 5000, 100 });
 
 	Equipment.DefaultMainHandTransformSheathed = FTransform(FRotator(349.199066, 32.399937, 262.799347), FVector(18.000000, 20.000000, -15.000000), FVector(0.4));
 	Equipment.DefaultMainHandTransformEquiped = FTransform(FRotator(-20, -30, 7), FVector(32, -40, 7), FVector(0.5));
 
-	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationAsset(TEXT("AnimBlueprint'/Game/Units/Alliance/StylizedHumanMale/Animations/AllianceMinerAnimation_BP.AllianceMinerAnimation_BP_C'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> AnimationAsset(TEXT("AnimMontage'/Game/Units/Alliance/StylizedHumanMale/Animations/Human_Male_Unequiped_Attack_Attack_Montage.Human_Male_Unequiped_Attack_Attack_Montage'"));
 	if (AnimationAsset.Succeeded()) {
-		GetMesh()->AnimClass = AnimationAsset.Class;
+		Equipment.DefaultAttackMontage = AnimationAsset.Object;
+		AttackMontage = Equipment.DefaultAttackMontage;
+	}
+
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimationBlueprint(TEXT("AnimBlueprint'/Game/Units/Alliance/StylizedHumanMale/Animations/AllianceMinerAnimation_BP.AllianceMinerAnimation_BP_C'"));
+	if (AnimationBlueprint.Succeeded()) {
+		GetMesh()->AnimClass = AnimationBlueprint.Class;
 	}
 }
 

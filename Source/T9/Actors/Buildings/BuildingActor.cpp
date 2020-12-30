@@ -225,6 +225,11 @@ void ABuildingActor::SetUnSelected() {
 	if(HealthWidgetComponent) HealthWidgetComponent->SetVisibility(false);
 }
 
+UCapsuleComponent* ABuildingActor::GetCapsuleComponent()
+{
+	return CapsuleComponent;
+}
+
 void ABuildingActor::ResetHealth()
 {
 	CurrentHealth = MaxHealth;

@@ -377,6 +377,9 @@ public:
 	UFUNCTION()
 		virtual void SetUnSelected();
 
+	UFUNCTION()
+		class UCapsuleComponent* GetCapsuleComponent();
+
 	UFUNCTION(BlueprintCallable)
 		float GetCurrentHealth();
 

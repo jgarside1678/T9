@@ -37,13 +37,16 @@ void AAllianceCharacter::BeginPlay() {
 	if (PS) PS->SpawnedAllianceCharacters.Add(this);
     GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel4);
     if (Cont) {
-        Cont->GetCrowdManager()->SetAvoidanceGroup(10);
-        Cont->GetCrowdManager()->SetGroupsToAvoid(10);
-        //Cont->GetCrowdManager()->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::Low);
-        //Cont->GetCrowdManager()->SetCrowdRotateToVelocity(false);
-        //Cont->GetCrowdManager()->SetCrowdAnticipateTurns(false);
+        Cont->GetCrowdManager()->SetAvoidanceGroup(1);
+        Cont->GetCrowdManager()->SetGroupsToAvoid(1);
+        Cont->GetCrowdManager()->SetGroupsToIgnore(4);
+        //Cont->GetCrowdManager()->SetCrowdOptimizeTopology(true);
+        //Cont->GetCrowdManager()->SetCrowdOptimizeVisibility(true);
+        //Cont->GetCrowdManager()->SetCrowdPathOffset(true);
         //Cont->GetCrowdManager()->SetCrowdSlowdownAtGoal(false);
-        Cont->GetCrowdManager()->SetCrowdCollisionQueryRange(GetCapsuleComponent()->GetScaledCapsuleRadius()+80);
+        //Cont->GetCrowdManager()->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::Medium);
+        //Cont->GetCrowdManager()->SetCrowdPathOptimizationRange(1000);
+        Cont->GetCrowdManager()->SetCrowdCollisionQueryRange(GetCapsuleComponent()->GetScaledCapsuleRadius()+2000);
     }
 }
 
@@ -80,5 +83,4 @@ FVector AAllianceCharacter::GetCommandLocation() {
 void AAllianceCharacter::SpawnInit(AActor* BuildingSpawn, int SpawnLevel, bool Invuln)
 {
     Super::SpawnInit(BuildingSpawn, SpawnLevel, Invuln);
-    //Cont = Cast<AAI_Controller>(GetController());
 }
