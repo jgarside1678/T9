@@ -70,7 +70,10 @@ void AAllianceCharacter::Command(FHitResult Hit)
             Cont->GetBlackboard()->SetValueAsVector(bb_keys::command_location, CommandLocation);
             DrawDebugLine(GetWorld(), CommandLocation, FVector(CommandLocation.X, CommandLocation.Y, 3000), FColor::Blue, false, 20, 0, 10);
         }
-        else Cont->GetBlackboard()->ClearValue(bb_keys::command_location);
+        else {
+            Cont->GetBlackboard()->ClearValue(bb_keys::command_location);
+            Cont->GetBlackboard()->ClearValue(bb_keys::utility_target);
+        }
         Cont->BrainComponent->RestartLogic();
         
     }

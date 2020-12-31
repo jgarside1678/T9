@@ -30,21 +30,20 @@ EBTNodeResult::Type UAI_FindClosestResource::ExecuteTask(UBehaviorTreeComponent&
 
 	if (!NPC->IsDead) {
 		AResourceActor* CommandedTarget = NPC->GetCommandedResourceActor();
-
+		UE_LOG(LogTemp, Warning, TEXT("2222"));
 		AResourceActor* Target = Cast<AResourceActor>(Cont->GetBlackboard()->GetValueAsObject(bb_keys::utility_target));
 		FVector const Origin = NPC->GetActorLocation();
 
 		//Locate nearest Building
 		if (!CommandedTarget) {
+			UE_LOG(LogTemp, Warning, TEXT("2223333"));
 			SpawnedResources = PS->SpawnedResources;
 			for (int x = 0; x < SpawnedResources.Num(); x++) {
-				if (SpawnedResources[x]->ResourceType == NPC->ResourceGatherType) {
-					if ((SpawnedResources[x] != nullptr) && (!SpawnedResources[x]->IsPendingKill())) {
-						DistanceToActor = (Origin - SpawnedResources[x]->GetActorLocation()).Size();
-						if (ClosestResource == nullptr || DistanceToActor < CRDistanceToActor) {
-							ClosestResource = SpawnedResources[x];
-							CRDistanceToActor = DistanceToActor;
-						}
+				if (SpawnedResources[x] != nullptr && !SpawnedResources[x]->IsPendingKill() && SpawnedResources[x]->ResourceType == NPC->ResourceGatherType) {
+					DistanceToActor = (Origin - SpawnedResources[x]->GetActorLocation()).Size();
+					if (ClosestResource == nullptr || DistanceToActor < CRDistanceToActor) {
+						ClosestResource = SpawnedResources[x];
+						CRDistanceToActor = DistanceToActor;
 					}
 				}
 			}
@@ -52,6 +51,8 @@ EBTNodeResult::Type UAI_FindClosestResource::ExecuteTask(UBehaviorTreeComponent&
 		else ClosestResource = CommandedTarget;
 
 		if ((ClosestResource != nullptr) && (Target != ClosestResource)) {
+
+			UE_LOG(LogTemp, Warning, TEXT("11111"));
 			NPC->SetResource(ClosestResource);
 			FVector ClosestResourceBounds, ClosestResourceOrigin;
 			ClosestResource->GetClosestStaticMesh(Origin, ClosestResourceOrigin, ClosestResourceBounds);
@@ -59,9 +60,7 @@ EBTNodeResult::Type UAI_FindClosestResource::ExecuteTask(UBehaviorTreeComponent&
 			FVector Min = FVector(ClosestResourceOrigin.X - ClosestResourceBounds.X, ClosestResourceOrigin.Y - ClosestResourceBounds.Y, 1);
 			FVector Max = FVector(ClosestResourceOrigin.X + ClosestResourceBounds.X, ClosestResourceOrigin.Y + ClosestResourceBounds.Y, 1);
 			FVector ClampedVector = UKismetMathLibrary::Vector_BoundedToBox(Origin, Min - NPC->CapsuleRadius, Max + NPC->CapsuleRadius);
-			//DrawDebugLine(GetWorld(), ClampedVector, FVector(ClampedVector.X, ClampedVector.Y, 3000), FColor::Blue, false, 20, 0, 10);
 			Cont->GetBlackboard()->SetValueAsObject(bb_keys::utility_target, (UObject*)ClosestResource);
-			Cont->GetBlackboard()->SetValueAsVector(bb_keys::move_location, ClampedVector);
 		}
 
 	}
